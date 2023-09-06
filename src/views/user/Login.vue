@@ -35,7 +35,6 @@
       </a-tabs>
 
       <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
         <router-link
           :to="{ name: 'recover', params: { user: 'aaa'} }"
           class="forge-password"
@@ -53,28 +52,10 @@
           :disabled="state.loginBtn"
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
-
       <div class="user-login-other">
-        <span>{{ $t('user.login.sign-in-with') }}</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
         <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>
       </div>
     </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
   </div>
 </template>
 
