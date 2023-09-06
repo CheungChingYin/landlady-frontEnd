@@ -31,6 +31,10 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    // 登录时的用户信息存入全局变量中
+    SET_USERINFO: (state, info) => {
+      state.info = info
     }
   },
 
@@ -42,6 +46,7 @@ const user = {
           const result = response.result
           storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', result.token)
+          commit('SET_USERINFO', result)
           resolve()
         }).catch(error => {
           reject(error)
