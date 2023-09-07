@@ -3,6 +3,7 @@ import request from '@/utils/request'
 const userApi = {
   Login: '/sys/user/login',
   Logout: '/auth/logout',
+  checkPhoneNumber: '/sys/user/checkPhoneNumberExist',
   ForgePassword: '/auth/forge-password',
   Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
@@ -76,5 +77,12 @@ export function get2step (parameter) {
     url: userApi.twoStepCode,
     method: 'post',
     data: parameter
+  })
+}
+
+export function checkPhoneNumberExist (phoneNumber) {
+  return request({
+    url: userApi.checkPhoneNumber + '/' + phoneNumber,
+    method: 'get'
   })
 }
