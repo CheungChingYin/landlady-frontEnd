@@ -4,8 +4,8 @@ const userApi = {
   Login: '/sys/user/login',
   Logout: '/auth/logout',
   checkPhoneNumber: '/sys/user/checkPhoneNumberExist',
+  Register: '/sys/user/addByPublic',
   ForgePassword: '/auth/forge-password',
-  Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
@@ -84,5 +84,18 @@ export function checkPhoneNumberExist (phoneNumber) {
   return request({
     url: userApi.checkPhoneNumber + '/' + phoneNumber,
     method: 'get'
+  })
+}
+
+/**
+ * 公共注册用户
+ * @param userInfo 用户信息
+ * @returns {*}
+ */
+export function registerPublic (userInfo) {
+  return request({
+    url: userApi.Register,
+    method: 'post',
+    data: userInfo
   })
 }

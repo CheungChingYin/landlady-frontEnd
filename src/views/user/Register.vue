@@ -22,7 +22,7 @@
         <a-input
           size="large"
           :placeholder="$t('user.login.mobile.placeholder')"
-          v-decorator="['mobile', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
+          v-decorator="['phoneNumber', {rules: [{ required: true, message: $t('user.phone-number.required'), pattern: /^1[3456789]\d{9}$/ }, { validator: this.handlePhoneCheck } ], validateTrigger: ['change', 'blur'] }]">
           <a-select slot="addonBefore" size="large" defaultValue="+86">
             <a-select-option value="+86">+86</a-select-option>
           </a-select>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { checkPhoneNumberExist, getSmsCaptcha } from '@/api/login'
+import { checkPhoneNumberExist, getSmsCaptcha, registerPublic } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 
@@ -225,10 +225,29 @@ export default {
     handleSubmit () {
       const { form: { validateFields }, state, $router } = this
       validateFields({ force: true }, (err, values) => {
-        if (!err) {
-          state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+        if (err) {
+          return
         }
+        state.passwordLevelChecked = false
+        registerPublic(values).then((res) => {
+          if (res.code !== 200) {
+            this.$notification.error({
+              message: '注册失败',
+              description: res.message
+            })
+            $router.push({ name: 'registerResult', params: { ...values } })
+          } else {
+            this.$notification.success({
+              message: '注册成功'
+            })
+            $router.push({ name: 'login' })
+          }
+        }).catch((res) => {
+          this.$notification.error({
+            message: '网络异常',
+            description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试'
+          })
+        })
       })
     },
 
