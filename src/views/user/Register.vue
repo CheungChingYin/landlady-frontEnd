@@ -235,7 +235,6 @@ export default {
               message: '注册失败',
               description: res.message
             })
-            $router.push({ name: 'registerResult', params: { ...values } })
           } else {
             this.$notification.success({
               message: '注册成功'
