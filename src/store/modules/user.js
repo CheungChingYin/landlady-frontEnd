@@ -85,13 +85,18 @@ const user = {
       })
     },
 
-    // 登出
+    /**
+     * 登出
+     * @param commit
+     * @param state
+     * @returns {Promise<unknown>}
+     * @constructor
+     */
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
+          storage.remove(USER_INFO)
           resolve()
         }).catch((err) => {
           console.log('logout fail:', err)

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 const userApi = {
   Login: '/sys/user/login',
-  Logout: '/auth/logout',
+  Logout: '/sys/user/logout',
   checkPhoneNumber: '/sys/user/checkPhoneNumberExist',
   Register: '/sys/user/addByPublic',
   ForgePassword: '/auth/forge-password',
