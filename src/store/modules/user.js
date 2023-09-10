@@ -1,7 +1,7 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, USER_INFO } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 storage.addPlugin(expirePlugin)
@@ -31,10 +31,6 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
-    },
-    // 登录时的用户信息存入全局变量中
-    SET_USERINFO: (state, info) => {
-      state.info = info
     }
   },
 
@@ -44,9 +40,10 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           const result = response.result
+          // 配置token
           storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
-          commit('SET_USERINFO', result)
+          // 设置用户信息
+          storage.set(USER_INFO, result.userInfo)
           resolve()
         }).catch(error => {
           reject(error)
