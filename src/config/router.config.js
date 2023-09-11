@@ -70,7 +70,23 @@ export const asyncRouterMap = [
           }
         ]
       },
-      // list
+      // 系统管理
+      {
+        path: '/system',
+        name: 'system',
+        component: RouteView,
+        redirect: '/system/userList',
+        meta: { title: 'menu.system', icon: 'table', permission: ['system'] },
+        children: [
+          {
+            path: '/system/userList',
+            name: 'userList',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/list/TableList'),
+            meta: { title: 'menu.system.userList', keepAlive: true, permission: ['system'] }
+          }
+        ]
+      },
       {
         path: '/list',
         name: 'list',
