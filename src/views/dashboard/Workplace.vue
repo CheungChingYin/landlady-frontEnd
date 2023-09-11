@@ -136,6 +136,8 @@ import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
+import storage from 'store'
+import { USER_INFO } from '@/store/mutation-types'
 
 import { getRoleList, getServiceList } from '@/api/manage'
 
@@ -212,7 +214,7 @@ export default {
       }
     },
     userInfo () {
-      return this.$store.getters.userInfo
+      return storage.get(USER_INFO)
     }
   },
   created () {
