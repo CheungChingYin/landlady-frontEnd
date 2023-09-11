@@ -1,9 +1,10 @@
 import axios from 'axios'
-import store from '@/store'
 import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, USER_INFO } from '@/store/mutation-types'
+import router from '@/router'
+import { Modal } from 'ant-design-vue'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -26,11 +27,10 @@ const errorHandler = (error) => {
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
+        Modal.destroyAll()
+        storage.remove(ACCESS_TOKEN)
+        storage.remove(USER_INFO)
+        router.push({ name: 'login' })
       }
     }
   }

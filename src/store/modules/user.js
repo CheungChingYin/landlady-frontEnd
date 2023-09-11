@@ -98,10 +98,6 @@ const user = {
           storage.remove(ACCESS_TOKEN)
           storage.remove(USER_INFO)
           resolve()
-        }).catch((err) => {
-          console.log('logout fail:', err)
-          // resolve()
-        }).finally(() => {
         })
       })
     }
