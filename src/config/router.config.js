@@ -76,14 +76,14 @@ export const asyncRouterMap = [
         name: 'system',
         component: RouteView,
         redirect: '/system/userList',
-        meta: { title: 'menu.system', icon: 'table', permission: ['system'] },
+        meta: { title: 'menu.system', icon: 'setting', permission: ['system'] },
         children: [
           {
             path: '/system/userList',
             name: 'userList',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/list/TableList'),
-            meta: { title: 'menu.system.userList', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userList', icon: 'user', keepAlive: true, permission: ['system'] }
           }
         ]
       },
