@@ -29,6 +29,7 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
+import notification from 'ant-design-vue/lib/notification'
 
 export default {
   name: 'AvatarDropdown',
@@ -59,6 +60,9 @@ export default {
           // }).catch(() => console.log('Oops errors!'))
           return this.$store.dispatch('Logout').then(() => {
           }).finally(() => {
+            notification.success({
+              message: '登出成功'
+            })
             this.$router.push({ name: 'login' })
           })
         },
