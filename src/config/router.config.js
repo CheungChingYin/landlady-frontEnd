@@ -12,7 +12,7 @@ export const asyncRouterMap = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: 'menu.home' },
+    meta: { title: 'menu.home', requiresAuth: true },
     redirect: '/dashboard/workplace',
     children: [
       // dashboard
@@ -21,13 +21,13 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'], requiresAuth: true },
         children: [
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
             name: 'Analysis',
             component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['dashboard'] }
+            meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['dashboard'], requiresAuth: true }
           },
           // 外部链接
           // {
