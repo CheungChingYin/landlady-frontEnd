@@ -81,8 +81,8 @@ export const asyncRouterMap = [
           {
             path: '/system/userList',
             name: 'userList',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/list/TableList'),
+            hideChildrenInMenu: true,
+            component: () => import('@/views/system/user/UserTableList'),
             meta: { title: 'menu.system.userList', icon: 'user', keepAlive: true, permission: ['system'] }
           }
         ]
