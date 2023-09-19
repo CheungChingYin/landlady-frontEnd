@@ -78,7 +78,9 @@
             <a-divider type="vertical" />
             <a @click="handleEdit(record)">查看</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">删除</a>
+            <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
+              <a>删除</a>
+            </a-popconfirm>
           </template>
         </span>
       </s-table>
@@ -94,7 +96,7 @@ import { getRoleList } from '@/api/manage'
 import StepByStepModal from '@/views/list/modules/StepByStepModal'
 import CreateForm from '@/views/list/modules/CreateForm'
 import { getDictOption } from '@/api/system/dictItemApi'
-import { getList } from '@/api/system/userApi'
+import { getList, deleteData } from '@/api/system/userApi'
 import { notification } from 'ant-design-vue'
 
 const columns = [
@@ -204,10 +206,27 @@ export default {
       this.isFreezeOption = await getDictOption('yn')
     },
     handleAdd () {
-      this.$router.push({ path: '/system/userForm' })
+      this.$router.push({ name: 'userForm' })
     },
     handleEdit (record) {
+      this.$router.push({ name: 'userForm', params: record })
       console.log(record)
+    },
+    handleDelete (record) {
+      console.log(record)
+      deleteData(record.id).then(res => {
+          if (res.code !== 200) {
+            notification.error({
+              message: '请求列表数据失败',
+              description: '请求列表数据失败,请稍后重试'
+            })
+          } else {
+            notification.success({
+              message: '删除成功'
+            })
+          }
+        this.$refs.table.loadData()
+      })
     },
     handleCancel () {
       const form = this.$refs.createModal.form

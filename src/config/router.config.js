@@ -81,9 +81,15 @@ export const asyncRouterMap = [
           {
             path: '/system/userList',
             name: 'userList',
-            hideChildrenInMenu: true,
             component: () => import('@/views/system/user/UserTableList'),
             meta: { title: 'menu.system.userList', icon: 'user', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/userForm',
+            name: 'userForm',
+            component: () => import('@/views/system/user/UserForm'),
+            hidden: true,
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
           }
         ]
       },
