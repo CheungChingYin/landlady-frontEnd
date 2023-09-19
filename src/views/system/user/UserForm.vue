@@ -38,34 +38,34 @@
             </a-select>
           </a-input>
         </a-form-item>
-        <a-popover
-          placement="rightTop"
-          :trigger="['focus']"
-          :getPopupContainer="(trigger) => trigger.parentElement"
-          v-model="state.passwordLevelChecked">
-          <template slot="content">
-            <div :style="{ width: '240px' }">
-              <div :class="['user-register', passwordLevelClass]">{{ $t(passwordLevelName) }}</div>
-              <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor "/>
-              <div style="margin-top: 10px;">
-                <span>{{ $t('user.register.password.popover-message') }}
-                </span>
+        <a-form-item
+          :label="$t('user.label.form.password')"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
+          v-show="isAddForm">
+          <a-popover
+            placement="rightTop"
+            :trigger="['focus']"
+            :getPopupContainer="(trigger) => trigger.parentElement"
+            v-model="state.passwordLevelChecked">
+            <template slot="content">
+              <div :style="{ width: '240px' }">
+                <div :class="['user-register', passwordLevelClass]">{{ $t(passwordLevelName) }}</div>
+                <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor "/>
+                <div style="margin-top: 10px;">
+                  <span>{{ $t('user.register.password.popover-message') }}
+                  </span>
+                </div>
               </div>
-            </div>
-          </template>
-          <a-form-item
-            :label="$t('user.label.form.password')"
-            :labelCol="{lg: {span: 7}, sm: {span: 7}}"
-            :wrapperCol="{lg: {span: 10}, sm: {span: 17} }"
-            v-show="isAddForm">
+            </template>
             <a-input-password
               size="large"
               @click="handlePasswordInputClick"
               :placeholder="$t('user.register.password.placeholder')"
               v-decorator="['password', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
             ></a-input-password>
-          </a-form-item>
-        </a-popover>
+          </a-popover>
+        </a-form-item>
 
         <a-form-item
           :label="$t('user.label.form.passwordConfirm')"
