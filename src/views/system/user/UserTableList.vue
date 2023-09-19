@@ -76,7 +76,7 @@
           <template>
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a @click="handleEdit(record)">查看</a>
+            <a @click="handleShowDetail(record)">查看</a>
             <a-divider type="vertical" />
             <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
               <a>删除</a>
@@ -211,6 +211,9 @@ export default {
     handleEdit (record) {
       this.$router.push({ name: 'userForm', params: record })
       console.log(record)
+    },
+    handleShowDetail (record) {
+      this.$router.push({ name: 'userFormDetail', params: record })
     },
     handleDelete (record) {
       console.log(record)

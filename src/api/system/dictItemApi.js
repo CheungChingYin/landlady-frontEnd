@@ -49,3 +49,33 @@ export async function getDictOption (dictCode) {
   }
   return result
 }
+
+/**
+ * 根据字典编码获得字典Map
+ * @param dictCode 字典编码
+ * @returns {Promise<{}>}
+ */
+export async function getDictItemMap (dictCode) {
+  // 字典项列表
+  let dictItemList = null
+  // 请求接口
+  await getDictItemByDiceCode(dictCode).then((res) => {
+    if (res.code === 200) {
+      dictItemList = res.result
+    } else {
+      notification.error({
+        message: '错误',
+        description: '字典请求错误'
+      })
+    }
+  })
+  // 组装字典map
+  const resultMap = {}
+  if (dictItemList != null) {
+    for (const index in dictItemList) {
+      const item = dictItemList[index]
+      resultMap[item.itemValue] = item.itemText
+    }
+  }
+  return resultMap
+}

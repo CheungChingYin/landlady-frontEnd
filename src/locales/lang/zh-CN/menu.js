@@ -15,6 +15,7 @@ export default {
     'menu.system': '系统管理',
     'menu.system.userList': '用户管理',
     'menu.system.userForm': '用户表单页',
+    'menu.system.userFormDetail': '用户详情页',
     'menu.list': '列表页',
     'menu.list.table-list': '查询表格',
     'menu.list.basic-list': '标准列表',
