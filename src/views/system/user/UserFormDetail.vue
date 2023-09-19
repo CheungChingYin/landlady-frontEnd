@@ -1,5 +1,8 @@
 <template>
   <page-header-wrapper>
+    <template v-slot:extra>
+      <a-button type="primary" style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
+    </template>
     <a-card :bordered="false">
       <a-descriptions title="用户信息">
         <a-descriptions-item :label="$t('user.label.form.name')">{{ queryData.name }}</a-descriptions-item>
@@ -9,7 +12,6 @@
         <a-descriptions-item :label="$t('user.label.form.createTime')">{{ queryData.createTime }}</a-descriptions-item>
         <a-descriptions-item :label="$t('user.label.form.updateTime')">{{ queryData.updateTime }}</a-descriptions-item>
       </a-descriptions>
-      <a-button style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
     </a-card>
   </page-header-wrapper>
 </template>
