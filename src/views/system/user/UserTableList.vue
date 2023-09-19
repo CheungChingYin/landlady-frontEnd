@@ -61,7 +61,7 @@
         rowKey="id"
         :columns="columns"
         :data="loadData"
-        :alert="true"
+        :alert="false"
         :rowSelection="rowSelection"
         showPagination="auto"
       >
