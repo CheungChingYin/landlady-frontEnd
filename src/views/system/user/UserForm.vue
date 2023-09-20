@@ -172,6 +172,7 @@ export default {
     async initDict () {
       // 是否冻结
       this.isFreezeOption = await getDictOption('yn')
+      console.log(this.isFreezeOption)
     },
     /**
      * 密码等级计算
@@ -258,7 +259,7 @@ export default {
     // 提交表单
     handleSubmit (e) {
       e.preventDefault()
-      const fieldArray = ['name', 'email', 'phoneNumber']
+      const fieldArray = ['name', 'email', 'phoneNumber', 'isFreeze']
       if (this.isAddForm) {
         fieldArray.push('password')
         fieldArray.push('password2')
