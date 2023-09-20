@@ -79,6 +79,15 @@
           ></a-input-password>
         </a-form-item>
         <a-form-item
+          :label="$t('user.label.form.isFreeze')"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
+          <a-select
+            placeholder="请选择"
+            :options="isFreezeOption"
+            v-decorator="['isFreeze', {initialValue: '0',rules: [{ required: true, message: $t('user.isFreeze.required') }], validateTrigger: ['change', 'blur']}]"></a-select>
+        </a-form-item>
+        <a-form-item
           :wrapperCol="{ span: 24 }"
           style="text-align: center"
         >
@@ -95,6 +104,8 @@ import { scorePassword } from '@/utils/util'
 import { checkPhoneNumberExist } from '@/api/login'
 import { addData, editData, queryById } from '@/api/system/userApi'
 import { notification } from 'ant-design-vue'
+import { getDictOption } from '@/api/system/dictItemApi'
+import pick from 'lodash.pick'
 
 const levelNames = {
   0: 'user.password.strength.short',
@@ -128,7 +139,9 @@ export default {
       },
       queryData: {},
       form: this.$form.createForm(this),
-      isAddForm: false
+      isAddForm: false,
+      // 是否冻结选项
+      isFreezeOption: []
     }
   },
   computed: {
@@ -152,11 +165,13 @@ export default {
           })
           return
         }
-        this.form.setFieldsValue(res.result)
+        this.form.setFieldsValue(pick(res.result, ['name', 'email', 'phoneNumber', 'isFreeze']))
         this.queryData = res.result
-        // this.form = res.result
-        console.log(res)
       })
+    },
+    async initDict () {
+      // 是否冻结
+      this.isFreezeOption = await getDictOption('yn')
     },
     /**
      * 密码等级计算
@@ -286,6 +301,7 @@ export default {
     }
   },
   mounted () {
+    this.initDict()
     let id = null
     if (this.$route.params) {
       id = this.$route.params.id

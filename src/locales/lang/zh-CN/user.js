@@ -36,6 +36,7 @@ export default {
   'user.label.form.createTime': '创建时间',
   'user.label.form.updateTime': '修改时间',
   'user.name.required': '请输入姓名！',
+  'user.isFreeze.required': '请选择是否冻结该账户！',
   'user.gender.required': '请选择性别！',
   'user.gender.male': '男',
   'user.gender.female': '女',

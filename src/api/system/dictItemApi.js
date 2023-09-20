@@ -43,7 +43,12 @@ export async function getDictOption (dictCode) {
       const item = dictItemList[index]
       const obj = {}
       obj.label = item.itemText
-      obj.value = item.itemValue
+      // 如果值为数字则转换为数字类型
+      if (item.itemValue.match(/^\d+$/)) {
+        obj.value = Number.parseInt(item.itemValue)
+      } else {
+        obj.value = item.itemValue
+      }
       result.push(obj)
     }
   }
