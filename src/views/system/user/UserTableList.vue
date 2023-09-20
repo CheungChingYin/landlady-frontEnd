@@ -43,16 +43,7 @@
 
       <div class="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-          <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
-            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            批量操作 <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
+        <a-button type="primary" icon="key" @click="handleResetPassword">重置密码</a-button>
       </div>
 
       <s-table
@@ -85,6 +76,52 @@
         </span>
       </s-table>
     </a-card>
+    <a-modal
+      title="重置密码"
+      :visible="resetPasswordModalVisible"
+      :confirm-loading="resetPasswordConfirmLoading"
+      @cancel="handleCancel"
+      @ok="handleResetPasswordSubmit">
+      <a-form :form="resetPasswordForm">
+        <a-form-item
+          :label="$t('user.label.form.password')"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
+          <a-popover
+            placement="rightTop"
+            :trigger="['focus']"
+            :getPopupContainer="(trigger) => trigger.parentElement"
+            v-model="state.passwordLevelChecked">
+            <template slot="content">
+              <div :style="{ width: '240px' }">
+                <div :class="['user-register', passwordLevelClass]">{{ $t(passwordLevelName) }}</div>
+                <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor "/>
+                <div style="margin-top: 10px;">
+                  <span>{{ $t('user.register.password.popover-message') }}
+                  </span>
+                </div>
+              </div>
+            </template>
+            <a-input-password
+              size="large"
+              @click="handlePasswordInputClick"
+              :placeholder="$t('user.register.password.placeholder')"
+              v-decorator="['password', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+            ></a-input-password>
+          </a-popover>
+        </a-form-item>
+        <a-form-item
+          :label="$t('user.label.form.passwordConfirm')"
+          :labelCol="{lg: {span: 7}, sm: {span: 7}}"
+          :wrapperCol="{lg: {span: 10}, sm: {span: 17} }">
+          <a-input-password
+            size="large"
+            :placeholder="$t('user.register.confirm-password.placeholder')"
+            v-decorator="['password2', {rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+          ></a-input-password>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
@@ -96,8 +133,9 @@ import { getRoleList } from '@/api/manage'
 import StepByStepModal from '@/views/list/modules/StepByStepModal'
 import CreateForm from '@/views/list/modules/CreateForm'
 import { getDictOption } from '@/api/system/dictItemApi'
-import { getList, deleteData } from '@/api/system/userApi'
+import { getList, deleteData, resetPassword } from '@/api/system/userApi'
 import { notification } from 'ant-design-vue'
+import { scorePassword } from '@/utils/util'
 
 const columns = [
   {
@@ -145,6 +183,25 @@ const isFreezeStatusMap = {
   }
 }
 
+const levelNames = {
+  0: 'user.password.strength.short',
+  1: 'user.password.strength.low',
+  2: 'user.password.strength.medium',
+  3: 'user.password.strength.strong'
+}
+const levelClass = {
+  0: 'error',
+  1: 'error',
+  2: 'warning',
+  3: 'success'
+}
+const levelColor = {
+  0: '#ff0000',
+  1: '#ff0000',
+  2: '#ff7e05',
+  3: '#52c41a'
+}
+
 export default {
   name: 'UserTableList',
   components: {
@@ -178,7 +235,17 @@ export default {
         })
       },
       selectedRowKeys: [],
-      selectedRows: []
+      selectedRows: [],
+      resetPasswordModalVisible: false,
+      resetPasswordConfirmLoading: false,
+      resetPasswordForm: this.$form.createForm(this),
+      state: {
+        level: 0,
+        passwordLevel: 0,
+        passwordLevelChecked: false,
+        percent: 10,
+        progressColor: '#FF0000'
+      }
     }
   },
   filters: {
@@ -198,6 +265,15 @@ export default {
         selectedRowKeys: this.selectedRowKeys,
         onChange: this.onSelectChange
       }
+    },
+    passwordLevelClass () {
+      return levelClass[this.state.passwordLevel]
+    },
+    passwordLevelName () {
+      return levelNames[this.state.passwordLevel]
+    },
+    passwordLevelColor () {
+      return levelColor[this.state.passwordLevel]
     }
   },
   methods: {
@@ -210,13 +286,11 @@ export default {
     },
     handleEdit (record) {
       this.$router.push({ name: 'userForm', params: record })
-      console.log(record)
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'userFormDetail', params: record })
     },
     handleDelete (record) {
-      console.log(record)
       deleteData(record.id).then(res => {
           if (res.code !== 200) {
             notification.error({
@@ -231,9 +305,99 @@ export default {
         this.$refs.table.loadData()
       })
     },
+    handleResetPassword () {
+      if (this.selectedRows.length === 0 || this.selectedRows.length > 1) {
+        this.$message.warning('请选择一条数据')
+        return
+      }
+      this.resetPasswordModalVisible = true
+    },
+    /**
+     * 移动端不进行密码检查
+     */
+    handlePasswordInputClick () {
+      if (!this.isMobile) {
+        this.state.passwordLevelChecked = true
+        return
+      }
+      this.state.passwordLevelChecked = false
+    },
     handleCancel () {
-      const form = this.$refs.createModal.form
-      form.resetFields() // 清理表单数据（可不做）
+      this.resetPasswordModalVisible = false
+      // 清理表单数据
+      this.resetPasswordForm.resetFields()
+    },
+    /**
+     * 密码等级计算
+     * @param rule 规则
+     * @param value 密码
+     * @param callback 回调
+     * @returns {*}
+     */
+    handlePasswordLevel (rule, value, callback) {
+      if (!value) {
+        return callback()
+      }
+      console.log('scorePassword ; ', scorePassword(value))
+      if (value.length >= 6) {
+        if (scorePassword(value) >= 30) {
+          this.state.level = 1
+        }
+        if (scorePassword(value) >= 60) {
+          this.state.level = 2
+        }
+        if (scorePassword(value) >= 80) {
+          this.state.level = 3
+        }
+      } else {
+        this.state.level = 0
+        callback(new Error(this.$t('user.password.strength.msg')))
+      }
+      this.state.passwordLevel = this.state.level
+      this.state.percent = this.state.level * 33
+
+      callback()
+    },
+    /**
+     * 密码检查
+     * @param rule 规则
+     * @param value 密码
+     * @param callback 回调函数
+     */
+    handlePasswordCheck (rule, value, callback) {
+      const password = this.resetPasswordForm.getFieldValue('password')
+      if (value === undefined) {
+        callback(new Error(this.$t('user.password.required')))
+      }
+      if (value && password && value.trim() !== password.trim()) {
+        callback(new Error(this.$t('user.password.twice.msg')))
+      }
+      callback()
+    },
+    handleResetPasswordSubmit () {
+      this.resetPasswordForm.validateFields((errors, values) => {
+        const selectRow = this.selectedRows[0]
+        if (!errors) {
+          // 提交按钮loading
+          this.resetPasswordConfirmLoading = true
+          const data = Object.assign({}, values, selectRow)
+          resetPassword(data).then(res => {
+            if (res.code !== 200) {
+              notification.error({
+                message: '重置密码失败',
+                description: res.message
+              })
+            } else {
+              notification.success({
+                message: '重置密码成功'
+              })
+              this.resetPasswordModalVisible = false
+            }
+            // 取消提交按钮loading
+            this.resetPasswordConfirmLoading = false
+          })
+        }
+      })
     },
     handleSub (record) {
       if (record.status !== 0) {

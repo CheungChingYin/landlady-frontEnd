@@ -5,7 +5,8 @@ const api = {
   Add: '/sys/user/add',
   Edit: '/sys/user/edit',
   QueryById: '/sys/user/queryById',
-  Delete: '/sys/user/delete'
+  Delete: '/sys/user/delete',
+  ResetPassword: '/sys/user/resetPassword'
 }
 
 /**
@@ -76,5 +77,18 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+/**
+ * 编辑保存信息信息
+ * @param id 主键ID
+ * @returns {*}
+ */
+export function resetPassword (data) {
+  return request({
+    url: api.ResetPassword,
+    method: 'post',
+    data: data
   })
 }
