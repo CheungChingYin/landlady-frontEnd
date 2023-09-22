@@ -97,6 +97,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/system/user/UserFormDetail'),
             hidden: true,
             meta: { title: 'menu.system.userFormDetail', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/dictList',
+            name: 'dictList',
+            component: () => import('@/views/system/dict/DictTableList'),
+            meta: { title: 'menu.system.dictList', icon: 'unordered-list', keepAlive: true, permission: ['system'] }
           }
         ]
       },
