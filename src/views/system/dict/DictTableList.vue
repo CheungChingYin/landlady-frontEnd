@@ -56,7 +56,7 @@
           <template>
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a @click="handleShowDetail(record)">字典配置</a>
+            <a @click="handleDictItemConfig(record)">字典配置</a>
             <a-divider type="vertical" />
             <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
               <a>删除</a>
@@ -71,6 +71,8 @@
         :rowData="rowData"
         @cancel="handleCancel"
         @ok="handleOk"/>
+      <DictItemList
+        ref="dictItemListRef"/>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -83,6 +85,7 @@ import CreateForm from '@/views/list/modules/CreateForm'
 import { getList, deleteData, addData, editData } from '@/api/system/dictApi'
 import { notification } from 'ant-design-vue'
 import DictFormModal from '@/views/system/dict/DictFormModal'
+import DictItemList from '@/views/system/dict/dictItem/DictItemList'
 
 const columns = [
   {
@@ -119,6 +122,7 @@ const columns = [
 export default {
   name: 'UserTableList',
   components: {
+    DictItemList,
     DictFormModal,
     STable,
     Ellipsis,
@@ -175,8 +179,9 @@ export default {
       this.rowData = record
       this.$refs.dictModalRef.dialogTitle = '修改字典'
     },
-    handleShowDetail (record) {
-      this.$router.push({ name: 'userFormDetail', params: record })
+    handleDictItemConfig (record) {
+      this.rowData = record
+      this.$refs.dictItemListRef.edit(record)
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {
