@@ -56,7 +56,7 @@
           <template>
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a @click="handleDictItemConfig(record)">角色配置</a>
+            <a @click="handleDictItemConfig(record)">角色授权</a>
             <a-divider type="vertical" />
             <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
               <a>删除</a>
