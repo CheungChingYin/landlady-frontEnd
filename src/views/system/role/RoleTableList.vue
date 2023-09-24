@@ -139,7 +139,6 @@ export default {
       queryParam: {},
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        console.log(parameter)
         return getList(parameter.pageNo, parameter.pageSize, this.queryParam).then(res => {
           if (res.code !== 200) {
             notification.error({
