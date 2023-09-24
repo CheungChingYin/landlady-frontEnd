@@ -103,6 +103,12 @@ export const asyncRouterMap = [
             name: 'dictList',
             component: () => import('@/views/system/dict/DictTableList'),
             meta: { title: 'menu.system.dictList', icon: 'unordered-list', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/roleList',
+            name: 'roleList',
+            component: () => import('@/views/system/role/RoleTableList'),
+            meta: { title: 'menu.system.roleList', icon: 'cluster', keepAlive: true, permission: ['system'] }
           }
         ]
       },
