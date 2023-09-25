@@ -10,7 +10,7 @@
           <div class="header">
             <a href="/">
               <img src="~@/assets/logo.svg" class="logo" alt="logo">
-              <span class="title">包租婆出租屋管理系统</span>
+              <span class="title">包租婆房屋租赁管理系统</span>
             </a>
           </div>
           <div class="desc">
