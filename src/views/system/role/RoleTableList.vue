@@ -71,7 +71,7 @@
         :rowData="rowData"
         @cancel="handleCancel"
         @ok="handleOk"/>
-      <DictItemList ref="dictItemListRef"/>
+      <RoleUserList ref="roleUserListRef"/>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -83,7 +83,7 @@ import CreateForm from '@/views/list/modules/CreateForm'
 import { getList, deleteData, addData, editData } from '@/api/system/roleApi'
 import { notification } from 'ant-design-vue'
 import RoleFormModal from '@/views/system/role/RoleFormModal'
-import DictItemList from '@/views/system/dict/dictItem/DictItemList'
+import RoleUserList from '@/views/system/role/roleUser/RoleUserList'
 
 const columns = [
   {
@@ -120,7 +120,7 @@ const columns = [
 export default {
   name: 'RoleTableList',
   components: {
-    DictItemList,
+    RoleUserList,
     RoleFormModal,
     STable,
     Ellipsis,
@@ -178,7 +178,7 @@ export default {
     },
     handleDictItemConfig (record) {
       this.rowData = record
-      this.$refs.dictItemListRef.edit(record)
+      this.$refs.roleUserListRef.open(record)
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {
