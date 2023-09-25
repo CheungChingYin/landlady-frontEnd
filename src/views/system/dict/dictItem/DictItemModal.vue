@@ -130,12 +130,12 @@ const fields = ['id', 'dictId', 'itemText', 'itemValue', 'description', 'sortOrd
                 that.$message.success(res.message)
                 // 刷新列表
                 that.$parent.$parent.$refs.itemTable.loadData()
+                that.close()
               } else {
                 that.$message.error(res.message)
               }
             }).finally(() => {
               that.confirmLoading = false
-              that.close()
             })
           } else {
             return false
