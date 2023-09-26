@@ -19,6 +19,8 @@ export default {
   'menu.system.dictList': '字典管理',
   'menu.system.dictForm': '字典表单页',
   'menu.system.roleList': '角色管理',
+  'menu.maindata': '主数据管理',
+  'menu.maindata.apartmentList': '公寓管理',
   'menu.list': '列表页',
   'menu.list.table-list': '查询表格',
   'menu.list.basic-list': '标准列表',

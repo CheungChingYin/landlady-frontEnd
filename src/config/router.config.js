@@ -70,6 +70,22 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // 主数据管理
+      {
+        path: '/maindata',
+        name: 'maindata',
+        component: RouteView,
+        redirect: '/maindata/apartmentList',
+        meta: { title: 'menu.maindata', icon: 'container', permission: ['system'] },
+        children: [
+          {
+            path: '/maindata/apartmentList',
+            name: 'apartmentList',
+            component: () => import('@/views/maindata/apartment/ApartmentTableList'),
+            meta: { title: 'menu.maindata.apartmentList', icon: 'home', keepAlive: true, permission: ['system'] }
+          }
+        ]
+      },
       // 系统管理
       {
         path: '/system',
