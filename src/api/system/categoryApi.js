@@ -6,6 +6,7 @@ const api = {
   Edit: '/sys/category/edit',
   QueryById: '/sys/category/queryById',
   Delete: '/sys/category/delete',
+  QueryRootList: '/sys/category/queryRootList',
   QueryChildrenList: '/sys/category/queryChildrenList'
 }
 
@@ -23,6 +24,19 @@ export function getList (pageNo, pageSize, param) {
   param.order = 'desc'
   return request({
     url: api.List,
+    method: 'get',
+    params: param
+  })
+}
+
+/**
+ * 获得根列表
+ * @param param 搜索参数
+ * @returns {*}
+ */
+export function getRootList (param) {
+  return request({
+    url: api.QueryRootList,
     method: 'get',
     params: param
   })
