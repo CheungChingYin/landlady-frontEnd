@@ -121,6 +121,12 @@ export const asyncRouterMap = [
             meta: { title: 'menu.system.dictList', icon: 'unordered-list', keepAlive: true, permission: ['system'] }
           },
           {
+            path: '/system/categoryList',
+            name: 'categoryList',
+            component: () => import('@/views/system/category/CategoryList'),
+            meta: { title: 'menu.system.categoryList', icon: 'branches', keepAlive: true, permission: ['system'] }
+          },
+          {
             path: '/system/roleList',
             name: 'roleList',
             component: () => import('@/views/system/role/RoleTableList'),
