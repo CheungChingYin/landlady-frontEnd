@@ -24,7 +24,8 @@
             placeholder="请选择父级节点"
             :load-data="onLoadData"
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            v-decorator="['pid']"/>
+            v-decorator="['pid']"
+            :disabled="!isAddForm"/>
         </a-form-item>
         <a-form-item label="类型名称">
           <a-input
@@ -45,8 +46,11 @@
 
 <script>
 import { STable } from '@/components'
-import { getChildrenList, getRootList } from '@/api/system/categoryApi'
+import { addData, editData, getChildrenList, getRootList, queryById } from '@/api/system/categoryApi'
 import { TreeSelect, notification } from 'ant-design-vue'
+import pick from 'lodash.pick'
+
+const fields = ['id', 'name', 'code', 'pid']
 
 export default {
   name: 'CategoryModal',
@@ -85,7 +89,8 @@ export default {
       subExpandedKeys: [],
       treeData: [],
       form: this.$form.createForm(this),
-      replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' }
+      replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' },
+      isAddForm: false
     }
   },
   created () {
@@ -97,7 +102,8 @@ export default {
   },
   methods: {
     add () {
-      this.edit({})
+      this.isAddForm = true
+      this.visible = true
       getRootList({}).then(res => {
         if (res.code !== 200) {
           notification.error({
@@ -110,19 +116,53 @@ export default {
       })
     },
     edit (record) {
-      this.model = Object.assign({}, record)
+      this.isAddForm = false
+      queryById(record.id).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+        } else {
+          if (res.result.pid !== '0') {
+            queryById(res.result.pid).then(res => {
+              if (res.code !== 200) {
+                this.$message.error(res.message)
+              } else {
+                const data = []
+                data.push(res.result)
+                this.treeData = data
+              }
+            })
+          }
+          this.form.setFieldsValue(pick(res.result, fields))
+        }
+      })
       this.visible = true
     },
     close () {
       this.$emit('close')
       this.visible = false
-      this.$refs.form.resetFields()
+      this.form.resetFields()
     },
     handleOk () {
       // 触发表单验证
-      this.$refs.form.validate(valid => {
-        if (valid) {
-        } else {
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          let request = null
+          if (this.isAddForm) {
+            request = addData(values)
+          } else {
+            request = editData(values)
+          }
+          request.then(res => {
+            if (res.code !== 200) {
+              this.$message.error(res.message)
+            } else {
+              this.$message.success(res.message)
+              // 刷新列表页数据
+              this.$parent.$parent.$refs.table.loadData()
+              // 关闭弹窗
+              this.close()
+            }
+          })
         }
       })
     },

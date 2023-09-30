@@ -39,7 +39,7 @@
       </s-table>
     </div>
 
-    <CategoryModal ref="modalForm" @ok="modalFormOk"/>
+    <CategoryModal ref="modalForm"/>
   </a-card>
 </template>
 
