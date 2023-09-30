@@ -47,7 +47,7 @@
 
 import { STable } from '@/components'
 import CategoryModal from '@/views/system/category/CategoryModal'
-import { getChildrenList, getList } from '@/api/system/categoryApi'
+import { deleteData, getChildrenList, getList } from '@/api/system/categoryApi'
 import { notification } from 'ant-design-vue'
 
 export default {
@@ -125,7 +125,13 @@ export default {
 
     },
     handleDelete (record) {
-
+      deleteData(record.id).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+        } else {
+          this.$refs.table.loadData()
+        }
+      })
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
