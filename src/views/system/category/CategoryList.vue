@@ -157,12 +157,9 @@ export default {
       }
     },
     handleAddSub (record) {
-      // this.subExpandedKeys = [];
-      // this.getExpandKeysByPid(record.id,this.dataSource,this.dataSource)
-      // this.$refs.modalForm.subExpandedKeys = this.subExpandedKeys;
-      // this.$refs.modalForm.title = "添加子分类";
-      // this.$refs.modalForm.edit({'pid':record.id});
-      // this.$refs.modalForm.disableSubmit = false;
+      this.$refs.modalForm.add(record)
+      this.$refs.modalForm.title = '添加下级'
+      this.$refs.modalForm.disableSubmit = false
     },
     checkHasChild (list) {
       return list.map(item => {

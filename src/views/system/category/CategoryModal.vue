@@ -94,6 +94,8 @@ export default {
     }
   },
   created () {
+    // 防止表单未注册
+    fields.forEach(v => this.form.getFieldDecorator(v))
   },
   computed: {
     disabled () {
@@ -101,19 +103,35 @@ export default {
     }
   },
   methods: {
-    add () {
+    add (record) {
       this.isAddForm = true
       this.visible = true
-      getRootList({}).then(res => {
-        if (res.code !== 200) {
-          notification.error({
-            message: '请求列表数据失败',
-            description: '请求列表数据失败,请稍后重试'
-          })
-          return []
-        }
-        this.treeData = this.checkIsLeaf(res.result)
-      })
+      if (record === undefined || record == null) {
+        getRootList({}).then(res => {
+          if (res.code !== 200) {
+            notification.error({
+              message: '请求列表数据失败',
+              description: '请求列表数据失败,请稍后重试'
+            })
+            return []
+          }
+          this.treeData = this.checkIsLeaf(res.result)
+        })
+      } else {
+        // 渲染父级目录数据
+        queryById(record.id).then(res => {
+          if (res.code !== 200) {
+            this.$message.error(res.message)
+          } else {
+            const data = []
+            data.push(res.result)
+            this.treeData = data
+          }
+        })
+        this.$nextTick(() => {
+          this.form.setFieldsValue({ pid: record.id })
+        })
+      }
     },
     edit (record) {
       this.isAddForm = false
@@ -121,7 +139,9 @@ export default {
         if (res.code !== 200) {
           this.$message.error(res.message)
         } else {
+          // 不是顶级目录
           if (res.result.pid !== '0') {
+            // 父节点数据渲染
             queryById(res.result.pid).then(res => {
               if (res.code !== 200) {
                 this.$message.error(res.message)
