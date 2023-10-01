@@ -179,6 +179,7 @@ export default {
               this.$message.success(res.message)
               // 刷新列表页数据
               this.$parent.$parent.$refs.table.loadData()
+              this.$parent.$parent.expandedRowKeys = []
               // 关闭弹窗
               this.close()
             }
