@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import message from 'ant-design-vue/es/message'
 
 const api = {
   List: '/sys/category/list',
@@ -105,4 +106,59 @@ export function deleteData (id) {
     method: 'delete',
     params: { 'id': id }
   })
+}
+
+/**
+ * 根据字典编码获得树形下拉Option数据
+ * @param code 编码
+ * @returns {Promise<*[]>}
+ */
+export async function getTreeDataOptionByCode (code) {
+  let rootId = null
+  await getRootList({ code: code }).then(res => {
+    if (res.code !== 200) {
+      message.error(res.msg)
+    } else {
+        rootId = res.result[0].id
+    }
+  })
+  return getTreeDataOptionById(rootId)
+}
+
+/**
+ * 获得树形下拉Option数据
+ * @param id
+ * @returns {Promise<*[]>}
+ */
+export async function getTreeDataOptionById (pid) {
+  let treeDataList = null
+  await getChildrenList({ pid: pid }).then(res => {
+    if (res.code !== 200) {
+      this.message.error(res.msg)
+    } else {
+      treeDataList = res.result
+    }
+  })
+  return optionHandler(treeDataList)
+}
+
+/**
+ * 组装下拉option
+ * @param list 数据列表
+ * @returns {*[]}
+ */
+function optionHandler (list) {
+  const resultList = []
+  if (!list || list.length === 0) {
+    return resultList
+  }
+  // 组装下拉option
+  list.forEach(item => {
+    resultList.push({
+      value: item.id,
+      label: item.name,
+      isLeaf: item.hasChild !== '1'
+    })
+  })
+  return resultList
 }
