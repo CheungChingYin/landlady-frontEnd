@@ -238,7 +238,7 @@ export default {
   },
   methods: {
     async initDict () {
-      // 是否冻结
+      // 查询表单区域选项
       this.areaOptions = await getTreeDataOptionByCode('area_code')
     },
     /**
