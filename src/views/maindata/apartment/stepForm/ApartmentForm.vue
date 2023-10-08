@@ -124,7 +124,6 @@ import { addData, editData, queryById } from '@/api/system/userApi'
 import { notification, Cascader } from 'ant-design-vue'
 import { getTreeDataOptionByCode, getTreeDataOptionById } from '@/api/system/categoryApi'
 
-// import { getDictOption } from '@/api/system/dictItemApi'
 import pick from 'lodash.pick'
 
 export default {
@@ -227,7 +226,7 @@ export default {
     },
     cascadeOnChange (value) {
       console.log(value)
-    },
+    }
   },
   mounted () {
     this.initDict()
