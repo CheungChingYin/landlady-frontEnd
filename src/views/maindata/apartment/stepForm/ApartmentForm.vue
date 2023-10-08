@@ -56,32 +56,38 @@
         <a-row class="form-row" :gutter="16">
           <a-col :lg="6" :md="12" :sm="24">
             <a-form-item :label="$t('maindata.apartment.label.form.apartmentArea')">
-              <a-input
+              <a-input-number
                 size="large"
-                type="text"
+                style="width: 100%"
+                :min="0"
+                :precision="2"
+                :formatter="value => `${value}m²`"
+                :parser="value => value.replace('m²', '')"
                 :placeholder="$t('maindata.apartment.label.form.apartmentArea')"
-                v-decorator="['apartmentArea']"
-              ></a-input>
+                v-decorator="['apartmentArea', {initialValue: 0}]"/>
             </a-form-item>
           </a-col>
           <a-col :xl="{span: 7, offset: 1}" :lg="{span: 8}" :md="{span: 12}" :sm="24">
             <a-form-item :label="$t('maindata.apartment.label.form.apartmentHeight')">
-              <a-input
+              <a-input-number
                 size="large"
-                type="text"
+                style="width: 100%"
+                :min="0"
+                :precision="2"
+                :formatter="value => `${value}m`"
+                :parser="value => value.replace('m', '')"
                 :placeholder="$t('maindata.apartment.label.form.apartmentHeight')"
-                v-decorator="['apartmentHeight']"
-              ></a-input>
+                v-decorator="['apartmentHeight', {initialValue: 0}]"/>
             </a-form-item>
           </a-col>
           <a-col :xl="{span: 9, offset: 1}" :lg="{span: 10}" :md="{span: 24}" :sm="24">
             <a-form-item :label="$t('maindata.apartment.label.form.apartmentCompletionDate')">
-              <a-input
+              <a-date-picker
                 size="large"
-                type="text"
+                style="width: 100%"
                 :placeholder="$t('maindata.apartment.label.form.apartmentCompletionDate')"
                 v-decorator="['apartmentCompletionDate']"
-              ></a-input>
+              ></a-date-picker>
             </a-form-item>
           </a-col>
         </a-row>
