@@ -103,7 +103,7 @@ export default {
     return {
       loading: false,
       memberLoading: false,
-
+      isMobile: false,
       // table
       columns: [
         {

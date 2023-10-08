@@ -1,6 +1,7 @@
 export default {
   'maindata.apartment.label.form.apartmentNumber': '公寓编号',
   'maindata.apartment.label.form.apartmentName': '公寓名称',
+  'maindata.apartment.label.form.locate': '省市区（县）',
   'maindata.apartment.label.form.provinceId': '省份',
   'maindata.apartment.label.form.cityId': '城市',
   'maindata.apartment.label.form.areaId': '区县',

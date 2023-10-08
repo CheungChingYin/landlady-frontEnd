@@ -15,7 +15,7 @@
                 size="large"
                 type="text"
                 :placeholder="$t('maindata.apartment.label.form.apartmentNumber')"
-                disabled="true"
+                disabled
                 v-decorator="['apartmentNumber']"
               ></a-input>
             </a-form-item>
@@ -31,47 +31,27 @@
             </a-form-item>
           </a-col>
           <a-col :xl="{span: 9, offset: 1}" :lg="{span: 10}" :md="{span: 24}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.provinceId')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.provinceId')"
-                v-decorator="['provinceId', {rules: [{ required: true, message: $t('maindata.apartment.provinceId.require') }], validateTrigger: ['change', 'blur']}]"
-              ></a-input>
+            <a-form-item :label="$t('maindata.apartment.label.form.locate')">
+              <Cascader
+                :options="areaOptions"
+                :load-data="loadAreaData"
+                placeholder="请选择省市区（县）"
+                change-on-select
+                @change="cascadeOnChange"
+                v-model="locate"
+              />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row class="form-row" :gutter="16">
-          <a-col :lg="6" :md="12" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.cityId')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.cityId')"
-                v-decorator="['cityId', {rules: [{ required: true, message: $t('maindata.apartment.cityId.require') }], validateTrigger: ['change', 'blur']}]"
-              ></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="{span: 7, offset: 1}" :lg="{span: 8}" :md="{span: 12}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.areaId')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.areaId')"
-                v-decorator="['areaId', {rules: [{ required: true, message: $t('maindata.apartment.areaId.require') }], validateTrigger: ['change', 'blur']}]"
-              ></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="{span: 9, offset: 1}" :lg="{span: 10}" :md="{span: 24}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentAddress')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.apartmentAddress')"
-                v-decorator="['apartmentAddress', {rules: [{ required: true, message: $t('maindata.apartment.apartmentAddress.require') }], validateTrigger: ['change', 'blur']}]"
-              ></a-input>
-            </a-form-item>
-          </a-col>
+          <a-form-item :label="$t('maindata.apartment.label.form.apartmentAddress')">
+            <a-input
+              size="large"
+              type="text"
+              :placeholder="$t('maindata.apartment.label.form.apartmentAddress')"
+              v-decorator="['apartmentAddress', {rules: [{ required: true, message: $t('maindata.apartment.apartmentAddress.require') }], validateTrigger: ['change', 'blur']}]"
+            ></a-input>
+          </a-form-item>
         </a-row>
         <a-row class="form-row" :gutter="16">
           <a-col :lg="6" :md="12" :sm="24">
@@ -141,11 +121,17 @@
 
 <script>
 import { addData, editData, queryById } from '@/api/system/userApi'
-import { notification } from 'ant-design-vue'
+import { notification, Cascader } from 'ant-design-vue'
+import { getTreeDataOptionByCode, getTreeDataOptionById } from '@/api/system/categoryApi'
+
 // import { getDictOption } from '@/api/system/dictItemApi'
 import pick from 'lodash.pick'
+
 export default {
   name: 'ApartmentForm',
+  components: {
+    Cascader
+  },
   props: {
     showSubmit: {
       type: Boolean,
@@ -156,7 +142,12 @@ export default {
     return {
       queryData: {},
       form: this.$form.createForm(this),
-      isAddForm: false
+      isAddForm: false,
+      areaOptions: [],
+      loadAreaData: selectOption => {
+        this.loadCategory(selectOption)
+      },
+      locate: []
     }
   },
   computed: {},
@@ -175,8 +166,20 @@ export default {
       })
     },
     async initDict () {
-      // 是否冻结
-      // this.isFreezeOption = await getDictOption('yn')
+      // 查询表单区域选项
+      this.areaOptions = await getTreeDataOptionByCode('area_code')
+    },
+    /**
+     * 加载级联数据
+     * @param selectOption 级联数据对象
+     * @returns {Promise<void>}
+     */
+    async loadCategory (selectOption) {
+      const targetOption = selectOption[selectOption.length - 1]
+      targetOption.loading = true
+      targetOption.children = await getTreeDataOptionById(targetOption.value)
+      this.areaOptions = [...this.areaOptions]
+      targetOption.loading = false
     },
     // 提交表单
     handleSubmit (e) {
@@ -221,7 +224,10 @@ export default {
           }
         }
       })
-    }
+    },
+    cascadeOnChange (value) {
+      console.log(value)
+    },
   },
   mounted () {
     this.initDict()
