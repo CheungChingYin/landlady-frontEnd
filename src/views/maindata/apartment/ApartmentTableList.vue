@@ -254,7 +254,7 @@ export default {
       targetOption.loading = false
     },
     handleAdd () {
-      this.$router.push({ name: 'userForm' })
+      this.$router.push({ name: 'apartmentAdvancedForm' })
     },
     handleEdit (record) {
       this.$router.push({ name: 'userForm', params: record })

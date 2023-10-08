@@ -22,6 +22,7 @@ export default {
   'menu.system.categoryList': '目录字典管理',
   'menu.maindata': '主数据管理',
   'menu.maindata.apartmentList': '公寓管理',
+  'menu.maindata.apartmentAdvancedForm': '公寓表单',
   'menu.list': '列表页',
   'menu.list.table-list': '查询表格',
   'menu.list.basic-list': '标准列表',
