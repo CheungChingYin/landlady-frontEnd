@@ -87,7 +87,7 @@ export const asyncRouterMap = [
           {
             path: '/maindata/ApartmentAdvancedForm',
             name: 'apartmentAdvancedForm',
-            component: () => import('@/views/maindata/apartment/stepForm/ApartmentAdvancedForm'),
+            component: () => import('@/views/maindata/apartment/form/ApartmentAdvancedForm'),
             hidden: true,
             meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
           }
