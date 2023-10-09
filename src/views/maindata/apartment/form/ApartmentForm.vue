@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper :title="false">
     <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-      <a-form @submit="handleSubmit" :form="form">
+      <a-form :form="form">
         <a-form-item label="" v-show="false">
           <a-input
             size="large"
@@ -85,6 +85,7 @@
               <a-date-picker
                 size="large"
                 style="width: 100%"
+                :disabled-date="disabledDate"
                 :placeholder="$t('maindata.apartment.label.form.apartmentCompletionDate')"
                 v-decorator="['apartmentCompletionDate']"
               ></a-date-picker>
@@ -126,11 +127,9 @@
 </template>
 
 <script>
-import { addData, editData, queryById } from '@/api/system/userApi'
-import { notification, Cascader } from 'ant-design-vue'
+import { Cascader } from 'ant-design-vue'
 import { getTreeDataOptionByCode, getTreeDataOptionById } from '@/api/system/categoryApi'
-
-import pick from 'lodash.pick'
+import moment from 'moment'
 
 export default {
   name: 'ApartmentForm',
@@ -145,9 +144,7 @@ export default {
   },
   data () {
     return {
-      queryData: {},
       form: this.$form.createForm(this),
-      isAddForm: false,
       areaOptions: [],
       loadAreaData: selectOption => {
         this.loadCategory(selectOption)
@@ -157,19 +154,6 @@ export default {
   },
   computed: {},
   methods: {
-    loadData (id) {
-      queryById(id).then(res => {
-        if (res.code !== 200) {
-          notification.error({
-            message: '加载表单数据失败',
-            description: '请联系管理员'
-          })
-          return
-        }
-        this.form.setFieldsValue(pick(res.result, ['name', 'email', 'phoneNumber', 'isFreeze']))
-        this.queryData = res.result
-      })
-    },
     async initDict () {
       // 查询表单区域选项
       this.areaOptions = await getTreeDataOptionByCode('area_code')
@@ -186,65 +170,16 @@ export default {
       this.areaOptions = [...this.areaOptions]
       targetOption.loading = false
     },
-    // 提交表单
-    handleSubmit (e) {
-      e.preventDefault()
-      const fieldArray = ['name', 'email', 'phoneNumber', 'isFreeze']
-      if (this.isAddForm) {
-        fieldArray.push('password')
-        fieldArray.push('password2')
-      }
-      this.form.validateFields(fieldArray, (err, values) => {
-        if (!err) {
-          if (this.isAddForm) {
-            addData(values).then(res => {
-              if (res.code !== 200) {
-                notification.error({
-                  message: '保存失败',
-                  description: res.message
-                })
-              } else {
-                notification.success({
-                  message: '保存成功'
-                })
-                // 保存成功，返回列表页
-                this.routeBackHandler()
-              }
-            })
-          } else {
-            const data = Object.assign(this.queryData, values)
-            editData(data).then(res => {
-              if (res.code !== 200) {
-                notification.error({
-                  message: '保存失败',
-                  description: res.message
-                })
-              } else {
-                notification.success({
-                  message: '保存成功'
-                })
-                this.loadData(res.result.id)
-              }
-            })
-          }
-        }
-      })
-    },
     cascadeOnChange (value) {
       console.log(value)
+    },
+    disabledDate (current) {
+      // 竣工日期不能大于当前时间
+      return current && current > moment().endOf('day')
     }
   },
   mounted () {
     this.initDict()
-    let id = null
-    if (this.$route.params) {
-      id = this.$route.params.id
-    }
-    if (id == null) {
-      this.isAddForm = true
-      return
-    }
-    this.loadData(id)
   }
 }
 </script>
