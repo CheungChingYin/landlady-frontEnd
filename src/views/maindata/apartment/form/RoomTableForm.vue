@@ -244,15 +244,6 @@ export default {
   },
   mounted () {
     this.initDict()
-    let id = null
-    if (this.$route.params) {
-      id = this.$route.params.id
-    }
-    if (id == null) {
-      this.isAddForm = true
-      return
-    }
-    this.loadData(id)
   }
 }
 </script>

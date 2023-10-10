@@ -16,7 +16,7 @@
 
     <!-- fixed footer toolbar -->
     <footer-tool-bar :is-mobile="isMobile">
-      <a-button type="primary" @click="validate" :loading="loading">提交</a-button>
+      <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
     </footer-tool-bar>
   </page-header-wrapper>
 </template>
@@ -25,6 +25,7 @@
 import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
+import { queryById } from '@/api/maindata/ApartmentApi'
 
 export default {
   name: 'ApartmentAdvancedForm',
@@ -38,59 +39,7 @@ export default {
       loading: false,
       memberLoading: false,
       isMobile: false,
-      id: '',
-      // table
-      columns: [
-        {
-          title: '成员姓名',
-          dataIndex: 'name',
-          key: 'name',
-          width: '20%',
-          scopedSlots: { customRender: 'name' }
-        },
-        {
-          title: '工号',
-          dataIndex: 'workId',
-          key: 'workId',
-          width: '20%',
-          scopedSlots: { customRender: 'workId' }
-        },
-        {
-          title: '所属部门',
-          dataIndex: 'department',
-          key: 'department',
-          width: '40%',
-          scopedSlots: { customRender: 'department' }
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'operation' }
-        }
-      ],
-      data: [
-        {
-          key: '1',
-          name: '小明',
-          workId: '001',
-          editable: false,
-          department: '行政部'
-        },
-        {
-          key: '2',
-          name: '李莉',
-          workId: '002',
-          editable: false,
-          department: 'IT部'
-        },
-        {
-          key: '3',
-          name: '王小帅',
-          workId: '003',
-          editable: false,
-          department: '财务部'
-        }
-      ]
+      id: ''
     }
   },
   methods: {
@@ -134,7 +83,26 @@ export default {
       if (labelNode) {
         labelNode.scrollIntoView(true)
       }
+    },
+    loadData () {
+      if (this.id == null || this.id === '') {
+        return
+      }
+      queryById(this.id).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+        } else {
+          this.$refs.apartForm.form.setFieldsValue(res.result)
+          this.$refs.apartForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+        }
+      })
     }
+  },
+  mounted () {
+    if (this.$route.params) {
+      this.id = this.$route.params.id
+    }
+    this.loadData()
   }
 }
 </script>

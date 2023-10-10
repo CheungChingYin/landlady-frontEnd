@@ -257,7 +257,7 @@ export default {
       this.$router.push({ name: 'apartmentAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'userForm', params: record })
+      this.$router.push({ name: 'apartmentAdvancedForm', params: record })
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'userFormDetail', params: record })
