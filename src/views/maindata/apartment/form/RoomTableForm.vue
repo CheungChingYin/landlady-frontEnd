@@ -47,7 +47,11 @@
           v-if="record.editable"
           @change="e => handleChange(e.target.value, record.key, 'remark')"
           :value="text"/>
-        <template v-else>{{ text }}</template>
+        <template v-else>
+          <ellipsis :length="20" tooltip>
+            {{ text }}
+          </ellipsis>
+        </template>
       </template>
       <template slot="operation" slot-scope="text, record">
         <template v-if="record.editable">
@@ -82,10 +86,13 @@
 <script>
 
 import { getDictOption } from '@/api/system/dictItemApi'
+import { Ellipsis } from '@/components'
 
 export default {
   name: 'RoomTableForm',
-  components: {},
+  components: {
+    Ellipsis
+  },
   props: {
     headId: {
       type: String,
