@@ -178,12 +178,17 @@ export default {
       console.log(this.roomStatusOption)
     },
     newMember () {
-      const length = this.data.length
+      if (this.headId === '') {
+        this.$message.error('请保存表单后后再进行新增操作')
+        return
+      }
       this.data.push({
-        key: length === 0 ? '1' : (parseInt(this.data[length - 1].key) + 1).toString(),
-        name: '',
-        workId: '',
-        department: '',
+        id: '',
+        apartmentId: this.headId,
+        roomNumber: '',
+        roomArea: 0,
+        roomStatus: 0,
+        remark: '',
         editable: true,
         isNew: true
       })
