@@ -26,6 +26,7 @@ import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
 import { queryById } from '@/api/maindata/ApartmentApi'
+import pick from 'lodash.pick'
 
 export default {
   name: 'ApartmentAdvancedForm',
@@ -92,7 +93,7 @@ export default {
         if (res.code !== 200) {
           this.$message.error(res.message)
         } else {
-          this.$refs.apartForm.form.setFieldsValue(res.result)
+          this.$refs.apartForm.form.setFieldsValue(pick(res.result, this.$refs.apartForm.fields))
           this.$refs.apartForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
         }
       })

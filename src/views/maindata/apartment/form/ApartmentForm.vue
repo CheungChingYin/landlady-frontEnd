@@ -149,10 +149,26 @@ export default {
       loadAreaData: selectOption => {
         this.loadCategory(selectOption)
       },
-      locate: []
+      locate: [],
+      fields: [
+        'id',
+        'apartmentNumber',
+        'apartmentName',
+        'apartmentAddress',
+        'apartmentArea',
+        'apartmentHeight',
+        'apartmentCompletionDate',
+        'ownerName',
+        'ownerIdNumber',
+        'remark'
+      ]
     }
   },
   computed: {},
+  created () {
+    // 防止表单未注册
+    this.fields.forEach(v => this.form.getFieldDecorator(v))
+  },
   methods: {
     async initDict () {
       // 查询表单区域选项
