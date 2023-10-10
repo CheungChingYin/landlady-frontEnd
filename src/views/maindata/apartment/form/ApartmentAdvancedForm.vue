@@ -6,7 +6,7 @@
     <a-card class="card" title="" :bordered="false">
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="房间主数据">
-          <room-table-form ref="roomTableForm"></room-table-form>
+          <room-table-form ref="roomTableForm" :head-id="id"></room-table-form>
         </a-tab-pane>
         <a-tab-pane key="2" tab="附件" force-render>
           Content of Tab Pane 2
@@ -38,6 +38,7 @@ export default {
       loading: false,
       memberLoading: false,
       isMobile: false,
+      id: '',
       // table
       columns: [
         {

@@ -6,76 +6,126 @@
       :pagination="false"
       :loading="memberLoading"
     >
-      <template v-for="(col, i) in ['name', 'workId', 'department']" :slot="col" slot-scope="text, record">
+      <template v-for="(item, i) in ['roomNumber']" :slot="item" slot-scope="text, record">
         <a-input
-          :key="col"
+          :key="item"
           v-if="record.editable"
           style="margin: -5px 0"
           :value="text"
           :placeholder="columns[i].title"
-          @change="e => handleChange(e.target.value, record.key, col)"
+          @change="e => handleChange(e.target.value, record.key, item)"
         />
+        <template v-else>{{ text }}</template>
+      </template>
+      <template v-for="(col, i) in ['roomArea']" :slot="col" slot-scope="text, record">
+        <a-input-number
+          :key="col"
+          v-if="record.editable"
+          size="large"
+          :min="0"
+          :value="text"
+          :precision="2"
+          @change="e => handleChange(e, record.key, col)"
+          :formatter="value => `${value}m²`"
+          :parser="value => value.replace('m²', '')"/>
+        <template v-else>{{ text }}</template>
+      </template>
+      <template :slot="'roomStatus'" slot-scope="text, record">
+        <a-select
+          v-if="record.editable"
+          placeholder="请选择"
+          style="width: 80%"
+          default-value="0"
+          :value="record.roomStatus"
+          @change="e => handleChange(e, record.key, 'roomStatus')"
+          :options="roomStatusOption">
+        </a-select>
+        <template v-else>{{ record.roomStatus__dictText }}</template>
+      </template>
+      <template :slot="'remark'" slot-scope="text, record">
+        <a-textarea
+          v-if="record.editable"
+          @change="e => handleChange(e.target.value, record.key, 'remark')"
+          :value="text"/>
         <template v-else>{{ text }}</template>
       </template>
       <template slot="operation" slot-scope="text, record">
         <template v-if="record.editable">
           <span v-if="record.isNew">
             <a @click="saveRow(record)">添加</a>
-            <a-divider type="vertical" />
+            <a-divider type="vertical"/>
             <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
               <a>删除</a>
             </a-popconfirm>
           </span>
           <span v-else>
             <a @click="saveRow(record)">保存</a>
-            <a-divider type="vertical" />
+            <a-divider type="vertical"/>
             <a @click="cancel(record.key)">取消</a>
           </span>
         </template>
         <span v-else>
           <a @click="toggle(record.key)">编辑</a>
-          <a-divider type="vertical" />
+          <a-divider type="vertical"/>
           <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
             <a>删除</a>
           </a-popconfirm>
         </span>
       </template>
     </a-table>
-    <a-button style="width: 100%; margin-top: 16px; margin-bottom: 8px" type="dashed" icon="plus" @click="newMember">新增</a-button>
+    <a-button style="width: 100%; margin-top: 16px; margin-bottom: 8px" type="dashed" icon="plus" @click="newMember">
+      新增
+    </a-button>
   </div>
 </template>
 
 <script>
 
+import { getDictOption } from '@/api/system/dictItemApi'
+
 export default {
   name: 'RoomTableForm',
   components: {},
+  props: {
+    headId: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       memberLoading: false,
       isMobile: false,
+      roomStatusOption: [],
       // table
       columns: [
         {
-          title: '成员姓名',
-          dataIndex: 'name',
-          key: 'name',
+          title: '房间编号',
+          dataIndex: 'roomNumber',
+          key: 'roomNumber',
           width: '20%',
-          scopedSlots: { customRender: 'name' }
+          scopedSlots: { customRender: 'roomNumber' }
         },
         {
-          title: '工号',
-          dataIndex: 'workId',
-          key: 'workId',
+          title: '房间面积',
+          dataIndex: 'roomArea',
+          key: 'roomArea',
           width: '20%',
-          scopedSlots: { customRender: 'workId' }
+          scopedSlots: { customRender: 'roomArea' }
         },
         {
-          title: '所属部门',
-          dataIndex: 'department',
-          key: 'department',
-          width: '40%',
-          scopedSlots: { customRender: 'department' }
+          title: '房间状态',
+          dataIndex: 'roomStatus',
+          key: 'roomStatus',
+          width: '20%',
+          scopedSlots: { customRender: 'roomStatus' }
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+          key: 'remark',
+          width: '30%',
+          scopedSlots: { customRender: 'remark' }
         },
         {
           title: '操作',
@@ -89,7 +139,12 @@ export default {
           name: '小明',
           workId: '001',
           editable: false,
-          department: '行政部'
+          department: '行政部',
+          roomNumber: '101',
+          roomArea: 12.5,
+          roomStatus: 0,
+          roomStatus__dictText: '未出租',
+          remark: 'aaaaa实打实大苏打111111111111111111111111111111111111111'
         },
         {
           key: '2',
@@ -110,6 +165,11 @@ export default {
   },
   computed: {},
   methods: {
+    async initDict () {
+      // 查询表单区域选项
+      this.roomStatusOption = await getDictOption('room_status')
+      console.log(this.roomStatusOption)
+    },
     newMember () {
       const length = this.data.length
       this.data.push({
@@ -156,7 +216,9 @@ export default {
     },
     cancel (key) {
       const target = this.data.find(item => item.key === key)
-      Object.keys(target).forEach(key => { target[key] = target._originalData[key] })
+      Object.keys(target).forEach(key => {
+        target[key] = target._originalData[key]
+      })
       target._originalData = undefined
     },
     handleChange (value, key, column) {
@@ -169,7 +231,7 @@ export default {
     }
   },
   mounted () {
-    // this.initDict()
+    this.initDict()
     let id = null
     if (this.$route.params) {
       id = this.$route.params.id
