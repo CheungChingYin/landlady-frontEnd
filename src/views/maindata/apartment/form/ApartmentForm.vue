@@ -173,8 +173,6 @@ export default {
     async initDict () {
       // 查询表单区域选项
       this.areaOptions = await getTreeDataOptionByCode('area_code')
-      console.log(this.locate.length)
-      console.log(this.locate)
       // 编辑的时候加载省市区
       if (this.locate.length === 3) {
         // 省份对象
