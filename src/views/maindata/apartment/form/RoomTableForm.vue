@@ -96,6 +96,7 @@ export default {
   props: {
     headId: {
       type: String,
+      default: '',
       required: true
     }
   },

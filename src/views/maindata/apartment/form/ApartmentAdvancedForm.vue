@@ -1,31 +1,34 @@
 <template>
-  <page-header-wrapper content="">
-    <a-card class="card" title="公寓管理" :bordered="false">
-      <ApartmentForm ref="apartForm" :showSubmit="false" />
-    </a-card>
-    <a-card class="card" title="" :bordered="false">
-      <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="房间主数据">
-          <room-table-form ref="roomTableForm" :head-id="id"></room-table-form>
-        </a-tab-pane>
-        <a-tab-pane key="2" tab="附件" force-render>
-          Content of Tab Pane 2
-        </a-tab-pane>
-      </a-tabs>
-    </a-card>
+  <a-spin :spinning="loading">
+    <page-header-wrapper content="">
+      <a-card class="card" title="公寓管理" :bordered="false">
+        <ApartmentForm ref="apartmentForm" :showSubmit="false" />
+      </a-card>
+      <a-card class="card" title="" :bordered="false">
+        <a-tabs default-active-key="1">
+          <a-tab-pane key="1" tab="房间主数据">
+            <room-table-form ref="roomTableForm" :head-id="id"></room-table-form>
+          </a-tab-pane>
+          <a-tab-pane key="2" tab="附件" force-render>
+            Content of Tab Pane 2
+          </a-tab-pane>
+        </a-tabs>
+      </a-card>
 
-    <!-- fixed footer toolbar -->
-    <footer-tool-bar :is-mobile="isMobile">
-      <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
-    </footer-tool-bar>
-  </page-header-wrapper>
+      <!-- fixed footer toolbar -->
+      <footer-tool-bar :is-mobile="isMobile">
+        <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
+        <a-button style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
+      </footer-tool-bar>
+    </page-header-wrapper>
+  </a-spin>
 </template>
 
 <script>
 import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
-import { queryById } from '@/api/maindata/ApartmentApi'
+import { addData, queryById } from '@/api/maindata/ApartmentApi'
 import pick from 'lodash.pick'
 
 export default {
@@ -46,37 +49,35 @@ export default {
   methods: {
     // 最终全页面提交
     validate () {
-      const { $refs: { repository, task }, $notification } = this
-      const repositoryForm = new Promise((resolve, reject) => {
-        repository.form.validateFields((err, values) => {
-          if (err) {
-            reject(err)
+      const headForm = this.$refs.apartmentForm.form
+      headForm.validateFields((err, values) => {
+        if (!err) {
+          const locate = this.$refs.apartmentForm.locate
+          if (locate.length !== 3) {
+            this.$message.error('省市区(县)范围必须要选到区')
             return
           }
-          resolve(values)
-        })
-      })
-      const taskForm = new Promise((resolve, reject) => {
-        task.form.validateFields((err, values) => {
-          if (err) {
-            reject(err)
-            return
+          const saveData = Object.assign({}, values)
+          if (values.apartmentCompletionDate !== undefined && values.apartmentCompletionDate != null) {
+            saveData.apartmentCompletionDate = values.apartmentCompletionDate.format('YYYY-MM-DD')
+            saveData.provinceId = locate[0]
+            saveData.cityId = locate[1]
+            saveData.areaId = locate[2]
           }
-          resolve(values)
-        })
-      })
-
-      // clean this.errors
-      this.errors = []
-      Promise.all([repositoryForm, taskForm]).then(values => {
-        $notification['error']({
-          message: 'Received values of form:',
-          description: JSON.stringify(values)
-        })
-      }).catch(() => {
-        const errors = Object.assign({}, repository.form.getFieldsError(), task.form.getFieldsError())
-        const tmp = { ...errors }
-        this.errorList(tmp)
+          this.loading = true
+          addData(saveData).then(res => {
+            if (res.code !== 200) {
+              this.$message.error(res.message)
+            } else {
+              this.$message.success('保存成功')
+              this.id = res.result.id
+              this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
+              this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+            }
+          }).finally(() => {
+            this.loading = false
+          })
+        }
       })
     },
     scrollToField (fieldKey) {
@@ -93,10 +94,13 @@ export default {
         if (res.code !== 200) {
           this.$message.error(res.message)
         } else {
-          this.$refs.apartForm.form.setFieldsValue(pick(res.result, this.$refs.apartForm.fields))
-          this.$refs.apartForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+          this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
+          this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
         }
       })
+    },
+    routeBackHandler () {
+      this.$router.back()
     }
   },
   mounted () {
