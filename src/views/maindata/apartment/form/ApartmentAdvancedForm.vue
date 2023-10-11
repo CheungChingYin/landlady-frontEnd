@@ -70,6 +70,7 @@ export default {
               this.$message.error(res.message)
             } else {
               this.$message.success('保存成功')
+              // 保存成功后，更新表单数据
               this.id = res.result.id
               this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
               this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]

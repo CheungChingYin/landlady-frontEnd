@@ -173,6 +173,24 @@ export default {
     async initDict () {
       // 查询表单区域选项
       this.areaOptions = await getTreeDataOptionByCode('area_code')
+      console.log(this.locate.length)
+      console.log(this.locate)
+      // 编辑的时候加载省市区
+      if (this.locate.length === 3) {
+        // 省份对象
+        const provinceObject = this.areaOptions.find(item => item.value === this.locate[0])
+        if (provinceObject) {
+          // 添加城市数据
+          provinceObject.children = await getTreeDataOptionById(this.locate[0])
+          // 城市对象
+          const cityObject = provinceObject.children.find(item => item.value === this.locate[1])
+          if (cityObject) {
+            // 添加区县数据
+            cityObject.children = await getTreeDataOptionById(this.locate[1])
+            this.areaOptions = [...this.areaOptions]
+          }
+        }
+      }
     },
     /**
      * 加载级联数据
