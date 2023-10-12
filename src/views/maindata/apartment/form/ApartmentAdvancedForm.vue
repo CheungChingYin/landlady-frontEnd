@@ -97,6 +97,7 @@ export default {
         } else {
           this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
           this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+          this.$refs.roomTableForm.loadData(res.result.id)
         }
       })
     },

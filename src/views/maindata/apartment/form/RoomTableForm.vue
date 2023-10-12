@@ -40,7 +40,7 @@
           @change="e => handleChange(e, record.key, 'roomStatus')"
           :options="roomStatusOption">
         </a-select>
-        <template v-else>{{ record.roomStatus__dictText }}</template>
+        <template v-else>{{ roomStatusOption.find(item => item.value === record.roomStatus).label }}</template>
       </template>
       <template :slot="'remark'" slot-scope="text, record">
         <a-textarea
@@ -71,7 +71,7 @@
         <span v-else>
           <a @click="toggle(record.key)">编辑</a>
           <a-divider type="vertical"/>
-          <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
+          <a-popconfirm title="是否要删除此行？" @confirm="remove(record)">
             <a>删除</a>
           </a-popconfirm>
         </span>
@@ -86,11 +86,13 @@
 <script>
 
 import { getDictOption } from '@/api/system/dictItemApi'
-import { Ellipsis } from '@/components'
+import { Ellipsis, STable } from '@/components'
+import { deleteData, getList } from '@/api/maindata/RoomMainDataApi'
 
 export default {
   name: 'RoomTableForm',
   components: {
+    STable,
     Ellipsis
   },
   props: {
@@ -142,32 +144,18 @@ export default {
         }
       ],
       data: [
-        {
-          key: '1',
-          name: '小明',
-          workId: '001',
-          editable: false,
-          department: '行政部',
-          roomNumber: '101',
-          roomArea: 12.5,
-          roomStatus: 0,
-          roomStatus__dictText: '未出租',
-          remark: 'aaaaa实打实大苏打111111111111111111111111111111111111111'
-        },
-        {
-          key: '2',
-          name: '李莉',
-          workId: '002',
-          editable: false,
-          department: 'IT部'
-        },
-        {
-          key: '3',
-          name: '王小帅',
-          workId: '003',
-          editable: false,
-          department: '财务部'
-        }
+        // {
+        //   key: '1',
+        //   name: '小明',
+        //   workId: '001',
+        //   editable: false,
+        //   department: '行政部',
+        //   roomNumber: '101',
+        //   roomArea: 12.5,
+        //   roomStatus: 0,
+        //   roomStatus__dictText: '未出租',
+        //   remark: 'aaaaa实打实大苏打111111111111111111111111111111111111111'
+        // }
       ]
     }
   },
@@ -183,7 +171,9 @@ export default {
         this.$message.error('请保存表单后后再进行新增操作')
         return
       }
+      const dataLength = this.data.length
       this.data.push({
+        key: dataLength === 0 ? '1' : (parseInt(this.data[dataLength - 1].key) + 1).toString(),
         id: '',
         apartmentId: this.headId,
         roomNumber: '',
@@ -194,34 +184,66 @@ export default {
         isNew: true
       })
     },
-    remove (key) {
-      const newData = this.data.filter(item => item.key !== key)
+    remove (record) {
+      const newData = this.data.filter(item => item.key !== record.key)
+      if (record.id !== '') {
+        deleteData(record.id).then(res => {
+          if (res.code !== 200) {
+            this.$message.error(res.message)
+            return
+          }
+          this.$message.success(res.message)
+        })
+      }
       this.data = newData
     },
     saveRow (record) {
-      this.memberLoading = true
-      const { key, name, workId, department } = record
-      if (!name || !workId || !department) {
-        this.memberLoading = false
-        this.$message.error('请填写完整成员信息。')
+      const data = Object.assign({}, record, { apartmentId: this.headId })
+      // 校验
+      if (data.roomNumber === undefined || data.roomNumber === '') {
+        this.$message.error('房间编号不能为空')
         return
       }
-      // 模拟网络请求、卡顿 800ms
-      new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ loop: false })
-        }, 800)
-      }).then(() => {
-        const target = this.data.find(item => item.key === key)
-        target.editable = false
-        target.isNew = false
-        this.memberLoading = false
-      })
+      if (this.checkRoomNumberIsExist(data.key, data.roomNumber)) {
+        this.$message.error('房间编号已存在')
+        return
+      }
+      this.memberLoading = true
+      const target = this.data.find(item => item.key === record.key)
+      target.isNew = false
+      target.editable = false
+      this.memberLoading = false
+    },
+    checkRoomNumberIsExist (key, roomNumber) {
+      return this.data.find(item => item.roomNumber === roomNumber && item.key !== key) !== undefined
     },
     toggle (key) {
       const target = this.data.find(item => item.key === key)
+      console.log('----targetOrigin----')
+      console.log(target)
       target._originalData = { ...target }
       target.editable = !target.editable
+      console.log('----targetNow----')
+      console.log(target)
+    },
+    async loadData (id) {
+      this.memberLoading = true
+      const param = { apartmentId: id }
+      await getList(1, 99999, param).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+          return
+        }
+        const recordList = res.result.records
+        let key = 0
+        // 设置为编辑数据
+        recordList.forEach(item => {
+          item.key = key++
+          item.editable = false
+        })
+        this.data = recordList
+      })
+      this.memberLoading = false
     },
     getRowByKey (key, newData) {
       const data = this.data
