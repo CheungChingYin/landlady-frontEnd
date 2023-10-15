@@ -28,8 +28,9 @@
 import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
-import { addData, queryById } from '@/api/maindata/ApartmentApi'
+import { queryById, saveOrUpdateComplexData } from '@/api/maindata/ApartmentApi'
 import pick from 'lodash.pick'
+import moment from 'moment'
 
 export default {
   name: 'ApartmentAdvancedForm',
@@ -53,19 +54,21 @@ export default {
       headForm.validateFields((err, values) => {
         if (!err) {
           const locate = this.$refs.apartmentForm.locate
+          // 省市区检验
           if (locate.length !== 3) {
             this.$message.error('省市区(县)范围必须要选到区')
             return
           }
           const saveData = Object.assign({}, values)
-          if (values.apartmentCompletionDate !== undefined && values.apartmentCompletionDate != null) {
+          saveData.provinceId = locate[0]
+          saveData.cityId = locate[1]
+          saveData.areaId = locate[2]
+          if (values.apartmentCompletionDate !== undefined && values.apartmentCompletionDate != null && values.apartmentCompletionDate instanceof moment) {
             saveData.apartmentCompletionDate = values.apartmentCompletionDate.format('YYYY-MM-DD')
-            saveData.provinceId = locate[0]
-            saveData.cityId = locate[1]
-            saveData.areaId = locate[2]
           }
+          saveData.roomMainDataList = this.$refs.roomTableForm.data
           this.loading = true
-          addData(saveData).then(res => {
+          saveOrUpdateComplexData(saveData).then(res => {
             if (res.code !== 200) {
               this.$message.error(res.message)
             } else {
@@ -74,6 +77,7 @@ export default {
               this.id = res.result.id
               this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
               this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+              this.$refs.roomTableForm.loadData(res.result.id)
             }
           }).finally(() => {
             this.loading = false

@@ -5,7 +5,8 @@ const api = {
   Add: '/maindata/apartment/add',
   Edit: '/maindata/apartment/edit',
   QueryById: '/maindata/apartment/queryById',
-  Delete: '/maindata/apartment/delete'
+  Delete: '/maindata/apartment/delete',
+  SaveOrUpdateComplex: '/maindata/apartment/saveOrUpdateComplexData'
 }
 
 /**
@@ -35,6 +36,19 @@ export function getList (pageNo, pageSize, param) {
 export function addData (data) {
   return request({
     url: api.Add,
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 新增或更新复合数据
+ * @param data 新增数据
+ * @returns {*}
+ */
+export function saveOrUpdateComplexData (data) {
+  return request({
+    url: api.SaveOrUpdateComplex,
     method: 'post',
     data: data
   })
