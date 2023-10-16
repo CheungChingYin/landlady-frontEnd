@@ -16,7 +16,7 @@
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="是否冻结">
+                <a-form-item label="房间状态">
                   <a-select
                     v-model="queryParam.roomStatus"
                     placeholder="请选择"
@@ -58,6 +58,10 @@
       >
         <span slot="apartNumberSlot" slot-scope="text, record">
           <a @click="apartmentNumberEvent(record)">{{ text }}</a>
+        </span>
+        <span slot="roomStatusSlot" slot-scope="text, record">
+          <a-badge v-if="record.roomStatus === 1" status="success" :text="text" />
+          <a-badge v-else status="warning" :text="text" />
         </span>
         <span slot="remark" slot-scope="text">
           <ellipsis :length="20" tooltip>{{ text }}</ellipsis>
@@ -103,7 +107,8 @@ const columns = [
   },
   {
     title: '房间状态',
-    dataIndex: 'roomStatus_dictText'
+    dataIndex: 'roomStatus_dictText',
+    scopedSlots: { customRender: 'roomStatusSlot' }
   },
   {
     title: '备注',
