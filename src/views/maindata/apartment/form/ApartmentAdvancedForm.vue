@@ -27,7 +27,7 @@
 <script>
 import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
-import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
+import RoomTableForm from '@/views/maindata/room/form/RoomTableForm'
 import { queryById, saveOrUpdateComplexData } from '@/api/maindata/ApartmentApi'
 import pick from 'lodash.pick'
 import moment from 'moment'
