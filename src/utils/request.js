@@ -50,6 +50,33 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  // 附件下载拦截
+  if (response.config && response.config.responseType === 'blob') {
+    const blob = new Blob([response.data], { type: 'application/octet-stream;charset=utf-8' })
+    const filename = decodeURI(response.headers['filename'])
+    if ('download' in document.createElement('a')) {
+      const downloadElement = document.createElement('a')
+      let href = ''
+      if (window.URL) {
+        href = window.URL.createObjectURL(blob)
+      } else {
+        href = window.webkitURL.createObjectURL(blob)
+      }
+      downloadElement.href = href
+      downloadElement.download = filename
+      document.body.appendChild(downloadElement)
+      downloadElement.click()
+      if (window.URL) {
+        window.URL.revokeObjectURL(href)
+      } else {
+        window.webkitURL.revokeObjectURL(href)
+      }
+      document.body.removeChild(downloadElement)
+    } else {
+      navigator.msSaveBlob(blob, filename)
+    }
+    return
+  }
   return response.data
 }, errorHandler)
 

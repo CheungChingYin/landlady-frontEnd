@@ -138,6 +138,13 @@ export const asyncRouterMap = [
             name: 'roleList',
             component: () => import('@/views/system/role/RoleTableList'),
             meta: { title: 'menu.system.roleList', icon: 'cluster', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/system/attachmentTab',
+            name: 'attachmentTabForm',
+            component: () => import('@/views/system/attachment/AttachmentTabForm'),
+            hidden: true,
+            meta: { title: 'menu.system.attachmentTabForm', keepAlive: true, permission: ['system'] }
           }
         ]
       },

@@ -10,7 +10,7 @@
             <room-table-form ref="roomTableForm" :head-id="id"></room-table-form>
           </a-tab-pane>
           <a-tab-pane key="2" tab="附件" force-render>
-            Content of Tab Pane 2
+            <attachment-tab-form ref="attachmentTabForm" :head-id="id"></attachment-tab-form>
           </a-tab-pane>
         </a-tabs>
       </a-card>
@@ -31,10 +31,12 @@ import RoomTableForm from '@/views/maindata/apartment/form/RoomTableForm'
 import { queryById, saveOrUpdateComplexData } from '@/api/maindata/ApartmentApi'
 import pick from 'lodash.pick'
 import moment from 'moment'
+import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 
 export default {
   name: 'ApartmentAdvancedForm',
   components: {
+    AttachmentTabForm,
     RoomTableForm,
     FooterToolBar,
     ApartmentForm
@@ -67,6 +69,7 @@ export default {
             saveData.apartmentCompletionDate = values.apartmentCompletionDate.format('YYYY-MM-DD')
           }
           saveData.roomMainDataList = this.$refs.roomTableForm.data
+          saveData.attachmentList = this.$refs.attachmentTabForm.data
           this.loading = true
           saveOrUpdateComplexData(saveData).then(res => {
             if (res.code !== 200) {
@@ -78,6 +81,7 @@ export default {
               this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
               this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
               this.$refs.roomTableForm.loadData(res.result.id)
+              this.$refs.attachmentTabForm.loadData(res.result.id)
             }
           }).finally(() => {
             this.loading = false
@@ -102,6 +106,7 @@ export default {
           this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
           this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
           this.$refs.roomTableForm.loadData(res.result.id)
+          this.$refs.attachmentTabForm.loadData(res.result.id)
         }
       })
     },

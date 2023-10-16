@@ -20,6 +20,7 @@ export default {
   'menu.system.dictForm': '字典表单页',
   'menu.system.roleList': '角色管理',
   'menu.system.categoryList': '目录字典管理',
+  'menu.system.attachmentTabForm': '附件Tab',
   'menu.maindata': '主数据管理',
   'menu.maindata.apartmentList': '公寓管理',
   'menu.maindata.apartmentAdvancedForm': '公寓表单',
