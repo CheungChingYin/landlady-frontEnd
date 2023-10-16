@@ -111,8 +111,8 @@ export default {
           title: '附件名称',
           dataIndex: 'attachmentName',
           key: 'attachmentName',
-          width: '20%',
-          scopedSlots: { customRender: 'attachmentName' }
+          width: '20%'
+          // scopedSlots: { customRender: 'attachmentName' }
         },
         {
           title: '附件大小',
