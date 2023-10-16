@@ -260,7 +260,7 @@ export default {
       this.$router.push({ name: 'apartmentAdvancedForm', params: record })
     },
     handleShowDetail (record) {
-      this.$router.push({ name: 'userFormDetail', params: record })
+      this.$router.push({ name: 'apartmentFormDetail', params: record })
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {

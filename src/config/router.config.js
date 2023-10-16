@@ -90,6 +90,13 @@ export const asyncRouterMap = [
             component: () => import('@/views/maindata/apartment/form/ApartmentAdvancedForm'),
             hidden: true,
             meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/maindata/ApartmentFormDetail',
+            name: 'apartmentFormDetail',
+            component: () => import('@/views/maindata/apartment/ApartmentFormDetail'),
+            hidden: true,
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
           }
         ]
       },
