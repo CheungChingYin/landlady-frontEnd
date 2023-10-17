@@ -103,6 +103,13 @@ export const asyncRouterMap = [
             name: 'roomList',
             component: () => import('@/views/maindata/room/RoomTableList'),
             meta: { title: 'menu.maindata.roomList', icon: 'container', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/maindata/RoomAdvancedForm',
+            name: 'roomAdvancedForm',
+            component: () => import('@/views/maindata/room/form/RoomAdvancedForm'),
+            hidden: true,
+            meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'] }
           }
         ]
       },

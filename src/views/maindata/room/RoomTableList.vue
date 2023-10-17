@@ -200,7 +200,7 @@ export default {
       this.roomStatusOption = await getDictOption('room_status')
     },
     handleAdd () {
-      this.$router.push({ name: 'apartmentAdvancedForm' })
+      this.$router.push({ name: 'roomAdvancedForm' })
     },
     handleEdit (record) {
       this.$router.push({ name: 'apartmentAdvancedForm', params: record })
