@@ -196,6 +196,9 @@ export default {
           const cascadeOption = this.queryParam.areaCascader
           // 移除查询条件中的级联数组，避免接口报错
           delete this.queryParam.areaCascader
+          delete this.queryParam.provinceId
+          delete this.queryParam.cityId
+          delete this.queryParam.areaId
           if (cascadeOption[0]) {
             this.queryParam.provinceId = cascadeOption[0]
           }
