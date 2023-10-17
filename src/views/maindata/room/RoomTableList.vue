@@ -5,8 +5,9 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="所属公寓">
-                <a-input v-model="queryParam.apartmentId" placeholder=""/>
+              <a-form-item label="公寓编号">
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" placeholder="" disabled/>
+                <a-button type="primary" @click="openModal">选择</a-button>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -79,6 +80,11 @@
           </template>
         </span>
       </s-table>
+      <ApartmentSelectSearchModal
+        ref="userSelectSearchModal"
+        @ok="apartmentSelectModalOk"
+        :get-list="getApartList"
+      ></ApartmentSelectSearchModal>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -88,8 +94,10 @@ import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 
 import { getList, deleteData } from '@/api/maindata/RoomMainDataApi'
+import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import { notification } from 'ant-design-vue'
 import { getDictOption } from '@/api/system/dictItemApi'
+import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal'
 
 const columns = [
   {
@@ -137,6 +145,7 @@ const columns = [
 export default {
   name: 'ApartmentTableList',
   components: {
+    ApartmentSelectSearchModal,
     STable,
     Ellipsis
   },
@@ -148,7 +157,9 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        apartmentNumber: ''
+      },
       // 是否冻结选项
       roomStatusOption: [],
       // 加载数据方法 必须为 Promise 对象
@@ -169,7 +180,8 @@ export default {
       areaOptions: [],
       loadAreaData: selectOption => {
         this.loadCategory(selectOption)
-      }
+      },
+      getApartList: getApartmentList
     }
   },
   filters: {},
@@ -227,6 +239,20 @@ export default {
       }
     },
     cascadeOnChange (value) {
+    },
+    apartmentSelectModalOk () {
+      const selectedRows = this.$refs.userSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
+      }
+      this.queryParam.apartmentId = selectedRows[0].id
+      this.queryParam.apartmentNumber = selectedRows[0].apartmentNumber
+      console.log(this.queryParam)
+      this.$refs.userSelectSearchModal.close()
+    },
+    openModal () {
+      this.$refs.userSelectSearchModal.open({})
     }
   },
   mounted () {
