@@ -86,7 +86,7 @@ import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 export default {
   name: 'RoomForm',
   components: {
-    ApartmentSelectSearchModal,
+    ApartmentSelectSearchModal
   },
   props: {
     showSubmit: {
