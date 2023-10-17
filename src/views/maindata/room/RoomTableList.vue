@@ -178,9 +178,6 @@ export default {
       selectedRowKeys: [],
       selectedRows: [],
       areaOptions: [],
-      loadAreaData: selectOption => {
-        this.loadCategory(selectOption)
-      },
       getApartList: getApartmentList
     }
   },

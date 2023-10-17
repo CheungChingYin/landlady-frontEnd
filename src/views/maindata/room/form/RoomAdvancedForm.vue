@@ -2,7 +2,7 @@
   <a-spin :spinning="loading">
     <page-header-wrapper content="">
       <a-card class="card" title="房间主数据" :bordered="false">
-        <ApartmentForm ref="apartmentForm" :showSubmit="false" />
+        <RoomForm ref="roomForm" :showSubmit="false" />
       </a-card>
       <a-card class="card" title="" :bordered="false">
         <a-tabs default-active-key="1">
@@ -25,21 +25,21 @@
 </template>
 
 <script>
-import ApartmentForm from '@/views/maindata/apartment/form/ApartmentForm'
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/room/form/RoomTableForm'
 import { queryById, saveOrUpdateComplexData } from '@/api/maindata/ApartmentApi'
 import pick from 'lodash.pick'
 import moment from 'moment'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
+import RoomForm from '@/views/maindata/room/form/RoomForm'
 
 export default {
   name: 'RoomAdvancedForm',
   components: {
+    RoomForm,
     AttachmentTabForm,
     RoomTableForm,
-    FooterToolBar,
-    ApartmentForm
+    FooterToolBar
   },
   data () {
     return {
@@ -52,10 +52,10 @@ export default {
   methods: {
     // 最终全页面提交
     validate () {
-      const headForm = this.$refs.apartmentForm.form
+      const headForm = this.$refs.roomForm.form
       headForm.validateFields((err, values) => {
         if (!err) {
-          const locate = this.$refs.apartmentForm.locate
+          const locate = this.$refs.roomForm.locate
           // 省市区检验
           if (locate.length !== 3) {
             this.$message.error('省市区(县)范围必须要选到区')
@@ -78,8 +78,8 @@ export default {
               this.$message.success('保存成功')
               // 保存成功后，更新表单数据
               this.id = res.result.id
-              this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
-              this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+              this.$refs.roomForm.form.setFieldsValue(pick(res.result, this.$refs.roomForm.fields))
+              this.$refs.roomForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
               this.$refs.roomTableForm.loadData(res.result.id)
               this.$refs.attachmentTabForm.loadData(res.result.id)
             }
@@ -103,8 +103,8 @@ export default {
         if (res.code !== 200) {
           this.$message.error(res.message)
         } else {
-          this.$refs.apartmentForm.form.setFieldsValue(pick(res.result, this.$refs.apartmentForm.fields))
-          this.$refs.apartmentForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
+          this.$refs.roomForm.form.setFieldsValue(pick(res.result, this.$refs.roomForm.fields))
+          this.$refs.roomForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
           this.$refs.roomTableForm.loadData(res.result.id)
           this.$refs.attachmentTabForm.loadData(res.result.id)
         }

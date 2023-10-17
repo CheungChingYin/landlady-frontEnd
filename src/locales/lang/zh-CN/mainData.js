@@ -16,5 +16,10 @@ export default {
   'maindata.apartment.provinceId.require': '请选择省份',
   'maindata.apartment.cityId.require': '请选择城市',
   'maindata.apartment.areaId.require': '请选择区县',
-  'maindata.apartment.apartmentAddress.require': '请输入公寓地址'
+  'maindata.apartment.apartmentAddress.require': '请输入公寓地址',
+  'maindata.room.label.form.roomNumber': '房间编号',
+  'maindata.room.label.form.apartmentNumber': '公寓编号',
+  'maindata.room.label.form.roomArea': '房间面积',
+  'maindata.room.label.form.roomStatus': '房间状态',
+  'maindata.room.label.form.remark': '备注'
 }

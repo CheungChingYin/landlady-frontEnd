@@ -10,52 +10,35 @@
         </a-form-item>
         <a-row class="form-row" :gutter="16">
           <a-col :lg="6" :md="12" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentNumber')">
+            <a-form-item :label="$t('maindata.room.label.form.roomNumber')">
               <a-input
                 size="large"
                 type="text"
-                :placeholder="$t('maindata.apartment.label.form.apartmentNumber')"
-                disabled
-                v-decorator="['apartmentNumber']"
+                :placeholder="$t('maindata.room.label.form.roomNumber')"
+                v-decorator="['roomNumber']"
               ></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="{span: 7, offset: 1}" :lg="{span: 8}" :md="{span: 12}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentName')">
+            <a-form-item label="" v-show="false">
               <a-input
                 size="large"
                 type="text"
-                :placeholder="$t('maindata.apartment.label.form.apartmentName')"
-                v-decorator="['apartmentName', {rules: [{ required: true, message: $t('maindata.apartment.apartmentName.require') }], validateTrigger: ['change', 'blur']}]"
-              ></a-input>
+                v-decorator="['apartmentId']"/>
+            </a-form-item>
+            <a-form-item :label="$t('maindata.room.label.form.apartmentNumber')">
+              <a-input
+                size="large"
+                type="text"
+                style="width: 65%;margin-right: 5%"
+                :placeholder="$t('maindata.room.label.form.apartmentNumber')"
+                disabled
+                v-decorator="['apartmentId_dictText']"/>
+              <a-button type="primary" @click="openModal">选择</a-button>
             </a-form-item>
           </a-col>
           <a-col :xl="{span: 9, offset: 1}" :lg="{span: 10}" :md="{span: 24}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.locate')">
-              <Cascader
-                :options="areaOptions"
-                :load-data="loadAreaData"
-                placeholder="请选择省市区（县）"
-                change-on-select
-                @change="cascadeOnChange"
-                v-model="locate"
-              />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row class="form-row" :gutter="16">
-          <a-form-item :label="$t('maindata.apartment.label.form.apartmentAddress')">
-            <a-input
-              size="large"
-              type="text"
-              :placeholder="$t('maindata.apartment.label.form.apartmentAddress')"
-              v-decorator="['apartmentAddress', {rules: [{ required: true, message: $t('maindata.apartment.apartmentAddress.require') }], validateTrigger: ['change', 'blur']}]"
-            ></a-input>
-          </a-form-item>
-        </a-row>
-        <a-row class="form-row" :gutter="16">
-          <a-col :lg="6" :md="12" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentArea')">
+            <a-form-item :label="$t('maindata.room.label.form.roomArea')">
               <a-input-number
                 size="large"
                 style="width: 100%"
@@ -63,78 +46,47 @@
                 :precision="2"
                 :formatter="value => `${value}m²`"
                 :parser="value => value.replace('m²', '')"
-                :placeholder="$t('maindata.apartment.label.form.apartmentArea')"
-                v-decorator="['apartmentArea', {initialValue: 0}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="{span: 7, offset: 1}" :lg="{span: 8}" :md="{span: 12}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentHeight')">
-              <a-input-number
-                size="large"
-                style="width: 100%"
-                :min="0"
-                :precision="2"
-                :formatter="value => `${value}m`"
-                :parser="value => value.replace('m', '')"
-                :placeholder="$t('maindata.apartment.label.form.apartmentHeight')"
-                v-decorator="['apartmentHeight', {initialValue: 0}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="{span: 9, offset: 1}" :lg="{span: 10}" :md="{span: 24}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.apartmentCompletionDate')">
-              <a-date-picker
-                size="large"
-                style="width: 100%"
-                :disabled-date="disabledDate"
-                :placeholder="$t('maindata.apartment.label.form.apartmentCompletionDate')"
-                v-decorator="['apartmentCompletionDate']"
-              ></a-date-picker>
+                :placeholder="$t('maindata.room.label.form.roomArea')"
+                v-decorator="['roomArea', {initialValue: 0}]"/>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row class="form-row" :gutter="16">
           <a-col :lg="6" :md="12" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.ownerName')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.ownerName')"
-                v-decorator="['ownerName']"
-              ></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="{span: 7, offset: 1}" :lg="{span: 8}" :md="{span: 12}" :sm="24">
-            <a-form-item :label="$t('maindata.apartment.label.form.ownerIdNumber')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('maindata.apartment.label.form.ownerIdNumber')"
-                v-decorator="['ownerIdNumber']"
-              ></a-input>
+            <a-form-item :label="$t('maindata.room.label.form.roomStatus')">
+              <a-select
+                placeholder="请选择"
+                :options="roomStatusOption"
+                v-decorator="['roomStatus', {initialValue: 0}]"/>
             </a-form-item>
           </a-col>
         </a-row>
         <a-row class="form-row" :gutter="16">
-          <a-form-item :label="$t('maindata.apartment.label.form.remark')">
+          <a-form-item :label="$t('maindata.room.label.form.remark')">
             <a-textarea
-              :placeholder="$t('maindata.apartment.label.form.remark')"
+              :placeholder="$t('maindata.room.label.form.remark')"
               v-decorator="['remark']"/>
           </a-form-item>
         </a-row>
       </a-form>
     </a-card>
+    <ApartmentSelectSearchModal
+      ref="userSelectSearchModal"
+      @ok="apartmentSelectModalOk"
+      :get-list="getApartList"
+    ></ApartmentSelectSearchModal>
   </page-header-wrapper>
 </template>
 
 <script>
-import { Cascader } from 'ant-design-vue'
-import { getTreeDataOptionByCode, getTreeDataOptionById } from '@/api/system/categoryApi'
-import moment from 'moment'
+import { getDictOption } from '@/api/system/dictItemApi'
+import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal.vue'
+import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 
 export default {
   name: 'RoomForm',
   components: {
-    Cascader
+    ApartmentSelectSearchModal,
   },
   props: {
     showSubmit: {
@@ -145,23 +97,17 @@ export default {
   data () {
     return {
       form: this.$form.createForm(this),
-      areaOptions: [],
-      loadAreaData: selectOption => {
-        this.loadCategory(selectOption)
-      },
-      locate: [],
       fields: [
         'id',
-        'apartmentNumber',
-        'apartmentName',
-        'apartmentAddress',
-        'apartmentArea',
-        'apartmentHeight',
-        'apartmentCompletionDate',
-        'ownerName',
-        'ownerIdNumber',
+        'apartmentId',
+        'apartmentNumber_dictText',
+        'roomNumber',
+        'roomArea',
+        'roomStatus',
         'remark'
-      ]
+      ],
+      roomStatusOption: [],
+      getApartList: getApartmentList
     }
   },
   computed: {},
@@ -171,43 +117,22 @@ export default {
   },
   methods: {
     async initDict () {
-      // 查询表单区域选项
-      this.areaOptions = await getTreeDataOptionByCode('area_code')
-      // 编辑的时候加载省市区
-      if (this.locate.length === 3) {
-        // 省份对象
-        const provinceObject = this.areaOptions.find(item => item.value === this.locate[0])
-        if (provinceObject) {
-          // 添加城市数据
-          provinceObject.children = await getTreeDataOptionById(this.locate[0])
-          // 城市对象
-          const cityObject = provinceObject.children.find(item => item.value === this.locate[1])
-          if (cityObject) {
-            // 添加区县数据
-            cityObject.children = await getTreeDataOptionById(this.locate[1])
-            this.areaOptions = [...this.areaOptions]
-          }
-        }
+      this.roomStatusOption = await getDictOption('room_status')
+    },
+    openModal () {
+      this.$refs.userSelectSearchModal.open({})
+    },
+    apartmentSelectModalOk () {
+      const selectedRows = this.$refs.userSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
       }
-    },
-    /**
-     * 加载级联数据
-     * @param selectOption 级联数据对象
-     * @returns {Promise<void>}
-     */
-    async loadCategory (selectOption) {
-      const targetOption = selectOption[selectOption.length - 1]
-      targetOption.loading = true
-      targetOption.children = await getTreeDataOptionById(targetOption.value)
-      this.areaOptions = [...this.areaOptions]
-      targetOption.loading = false
-    },
-    cascadeOnChange (value) {
-      console.log(value)
-    },
-    disabledDate (current) {
-      // 竣工日期不能大于当前时间
-      return current && current > moment().endOf('day')
+      const params = {}
+      params.apartmentId = selectedRows[0].id
+      params.apartmentId_dictText = selectedRows[0].apartmentNumber
+      this.form.setFieldsValue(params)
+      this.$refs.userSelectSearchModal.close()
     }
   },
   mounted () {
