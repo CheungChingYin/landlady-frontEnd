@@ -85,7 +85,7 @@
           <a-select
             placeholder="请选择"
             :options="isFreezeOption"
-            v-decorator="['isFreeze', {initialValue: '0',rules: [{ required: true, message: $t('user.isFreeze.required') }], validateTrigger: ['change', 'blur']}]"></a-select>
+            v-decorator="['isFreeze', {initialValue: 0,rules: [{ required: true, message: $t('user.isFreeze.required') }], validateTrigger: ['change', 'blur']}]"></a-select>
         </a-form-item>
         <a-form-item
           :wrapperCol="{ span: 24 }"
