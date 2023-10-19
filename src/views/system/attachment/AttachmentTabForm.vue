@@ -10,7 +10,16 @@
           :headers="headers"
           :before-upload="beforeUpload"
           @change="handleUploadChange">
-          <a-button>
+          <a-tooltip v-if="this.headId === ''">
+            <template slot="title">
+              请保存表单后再进行上传附件操作
+            </template>
+            <a-button disabled>
+              <a-icon type="upload"/>
+              上传
+            </a-button>
+          </a-tooltip>
+          <a-button v-else>
             <a-icon type="upload"/>
             上传
           </a-button>
@@ -169,7 +178,7 @@ export default {
       const data = Object.assign({}, record, { sourceId: this.headId })
       // 校验
       if (data.attachmentName === undefined || data.attachmentName === '') {
-        this.$message.error('房间编号不能为空')
+        this.$message.error('附件名称不能为空')
         return
       }
       this.memberLoading = true
@@ -180,12 +189,8 @@ export default {
     },
     toggle (key) {
       const target = this.data.find(item => item.key === key)
-      console.log('----targetOrigin----')
-      console.log(target)
       target._originalData = { ...target }
       target.editable = !target.editable
-      console.log('----targetNow----')
-      console.log(target)
     },
     async loadData (id) {
       this.memberLoading = true
