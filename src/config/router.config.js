@@ -116,6 +116,13 @@ export const asyncRouterMap = [
             name: 'assetList',
             component: () => import('@/views/maindata/assets/AssetsTableList.vue'),
             meta: { title: 'menu.maindata.assetList', icon: 'home', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/maindata/AssetAdvancedForm',
+            name: 'assetAdvancedForm',
+            component: () => import('@/views/maindata/assets/form/AssetsAdvancedForm.vue'),
+            hidden: true,
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
           }
         ]
       },

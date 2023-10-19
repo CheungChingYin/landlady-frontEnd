@@ -21,5 +21,13 @@ export default {
   'maindata.room.label.form.apartmentNumber': '公寓编号',
   'maindata.room.label.form.roomArea': '房间面积',
   'maindata.room.label.form.roomStatus': '房间状态',
-  'maindata.room.label.form.remark': '备注'
+  'maindata.room.label.form.remark': '备注',
+  'maindata.assets.label.form.assetsNumber': '资产编号',
+  'maindata.assets.label.form.assetsName': '资产名称',
+  'maindata.assets.label.form.assetsDesc': '资产描述',
+  'maindata.assets.label.form.skuNumber': 'SKU编号',
+  'maindata.assets.label.form.unit': '单位',
+  'maindata.assets.label.form.isFreeze': '是否冻结',
+  'maindata.assets.label.form.remark': '备注',
+  'maindata.assets.assetsName.require': '请输入资产名称'
 }

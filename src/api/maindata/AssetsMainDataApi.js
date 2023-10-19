@@ -5,7 +5,8 @@ const api = {
   Add: '/maindata/assets/add',
   Edit: '/maindata/assets/edit',
   QueryById: '/maindata/assets/queryById',
-  Delete: '/maindata/assets/delete'
+  Delete: '/maindata/assets/delete',
+  SaveOrUpdateComplex: '/maindata/assets/saveOrUpdateComplexData'
 }
 
 /**
@@ -76,5 +77,18 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+/**
+ * 新增或更新复合数据
+ * @param data 新增数据
+ * @returns {*}
+ */
+export function saveOrUpdateComplexData (data) {
+  return request({
+    url: api.SaveOrUpdateComplex,
+    method: 'post',
+    data: data
   })
 }

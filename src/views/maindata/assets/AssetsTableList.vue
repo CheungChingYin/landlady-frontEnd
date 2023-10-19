@@ -201,10 +201,10 @@ export default {
       this.isFreezeOption = await getDictOption('yn')
     },
     handleAdd () {
-      this.$router.push({ name: 'apartmentAdvancedForm' })
+      this.$router.push({ name: 'assetAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'apartmentAdvancedForm', params: record })
+      this.$router.push({ name: 'assetAdvancedForm', params: record })
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'apartmentFormDetail', params: record })
