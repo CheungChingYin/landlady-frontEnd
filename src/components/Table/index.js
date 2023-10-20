@@ -188,6 +188,9 @@ export default {
             this.localPagination = false
           }
           this.localDataSource = r.records // 返回结果中的数组数据
+          if (r.total) {
+            this.localPagination.showTotal = (total) => `共 ${r.total} 条`
+          }
         })
         .finally(() => {
           this.localLoading = false
