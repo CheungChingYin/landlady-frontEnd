@@ -100,7 +100,7 @@ export default {
       fields: [
         'id',
         'apartmentId',
-        'apartmentNumber_dictText',
+        'apartmentId_dictText',
         'roomNumber',
         'roomArea',
         'roomStatus',

@@ -1,13 +1,12 @@
 import request from '@/utils/request'
 
 const api = {
-  List: '/maindata/room/list',
-  Add: '/maindata/room/add',
-  Edit: '/maindata/room/edit',
-  QueryById: '/maindata/room/queryById',
-  Delete: '/maindata/room/delete',
-  SaveOrUpdateComplex: '/maindata/room/saveOrUpdateComplexData'
-
+  List: '/maindata/roomAssetsRecord/list',
+  UnionList: '/maindata/roomAssetsRecord/unionList',
+  Add: '/maindata/roomAssetsRecord/add',
+  Edit: '/maindata/roomAssetsRecord/edit',
+  QueryById: '/maindata/roomAssetsRecord/queryById',
+  Delete: '/maindata/roomAssetsRecord/delete'
 }
 
 /**
@@ -28,6 +27,24 @@ export function getList (pageNo, pageSize, param) {
     params: param
   })
 }
+/**
+ * 获得列表信息
+ * @param pageNo 当前页
+ * @param pageSize 显示条数
+ * @param param 搜索参数
+ * @returns {*}
+ */
+export function getUnionList (pageNo, pageSize, param) {
+  param.pageNo = pageNo
+  param.pageSize = pageSize
+  param.column = 'createTime'
+  param.order = 'desc'
+  return request({
+    url: api.UnionList,
+    method: 'get',
+    params: param
+  })
+}
 
 /**
  * 新增数据接口
@@ -37,19 +54,6 @@ export function getList (pageNo, pageSize, param) {
 export function addData (data) {
   return request({
     url: api.Add,
-    method: 'post',
-    data: data
-  })
-}
-
-/**
- * 新增或更新复合数据
- * @param data 新增数据
- * @returns {*}
- */
-export function saveOrUpdateComplexData (data) {
-  return request({
-    url: api.SaveOrUpdateComplex,
     method: 'post',
     data: data
   })

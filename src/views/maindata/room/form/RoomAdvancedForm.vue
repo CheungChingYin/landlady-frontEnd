@@ -6,8 +6,8 @@
       </a-card>
       <a-card class="card" title="" :bordered="false">
         <a-tabs default-active-key="1">
-          <a-tab-pane key="1" tab="资产主数据">
-            <room-table-form ref="roomTableForm" :head-id="id"></room-table-form>
+          <a-tab-pane key="1" tab="房间资产记录">
+            <room-assets-record-table-form ref="roomAssetsRecordTableForm" :head-id="id"></room-assets-record-table-form>
           </a-tab-pane>
           <a-tab-pane key="2" tab="附件" force-render>
             <attachment-tab-form ref="attachmentTabForm" :head-id="id"></attachment-tab-form>
@@ -27,15 +27,16 @@
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
 import RoomTableForm from '@/views/maindata/room/form/RoomTableForm'
-import { queryById, saveOrUpdateComplexData } from '@/api/maindata/ApartmentApi'
+import { getList, saveOrUpdateComplexData } from '@/api/maindata/RoomMainDataApi'
 import pick from 'lodash.pick'
-import moment from 'moment'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RoomForm from '@/views/maindata/room/form/RoomForm'
+import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/RoomAssetsRecordTableForm.vue'
 
 export default {
   name: 'RoomAdvancedForm',
   components: {
+    RoomAssetsRecordTableForm,
     RoomForm,
     AttachmentTabForm,
     RoomTableForm,
@@ -55,20 +56,8 @@ export default {
       const headForm = this.$refs.roomForm.form
       headForm.validateFields((err, values) => {
         if (!err) {
-          const locate = this.$refs.roomForm.locate
-          // 省市区检验
-          if (locate.length !== 3) {
-            this.$message.error('省市区(县)范围必须要选到区')
-            return
-          }
           const saveData = Object.assign({}, values)
-          saveData.provinceId = locate[0]
-          saveData.cityId = locate[1]
-          saveData.areaId = locate[2]
-          if (values.apartmentCompletionDate !== undefined && values.apartmentCompletionDate != null && values.apartmentCompletionDate instanceof moment) {
-            saveData.apartmentCompletionDate = values.apartmentCompletionDate.format('YYYY-MM-DD')
-          }
-          saveData.roomMainDataList = this.$refs.roomTableForm.data
+          saveData.roomAssetsRecordList = this.$refs.roomAssetsRecordTableForm.data
           saveData.attachmentList = this.$refs.attachmentTabForm.data
           this.loading = true
           saveOrUpdateComplexData(saveData).then(res => {
@@ -79,8 +68,7 @@ export default {
               // 保存成功后，更新表单数据
               this.id = res.result.id
               this.$refs.roomForm.form.setFieldsValue(pick(res.result, this.$refs.roomForm.fields))
-              this.$refs.roomForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
-              this.$refs.roomTableForm.loadData(res.result.id)
+              this.$refs.roomAssetsRecordTableForm.loadData(res.result.id)
               this.$refs.attachmentTabForm.loadData(res.result.id)
             }
           }).finally(() => {
@@ -99,14 +87,14 @@ export default {
       if (this.id == null || this.id === '') {
         return
       }
-      queryById(this.id).then(res => {
-        if (res.code !== 200) {
+      getList(1, 1, { id: this.id }).then(res => {
+        const record = res.result.records[0]
+        if (res.code !== 200 || record == null) {
           this.$message.error(res.message)
         } else {
-          this.$refs.roomForm.form.setFieldsValue(pick(res.result, this.$refs.roomForm.fields))
-          this.$refs.roomForm.locate = [res.result.provinceId, res.result.cityId, res.result.areaId]
-          this.$refs.roomTableForm.loadData(res.result.id)
-          this.$refs.attachmentTabForm.loadData(res.result.id)
+          this.$refs.roomForm.form.setFieldsValue(pick(record, this.$refs.roomForm.fields))
+          this.$refs.roomAssetsRecordTableForm.loadData(res.result.id)
+          this.$refs.attachmentTabForm.loadData(record.id)
         }
       })
     },
