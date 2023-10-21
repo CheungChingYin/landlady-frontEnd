@@ -58,7 +58,7 @@
           <span v-if="record.isNew">
             <a @click="saveRow(record)">添加</a>
             <a-divider type="vertical"/>
-            <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
+            <a-popconfirm title="是否要删除此行？" @confirm="remove(record)">
               <a>删除</a>
             </a-popconfirm>
           </span>
