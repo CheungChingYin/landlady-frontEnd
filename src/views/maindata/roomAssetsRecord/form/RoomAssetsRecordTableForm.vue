@@ -42,7 +42,7 @@
           <span v-if="record.isNew">
             <a @click="saveRow(record)">添加</a>
             <a-divider type="vertical"/>
-            <a-popconfirm title="是否要删除此行？" @confirm="remove(record.key)">
+            <a-popconfirm title="是否要删除此行？" @confirm="remove(record)">
               <a>删除</a>
             </a-popconfirm>
           </span>
@@ -73,7 +73,6 @@
 
 <script>
 
-import { getDictOption } from '@/api/system/dictItemApi'
 import { Ellipsis, STable } from '@/components'
 import { deleteData, getUnionList } from '@/api/maindata/RoomAssetsRecordApi'
 import { getList as getAssetsList } from '@/api/maindata/AssetsMainDataApi'
@@ -97,7 +96,6 @@ export default {
     return {
       memberLoading: false,
       isMobile: false,
-      roomStatusOption: [],
       // table
       columns: [
         {
@@ -148,11 +146,7 @@ export default {
   },
   computed: {},
   methods: {
-    async initDict () {
-      // 查询表单区域选项
-      this.roomStatusOption = await getDictOption('room_status')
-      console.log(this.roomStatusOption)
-    },
+    async initDict () {},
     newMember () {
       if (this.headId === '') {
         this.$message.error('请保存表单后后再进行新增操作')
@@ -191,17 +185,12 @@ export default {
     },
     toggle (key) {
       const target = this.data.find(item => item.key === key)
-      console.log('----targetOrigin----')
-      console.log(target)
       target._originalData = { ...target }
       target.editable = !target.editable
-      console.log('----targetNow----')
-      console.log(target)
     },
     async loadData (id) {
       this.memberLoading = true
-      const param = { roomId: id }
-      await getUnionList(1, 99999, param).then(res => {
+      await getUnionList(1, 99999, { roomId: id }).then(res => {
         if (res.code !== 200) {
           this.$message.error(res.message)
           return

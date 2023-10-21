@@ -93,7 +93,7 @@ export default {
           this.$message.error(res.message)
         } else {
           this.$refs.roomForm.form.setFieldsValue(pick(record, this.$refs.roomForm.fields))
-          this.$refs.roomAssetsRecordTableForm.loadData(res.result.id)
+          this.$refs.roomAssetsRecordTableForm.loadData(record.id)
           this.$refs.attachmentTabForm.loadData(record.id)
         }
       })
