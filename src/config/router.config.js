@@ -112,6 +112,13 @@ export const asyncRouterMap = [
             meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'] }
           },
           {
+            path: '/maindata/RoomDetail',
+            name: 'roomDetail',
+            component: () => import('@/views/maindata/room/RoomDetail'),
+            hidden: true,
+            meta: { title: 'menu.maindata.roomDetail', keepAlive: true, permission: ['system'] }
+          },
+          {
             path: '/maindata/AssetList',
             name: 'assetList',
             component: () => import('@/views/maindata/assets/AssetsTableList.vue'),

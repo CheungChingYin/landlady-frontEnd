@@ -25,6 +25,7 @@ export default {
   'menu.maindata.apartmentList': '公寓管理',
   'menu.maindata.apartmentAdvancedForm': '公寓表单',
   'menu.maindata.roomList': '房间管理',
+  'menu.maindata.roomDetail': '房间详情',
   'menu.maindata.roomAdvancedForm': '公寓表单',
   'menu.maindata.assetList': '资产管理',
   'menu.maindata.assetAdvancedForm': '资产表单',
