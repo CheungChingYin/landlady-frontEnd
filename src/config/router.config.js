@@ -137,6 +137,12 @@ export const asyncRouterMap = [
             component: () => import('@/views/maindata/assets/AssetsMainDataDetail'),
             hidden: true,
             meta: { title: 'menu.maindata.assetsDetail', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/maindata/RenterList',
+            name: 'renterList',
+            component: () => import('@/views/maindata/renter/RenterTableList.vue'),
+            meta: { title: 'menu.maindata.renterList', icon: 'idcard', keepAlive: true, permission: ['system'] }
           }
         ]
       },
