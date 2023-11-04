@@ -198,7 +198,7 @@ export default {
       this.genderOption = await getDictOption('sex')
     },
     handleAdd () {
-      this.$router.push({ name: 'assetAdvancedForm' })
+      this.$router.push({ name: 'renterAdvancedForm' })
     },
     handleEdit (record) {
       this.$router.push({ name: 'assetAdvancedForm', params: record })
