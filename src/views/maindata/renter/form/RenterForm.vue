@@ -128,6 +128,16 @@
           </a-form-item>
         </a-col>
       </a-row>
+      <a-row>
+        <a-col :span="24">
+          <a-form-item :label="$t('maindata.renter.label.form.remark')">
+            <a-textarea
+              rows="4"
+              :placeholder="$t('maindata.renter.label.form.remark')"
+              v-decorator="['remark']"/>
+          </a-form-item>
+        </a-col>
+      </a-row>
     </a-form>
   </a-card>
 </template>
