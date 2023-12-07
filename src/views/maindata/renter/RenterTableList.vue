@@ -201,7 +201,7 @@ export default {
       this.$router.push({ name: 'renterAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'assetAdvancedForm', params: record })
+      this.$router.push({ name: 'renterAdvancedForm', params: record })
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'assetsMainDataDetail', params: record })

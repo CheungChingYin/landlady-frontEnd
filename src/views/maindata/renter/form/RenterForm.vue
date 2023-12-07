@@ -185,6 +185,7 @@ export default {
       fields: [
         'id',
         'userId',
+        'name',
         'gender',
         'nation',
         'birthday',

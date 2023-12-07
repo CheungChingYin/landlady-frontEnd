@@ -83,6 +83,8 @@ export default {
           this.$message.error(res.message)
         } else {
           this.$refs.renterForm.form.setFieldsValue(pick(res.result, this.$refs.renterForm.fields))
+          this.$refs.renterForm.frontImageUrl = '/api/sys/file/download/' + res.result.frontAttachmentId
+          this.$refs.renterForm.reverseImageUrl = '/api/sys/file/download/' + res.result.reverseAttachmentId
           this.$refs.attachmentTabForm.loadData(res.result.id)
         }
       })
