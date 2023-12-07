@@ -6,6 +6,14 @@
           size="large"
           type="text"
           v-decorator="['id']"/>
+        <a-input
+          size="large"
+          type="text"
+          v-decorator="['frontAttachmentId']"/>
+        <a-input
+          size="large"
+          type="text"
+          v-decorator="['reverseAttachmentId']"/>
       </a-form-item>
       <a-row class="form-row" :gutter="[24, 8]">
         <a-col :span="8">
@@ -18,7 +26,7 @@
               :show-upload-list="false"
               action="/api/ocr/idCardFrontOCR"
               :before-upload="beforeUpload"
-              @change="handleChange">
+              @change="handleChangeFront">
               <img :src="frontImageUrl" alt="avatar" class="idCardPic" />
             </a-upload>
           </a-form-item>
@@ -171,17 +179,23 @@ export default {
       frontImageUrl: '/idCardSampleFront.png',
       reverseImageUrl: '/idCardSampleReverse.png',
       headers: {
-        'Authorization': storage.get(ACCESS_TOKEN)
+        'Authorization': storage.get(ACCESS_TOKEN),
+        'needAttachment': 'true'
       },
       fields: [
         'id',
-        'assetsNumber',
-        'assetsName',
-        'assetsDesc',
-        'skuNumber',
-        'unit',
-        'isFreeze',
-        'remark'
+        'userId',
+        'gender',
+        'nation',
+        'birthday',
+        'address',
+        'idNumber',
+        'signOffice',
+        'effectiveDate',
+        'expireDate',
+        'remark',
+        'frontAttachmentId',
+        'reverseAttachmentId'
       ]
     }
   },
@@ -195,16 +209,47 @@ export default {
       // 查询表单区域选项
       this.sexOption = await getDictOption('sex')
     },
-    handleChange (info) {
-      console.log(info)
-      if (info.file.status === 'uploading') {
-        this.loading = true
-        return
-      }
+    handleChangeFront (info) {
+      // 上传后回调
       if (info.file.status === 'done') {
-        // Get this url from response in real world.
-        // this.imageUrl = imageUrl
-        this.loading = false
+        const response = info.file.response
+        if (response.code !== 200) {
+          this.$message.error(response.message)
+          return
+        }
+        // 附件ID
+        const attachmentId = response.result.attachment.id
+        response.result.frontAttachmentId = attachmentId
+        // 赋值
+        this.form.setFieldsValue(response.result)
+        // 身份证正面图像预览
+        this.frontImageUrl = '/api/sys/file/download/' + attachmentId
+      }
+    },
+    handleChange (info) {
+      // 上传后回调
+      if (info.file.status === 'done') {
+        const response = info.file.response
+        if (response.code !== 200) {
+          this.$message.error(response.message)
+          return
+        }
+        // 性别转换
+        if (response.result.gender !== undefined && response.result.gender !== '') {
+          for (const item of this.sexOption) {
+            if (response.result.gender === item.label) {
+              response.result.gender = item.value
+              break
+            }
+          }
+        }
+        // 附件ID
+        const attachmentId = response.result.attachment.id
+        response.result.reverseAttachmentId = attachmentId
+        // 赋值
+        this.form.setFieldsValue(response.result)
+        // 身份证反面图像预览
+        this.reverseImageUrl = '/api/sys/file/download/' + attachmentId
       }
     },
     beforeUpload (file) {
