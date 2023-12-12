@@ -204,7 +204,7 @@ export default {
       this.$router.push({ name: 'renterAdvancedForm', params: record })
     },
     handleShowDetail (record) {
-      this.$router.push({ name: 'assetsMainDataDetail', params: record })
+      this.$router.push({ name: 'renterDataDetail', params: record })
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {

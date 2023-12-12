@@ -150,6 +150,13 @@ export const asyncRouterMap = [
             component: () => import('@/views/maindata/renter/form/RenterAdvancedForm.vue'),
             hidden: true,
             meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/maindata/RenterDataDetail',
+            name: 'renterDataDetail',
+            component: () => import('@/views/maindata/renter/RenterDataDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.maindata.renterDetail', icon: 'idcard', keepAlive: true, permission: ['system'] }
           }
         ]
       },
