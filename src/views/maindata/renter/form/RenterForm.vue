@@ -76,10 +76,12 @@
           <a-form-item :label="$t('maindata.renter.label.form.gender')">
             <a-radio-group
               :options="sexOption"
-              v-decorator="['gender', {rules: [{required: true, message: $t('maindata.renter.label.form.gender.require')}], validateTrigger: ['change', 'blur']}]"
-            />
+              size="large"
+              v-decorator="['gender', {rules: [{required: true, message: $t('maindata.renter.label.form.gender.require')}], validateTrigger: ['change', 'blur']}]"></a-radio-group>
           </a-form-item>
         </a-col>
+      </a-row>
+      <a-row class="form-row" :gutter="[24, 8]">
         <a-col :span="24 / colCount">
           <a-form-item :label="$t('maindata.renter.label.form.nation')">
             <a-input
@@ -99,19 +101,7 @@
             ></a-date-picker>
           </a-form-item>
         </a-col>
-      </a-row>
-      <a-row class="form-row" :gutter="[24, 8]">
-        <a-col :span="24">
-          <a-form-item :label="$t('maindata.renter.label.form.address')">
-            <a-input
-              size="large"
-              type="text"
-              v-decorator="['address', {rules: [{required: true, message: $t('maindata.renter.label.form.address.require')}], validateTrigger: ['change', 'blur']}]"/>
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row class="form-row" :gutter="[24, 8]">
-        <a-col :span="24">
+        <a-col :span="24 / colCount">
           <a-form-item :label="$t('maindata.renter.label.form.idNumber')">
             <a-input
               size="large"
@@ -119,8 +109,6 @@
               v-decorator="['idNumber', {rules: [{required: true, message: $t('maindata.renter.label.form.idNumber.require')}], validateTrigger: ['change', 'blur']}]"/>
           </a-form-item>
         </a-col>
-      </a-row>
-      <a-row class="form-row" :gutter="[24, 8]">
         <a-col :span="24 / colCount">
           <a-form-item :label="$t('maindata.renter.label.form.signOffice')">
             <a-input
@@ -149,6 +137,16 @@
               :placeholder="$t('maindata.renter.label.form.expireDate')"
               v-decorator="['expireDate', {rules: [{required: true, message: $t('maindata.renter.label.form.expireDate.require')}], validateTrigger: ['change', 'blur']}]"
             ></a-date-picker>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row class="form-row" :gutter="[24, 8]">
+        <a-col :span="24">
+          <a-form-item :label="$t('maindata.renter.label.form.address')">
+            <a-input
+              size="large"
+              type="text"
+              v-decorator="['address', {rules: [{required: true, message: $t('maindata.renter.label.form.address.require')}], validateTrigger: ['change', 'blur']}]"/>
           </a-form-item>
         </a-col>
       </a-row>
