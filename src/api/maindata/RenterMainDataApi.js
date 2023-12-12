@@ -6,7 +6,8 @@ const api = {
   Edit: '/maindata/renterMainData/edit',
   QueryById: '/maindata/renterMainData/queryById',
   Delete: '/maindata/renterMainData/delete',
-  SaveOrUpdateComplex: '/maindata/renterMainData/saveOrUpdateComplexData'
+  SaveOrUpdateComplex: '/maindata/renterMainData/saveOrUpdateComplexData',
+  getUserListNotInRenterMainData: '/maindata/renterMainData/getUserListNotInRenterMainData'
 }
 
 /**
@@ -64,6 +65,13 @@ export function queryById (id) {
     url: api.QueryById,
     method: 'get',
     params: { 'id': id }
+  })
+}
+
+export function getUserListNotInRenterMainData () {
+  return request({
+    url: api.getUserListNotInRenterMainData,
+    method: 'get'
   })
 }
 

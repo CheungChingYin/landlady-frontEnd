@@ -9,6 +9,10 @@
         <a-input
           size="large"
           type="text"
+          v-decorator="['userId', {rules: [{required: true, message: $t('maindata.renter.label.form.userId_dictText.require')}], validateTrigger: ['change', 'blur']}]"/>
+        <a-input
+          size="large"
+          type="text"
           v-decorator="['frontAttachmentId']"/>
         <a-input
           size="large"
@@ -49,11 +53,23 @@
       </a-row>
       <a-row class="form-row" :gutter="[24, 8]">
         <a-col :span="24 / colCount">
+          <a-form-item :label="$t('maindata.renter.label.form.userName')">
+            <a-input
+              size="large"
+              type="text"
+              style="width: 65%;margin-right: 5%"
+              :placeholder="$t('maindata.renter.label.form.userName')"
+              disabled
+              v-decorator="['userId_dictText', {rules: [{required: true, message: $t('maindata.renter.label.form.userId_dictText.require')}], validateTrigger: ['change', 'blur']}]"/>
+            <a-button type="primary" @click="openModal">选择</a-button>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24 / colCount">
           <a-form-item :label="$t('maindata.renter.label.form.name')">
             <a-input
               size="large"
               type="text"
-              v-decorator="['name', {rules: [{required: true, message: $t('maindata.renter.label.form.require')}], validateTrigger: ['change', 'blur']}]"/>
+              v-decorator="['name', {rules: [{required: true, message: $t('maindata.renter.label.form.name.require')}], validateTrigger: ['change', 'blur']}]"/>
           </a-form-item>
         </a-col>
         <a-col :span="24 / colCount">
@@ -147,6 +163,12 @@
         </a-col>
       </a-row>
     </a-form>
+    <div>
+      <UserSelectSearchModal
+        ref="userSelectSearchModal"
+        @ok="modalFormOk"
+        :getList="getUserListNotInRenterMainData"/>
+    </div>
   </a-card>
 </template>
 
@@ -156,10 +178,13 @@ import { getDictOption } from '@/api/system/dictItemApi'
 import storage from 'store'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import moment from 'moment/moment'
+import UserSelectSearchModal from '@/views/system/user/UserSelectSearchModal.vue'
+import { getUserListNotInRenterMainData } from '@/api/maindata/RenterMainDataApi'
 
 export default {
   name: 'RenterForm',
   components: {
+    UserSelectSearchModal,
     Cascader
   },
   props: {
@@ -185,6 +210,7 @@ export default {
       fields: [
         'id',
         'userId',
+        'userId_dictText',
         'name',
         'gender',
         'nation',
@@ -197,7 +223,8 @@ export default {
         'remark',
         'frontAttachmentId',
         'reverseAttachmentId'
-      ]
+      ],
+      getUserListNotInRenterMainData: getUserListNotInRenterMainData
     }
   },
   computed: {},
@@ -263,6 +290,21 @@ export default {
     disabledDate (current) {
       // 日期不能大于当前时间
       return current && current > moment().endOf('day')
+    },
+    openModal () {
+      this.$refs.userSelectSearchModal.open({})
+    },
+    modalFormOk () {
+      const selectedRows = this.$refs.userSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
+      }
+      const params = {}
+      params.userId = selectedRows[0].id
+      params.userId_dictText = selectedRows[0].name
+      this.form.setFieldsValue(params)
+      this.$refs.userSelectSearchModal.close()
     }
   },
   mounted () {

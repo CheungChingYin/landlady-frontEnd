@@ -23,7 +23,7 @@
 
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
-import { queryById, saveOrUpdateComplexData } from '@/api/maindata/RenterMainDataApi'
+import { saveOrUpdateComplexData, getList } from '@/api/maindata/RenterMainDataApi'
 import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RenterForm from '@/views/maindata/renter/form/RenterForm.vue'
@@ -78,13 +78,14 @@ export default {
       if (this.id == null || this.id === '') {
         return
       }
-      queryById(this.id).then(res => {
+      getList(1, 1, { id: this.id }).then(res => {
         if (res.code !== 200) {
           this.$message.error(res.message)
         } else {
-          this.$refs.renterForm.form.setFieldsValue(pick(res.result, this.$refs.renterForm.fields))
-          this.$refs.renterForm.frontImageUrl = '/api/sys/file/download/' + res.result.frontAttachmentId
-          this.$refs.renterForm.reverseImageUrl = '/api/sys/file/download/' + res.result.reverseAttachmentId
+          const record = res.result.records[0]
+          this.$refs.renterForm.form.setFieldsValue(pick(record, this.$refs.renterForm.fields))
+          this.$refs.renterForm.frontImageUrl = '/api/sys/file/download/' + record.frontAttachmentId
+          this.$refs.renterForm.reverseImageUrl = '/api/sys/file/download/' + record.reverseAttachmentId
           this.$refs.attachmentTabForm.loadData(res.result.id)
         }
       })
