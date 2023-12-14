@@ -63,8 +63,8 @@
         showPagination="auto"
       >
         <span slot="isFreezeSlot" slot-scope="text, record">
-          <a-badge v-if="record.isFreeze === 1" status="error" :text="text" />
-          <a-badge v-else status="success" :text="text" />
+          <a-badge v-if="record.isFreeze === 1" status="error" :text="'已冻结'" />
+          <a-badge v-else status="success" :text="'未冻结'" />
         </span>
         <span slot="description" slot-scope="text">
           <ellipsis :length="20" tooltip>{{ text }}</ellipsis>
