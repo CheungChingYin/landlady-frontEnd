@@ -5,24 +5,38 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="公寓编号">
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" placeholder="" disabled/>
-                <a-button type="primary" @click="openModal">选择</a-button>
+              <a-form-item label="合同编号">
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.contractNumber"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="房间编号">
-                <a-input v-model="queryParam.roomNumber" placeholder=""/>
+              <a-form-item label="合同名称">
+                <a-input v-model="queryParam.contractName" placeholder=""/>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="房间状态">
+                <a-form-item label="租赁人名称">
+                  <a-input v-model="queryParam.renterName" placeholder=""/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="公寓名称">
+                  <a-input v-model="queryParam.apartmentName" placeholder=""/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="房间名称">
+                  <a-input v-model="queryParam.roomNumber" placeholder=""/>
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="合同状态">
                   <a-select
-                    v-model="queryParam.roomStatus"
+                    v-model="queryParam.contractStatus"
                     placeholder="请选择"
                     default-value=""
-                    :options="roomStatusOption">
+                    :options="contractStatusOption">
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -61,8 +75,9 @@
           <a @click="apartmentNumberEvent(record)">{{ text }}</a>
         </span>
         <span slot="contractStatusSlot" slot-scope="text, record">
-          <a-badge v-if="record.roomStatus === 1" status="success" :text="text" />
-          <a-badge v-else status="warning" :text="text" />
+          <a-badge v-if="record.contractStatus === 0" status="default" :text="text"/>
+          <a-badge v-else-if="record.contractStatus === 1" status="success" :text="text"/>
+          <a-badge v-else status="error" :text="text"/>
         </span>
         <span slot="remark" slot-scope="text">
           <ellipsis :length="20" tooltip>{{ text }}</ellipsis>
@@ -106,8 +121,7 @@ const columns = [
   },
   {
     title: '合同名称',
-    dataIndex: 'contractName',
-    scopedSlots: { customRender: 'apartNumberSlot' }
+    dataIndex: 'contractName'
   },
   {
     title: '房间名称',
@@ -131,7 +145,7 @@ const columns = [
   },
   {
     title: '合同状态',
-    dataIndex: 'contractStatus',
+    dataIndex: 'contractStatus_dictText',
     scopedSlots: { customRender: 'contractStatusSlot' }
   },
   {
@@ -176,8 +190,8 @@ export default {
       queryParam: {
         apartmentNumber: ''
       },
-      // 是否冻结选项
-      roomStatusOption: [],
+      // 合同状态选项
+      contractStatusOption: [],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
         return getList(parameter.pageNo, parameter.pageSize, this.queryParam).then(res => {
@@ -210,7 +224,7 @@ export default {
   },
   methods: {
     async initDict () {
-      this.roomStatusOption = await getDictOption('room_status')
+      this.contractStatusOption = await getDictOption('contract_status')
     },
     handleAdd () {
       this.$router.push({ name: 'roomAdvancedForm' })
@@ -264,7 +278,7 @@ export default {
       console.log(this.queryParam)
       this.$refs.userSelectSearchModal.close()
     },
-    openModal () {
+    openRenterModal () {
       this.$refs.userSelectSearchModal.open({})
     }
   },
