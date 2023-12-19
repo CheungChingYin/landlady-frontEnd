@@ -160,6 +160,36 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // 合同
+      {
+        path: '/contract',
+        name: 'contract',
+        component: RouteView,
+        redirect: '/contract/contractList',
+        meta: { title: 'menu.contract', icon: 'file-text', permission: ['system'] },
+        children: [
+          {
+            path: '/contract/contractList',
+            name: 'contractList',
+            component: () => import('@/views/contract/ContractTableList'),
+            meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['system'] }
+          }
+          // {
+          //   path: '/maindata/RoomAdvancedForm',
+          //   name: 'roomAdvancedForm',
+          //   component: () => import('@/views/maindata/room/form/RoomAdvancedForm'),
+          //   hidden: true,
+          //   meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'] }
+          // },
+          // {
+          //   path: '/maindata/RoomDetail',
+          //   name: 'roomDetail',
+          //   component: () => import('@/views/maindata/room/RoomDetail'),
+          //   hidden: true,
+          //   meta: { title: 'menu.maindata.roomDetail', keepAlive: true, permission: ['system'] }
+          // }
+        ]
+      },
       // 系统管理
       {
         path: '/system',

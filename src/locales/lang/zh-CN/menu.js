@@ -33,6 +33,8 @@ export default {
   'menu.maindata.renterList': '租户管理',
   'menu.maindata.renterAdvancedForm': '租户表单',
   'menu.maindata.renterDetail': '租户详情',
+  'menu.contract': '合同管理',
+  'menu.contract.contractHead': '合同数据',
   'menu.list': '列表页',
   'menu.list.table-list': '查询表格',
   'menu.list.basic-list': '标准列表',
