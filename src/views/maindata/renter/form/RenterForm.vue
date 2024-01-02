@@ -243,6 +243,7 @@ export default {
           this.$message.error(response.message)
           return
         }
+        this.$message.success('识别成功')
         // 附件ID
         const attachmentId = response.result.attachment.id
         response.result.frontAttachmentId = attachmentId
@@ -260,6 +261,7 @@ export default {
           this.$message.error(response.message)
           return
         }
+        this.$message.success('识别成功')
         // 性别转换
         if (response.result.gender !== undefined && response.result.gender !== '') {
           for (const item of this.sexOption) {
