@@ -93,3 +93,15 @@ export function deleteData (id) {
     params: { 'id': id }
   })
 }
+
+export function getNoRentRoomList (pageNo, pageSize, param) {
+  param.pageNo = pageNo
+  param.pageSize = pageSize
+  param.column = 'createTime'
+  param.order = 'desc'
+  return request({
+    url: api.List,
+    method: 'get',
+    params: param
+  })
+}

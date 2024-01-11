@@ -43,9 +43,11 @@
               <a-input
                 size="large"
                 type="text"
+                style="width: 65%;margin-right: 5%"
                 :placeholder="$t('contract.label.form.roomNumber')"
                 v-decorator="['roomNumber',{rules: [{required: true, message: $t('contract.label.form.roomNumber.required')}]}]"
               ></a-input>
+              <a-button type="primary" @click="openRoomSelectModal">选择</a-button>
             </a-form-item>
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
@@ -103,6 +105,10 @@
       @ok="apartmentSelectModalOk"
       :get-list="getApartList"
     ></ApartmentSelectSearchModal>
+    <RoomSelectSearchModal
+      ref="roomSelectSearchModal"
+      @ok="roomSelectModalOk"
+      :get-list="getRoomList"></RoomSelectSearchModal>
   </page-header-wrapper>
 </template>
 
@@ -110,10 +116,13 @@
 import { getDictOption } from '@/api/system/dictItemApi'
 import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal.vue'
 import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
+import RoomSelectSearchModal from '@/views/maindata/apartment/modal/RoomSearchModal.vue'
+import { getList as getRoomList } from '@/api/maindata/RoomMainDataApi'
 
 export default {
   name: 'ContractForm',
   components: {
+    RoomSelectSearchModal,
     ApartmentSelectSearchModal
   },
   props: {
@@ -128,14 +137,23 @@ export default {
       fields: [
         'id',
         'apartmentId',
-        'apartmentId_dictText',
+        'roomId',
+        'userId',
+        'renterId',
+        'contractNumber',
+        'contractName',
+        'apartmentName',
         'roomNumber',
-        'roomArea',
-        'roomStatus',
+        'renterName',
+        'rentStartDate',
+        'rentEndDate',
+        'receiptDate',
+        'contractStatus',
         'remark'
       ],
       roomStatusOption: [],
-      getApartList: getApartmentList
+      getApartList: getApartmentList,
+      getRoomList: getRoomList
     }
   },
   computed: {},
@@ -150,6 +168,17 @@ export default {
     openModal () {
       this.$refs.userSelectSearchModal.open({})
     },
+    /**
+     * 房间选择模态框打开
+     */
+    openRoomSelectModal () {
+      const apartmentId = this.form.getFieldValue('apartmentId')
+      if (apartmentId == null || apartmentId === '') {
+        this.$message.error('请先选择公寓')
+        return
+      }
+      this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId })
+    },
     apartmentSelectModalOk () {
       const selectedRows = this.$refs.userSelectSearchModal.selectedRows
       if (selectedRows.length !== 1) {
@@ -158,9 +187,24 @@ export default {
       }
       const params = {}
       params.apartmentId = selectedRows[0].id
-      params.apartmentId_dictText = selectedRows[0].apartmentNumber
+      params.apartmentName = selectedRows[0].apartmentNumber
       this.form.setFieldsValue(params)
       this.$refs.userSelectSearchModal.close()
+    },
+    /**
+     * 房间选择模态框确认
+     */
+    roomSelectModalOk () {
+      const selectedRows = this.$refs.roomSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
+      }
+      const params = {}
+      params.roomId = selectedRows[0].id
+      params.roomNumber = selectedRows[0].roomNumber
+      this.form.setFieldsValue(params)
+      this.$refs.roomSelectSearchModal.close()
     }
   },
   mounted () {
