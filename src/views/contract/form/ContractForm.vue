@@ -45,6 +45,7 @@
                 type="text"
                 style="width: 65%;margin-right: 5%"
                 :placeholder="$t('contract.label.form.roomNumber')"
+                disabled=""
                 v-decorator="['roomNumber',{rules: [{required: true, message: $t('contract.label.form.roomNumber.required')}]}]"
               ></a-input>
               <a-button type="primary" @click="openRoomSelectModal">选择</a-button>
@@ -82,12 +83,11 @@
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
             <a-form-item :label="$t('contract.label.form.contractStatus')">
-              <a-input
-                size="large"
-                type="text"
-                :placeholder="$t('contract.label.form.contractStatus')"
-                v-decorator="['renterName', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}]}]"
-              ></a-input>
+              <a-select
+                placeholder="请选择"
+                :options="contractStatusOption"
+                v-decorator="['renterName', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}], initialValue: 0}]"
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -151,7 +151,7 @@ export default {
         'contractStatus',
         'remark'
       ],
-      roomStatusOption: [],
+      contractStatusOption: [],
       getApartList: getApartmentList,
       getRoomList: getRoomList
     }
@@ -163,7 +163,7 @@ export default {
   },
   methods: {
     async initDict () {
-      this.roomStatusOption = await getDictOption('room_status')
+      this.contractStatusOption = await getDictOption('contract_status')
     },
     openModal () {
       this.$refs.apaetmentSelectSearchModal.open({})
