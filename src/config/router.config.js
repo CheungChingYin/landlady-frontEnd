@@ -173,14 +173,14 @@ export const asyncRouterMap = [
             name: 'contractList',
             component: () => import('@/views/contract/ContractTableList'),
             meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/contract/contractAdvancedForm',
+            name: 'contractAdvancedForm',
+            component: () => import('@/views/contract/form/ContractAdvancedForm.vue'),
+            hidden: true,
+            meta: { title: 'menu.contract.contractList', keepAlive: true, permission: ['system'] }
           }
-          // {
-          //   path: '/maindata/RoomAdvancedForm',
-          //   name: 'roomAdvancedForm',
-          //   component: () => import('@/views/maindata/room/form/RoomAdvancedForm'),
-          //   hidden: true,
-          //   meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'] }
-          // },
           // {
           //   path: '/maindata/RoomDetail',
           //   name: 'roomDetail',

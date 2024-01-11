@@ -227,7 +227,7 @@ export default {
       this.contractStatusOption = await getDictOption('contract_status')
     },
     handleAdd () {
-      this.$router.push({ name: 'roomAdvancedForm' })
+      this.$router.push({ name: 'contractAdvancedForm' })
     },
     handleEdit (record) {
       this.$router.push({ name: 'roomAdvancedForm', params: record })
