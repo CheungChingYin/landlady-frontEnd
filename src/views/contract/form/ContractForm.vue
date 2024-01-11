@@ -101,7 +101,7 @@
       </a-form>
     </a-card>
     <ApartmentSelectSearchModal
-      ref="userSelectSearchModal"
+      ref="apaetmentSelectSearchModal"
       @ok="apartmentSelectModalOk"
       :get-list="getApartList"
     ></ApartmentSelectSearchModal>
@@ -166,7 +166,7 @@ export default {
       this.roomStatusOption = await getDictOption('room_status')
     },
     openModal () {
-      this.$refs.userSelectSearchModal.open({})
+      this.$refs.apaetmentSelectSearchModal.open({})
     },
     /**
      * 房间选择模态框打开
@@ -180,7 +180,7 @@ export default {
       this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId })
     },
     apartmentSelectModalOk () {
-      const selectedRows = this.$refs.userSelectSearchModal.selectedRows
+      const selectedRows = this.$refs.apaetmentSelectSearchModal.selectedRows
       if (selectedRows.length !== 1) {
         this.$message.error('请选择一条数据')
         return
@@ -189,7 +189,7 @@ export default {
       params.apartmentId = selectedRows[0].id
       params.apartmentName = selectedRows[0].apartmentNumber
       this.form.setFieldsValue(params)
-      this.$refs.userSelectSearchModal.close()
+      this.$refs.apaetmentSelectSearchModal.close()
     },
     /**
      * 房间选择模态框确认
