@@ -63,6 +63,10 @@ const columns = [
     dataIndex: 'name'
   },
   {
+    title: '性别',
+    dataIndex: 'gender_dictText'
+  },
+  {
     title: '身份证号码',
     dataIndex: 'idNumber'
   },
