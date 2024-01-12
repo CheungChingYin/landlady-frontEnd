@@ -1,4 +1,6 @@
 export default {
+  'contract.label.form.contractNumber': '合同编号',
+  'contract.label.form.contractName': '合同名称',
   'contract.label.form.apartmentName': '公寓名称',
   'contract.label.form.roomNumber': '房间编号',
   'contract.label.form.renterName': '租户名字',
@@ -7,6 +9,7 @@ export default {
   'contract.label.form.receiptDate': '每月收款日',
   'contract.label.form.contractStatus': '合同状态',
   'contract.label.form.remark': '备注',
+  'contract.label.form.contractName.required': '公寓名称必填',
   'contract.label.form.apartmentName.required': '公寓名称必填',
   'contract.label.form.roomNumber.required': '房间编号必填',
   'contract.label.form.renterName.required': '租户名字必填',

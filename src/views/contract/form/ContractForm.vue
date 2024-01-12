@@ -26,6 +26,27 @@
         </a-form-item>
         <a-row class="form-row" :gutter="16">
           <a-col :lg="6" :md="12" :sm="24">
+            <a-form-item :label="$t('contract.label.form.contractNumber')">
+              <a-input
+                size="large"
+                type="text"
+                disabled=""
+                :placeholder="$t('contract.label.form.contractNumber')"
+                v-decorator="['apartmentName', {}]"
+              ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :lg="6" :md="12" :sm="24">
+            <a-form-item :label="$t('contract.label.form.contractName')">
+              <a-input
+                size="large"
+                type="text"
+                :placeholder="$t('contract.label.form.contractName')"
+                v-decorator="['contractName', {rules: [{required: true, message: $t('contract.label.form.contractName.required')}]}]"
+              ></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :lg="6" :md="12" :sm="24">
             <a-form-item :label="$t('contract.label.form.apartmentName')">
               <a-input
                 size="large"
