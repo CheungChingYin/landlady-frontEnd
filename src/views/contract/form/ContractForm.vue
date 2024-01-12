@@ -56,9 +56,12 @@
               <a-input
                 size="large"
                 type="text"
+                style="width: 65%;margin-right: 5%"
                 :placeholder="$t('contract.label.form.renterName')"
+                disabled=""
                 v-decorator="['renterName',{rules: [{required: true, message: $t('contract.label.form.renterName.required')}]}]"
               ></a-input>
+              <a-button type="primary" @click="openRenterSelectModal">选择</a-button>
             </a-form-item>
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
@@ -86,7 +89,7 @@
               <a-select
                 placeholder="请选择"
                 :options="contractStatusOption"
-                v-decorator="['renterName', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}], initialValue: 0}]"
+                v-decorator="['contractStatus', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}], initialValue: 0}]"
               />
             </a-form-item>
           </a-col>
@@ -103,12 +106,17 @@
     <ApartmentSelectSearchModal
       ref="apaetmentSelectSearchModal"
       @ok="apartmentSelectModalOk"
-      :get-list="getApartList"
-    ></ApartmentSelectSearchModal>
+      :get-list="getApartList"/>
+
     <RoomSelectSearchModal
       ref="roomSelectSearchModal"
       @ok="roomSelectModalOk"
-      :get-list="getRoomList"></RoomSelectSearchModal>
+      :get-list="getRoomList"/>
+
+    <RenterMainDataSelectSearchModal
+      ref="renterMainDataSelectSearchModal"
+      @ok="renterSelectModalOk"
+      :get-list="getRenterList"/> >
   </page-header-wrapper>
 </template>
 
@@ -118,10 +126,13 @@ import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/Apartme
 import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import RoomSelectSearchModal from '@/views/maindata/apartment/modal/RoomSearchModal.vue'
 import { getList as getRoomList } from '@/api/maindata/RoomMainDataApi'
+import { getList as getRenterList } from '@/api/maindata/RenterMainDataApi'
+import RenterMainDataSelectSearchModal from '@/views/maindata/renter/modal/RenterMainDataSearchModal.vue'
 
 export default {
   name: 'ContractForm',
   components: {
+    RenterMainDataSelectSearchModal,
     RoomSelectSearchModal,
     ApartmentSelectSearchModal
   },
@@ -153,7 +164,8 @@ export default {
       ],
       contractStatusOption: [],
       getApartList: getApartmentList,
-      getRoomList: getRoomList
+      getRoomList: getRoomList,
+      getRenterList: getRenterList
     }
   },
   computed: {},
@@ -178,6 +190,9 @@ export default {
         return
       }
       this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId })
+    },
+    openRenterSelectModal () {
+      this.$refs.renterMainDataSelectSearchModal.open({})
     },
     apartmentSelectModalOk () {
       const selectedRows = this.$refs.apaetmentSelectSearchModal.selectedRows
@@ -205,6 +220,19 @@ export default {
       params.roomNumber = selectedRows[0].roomNumber
       this.form.setFieldsValue(params)
       this.$refs.roomSelectSearchModal.close()
+    },
+    renterSelectModalOk () {
+      const selectedRows = this.$refs.renterMainDataSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
+      }
+      const params = {}
+      params.renterId = selectedRows[0].id
+      params.userId = selectedRows[0].userId
+      params.renterName = selectedRows[0].name
+      this.form.setFieldsValue(params)
+      this.$refs.renterMainDataSelectSearchModal.close()
     }
   },
   mounted () {
