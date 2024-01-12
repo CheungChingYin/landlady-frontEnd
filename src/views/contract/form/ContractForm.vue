@@ -87,22 +87,34 @@
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
             <a-form-item :label="$t('contract.label.form.rentStartDate')">
-              <a-input
+              <a-date-picker
                 size="large"
-                type="text"
-                :placeholder="$t('contract.label.form.rentStartDate')"
+                style="width: 100%"
+                :placeholder="$t('contract.label.form.rentStartDate.required')"
                 v-decorator="['rentStartDate', {rules: [{required: true, message: $t('contract.label.form.rentStartDate.required')}]}]"
-              ></a-input>
+              ></a-date-picker>
             </a-form-item>
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
             <a-form-item :label="$t('contract.label.form.rentEndDate')">
-              <a-input
+              <a-date-picker
                 size="large"
-                type="text"
+                style="width: 100%"
                 :placeholder="$t('contract.label.form.rentEndDate')"
                 v-decorator="['rentEndDate', {rules: [{required: true, message: $t('contract.label.form.rentEndDate.required')}]}]"
-              ></a-input>
+              ></a-date-picker>
+            </a-form-item>
+          </a-col>
+          <a-col :lg="6" :md="12" :sm="24">
+            <a-form-item :label="$t('contract.label.form.receiptDate')">
+              <a-input-number
+                size="large"
+                style="width: 100%"
+                :min="1"
+                :max="28"
+                :precision="0"
+                :placeholder="$t('maindata.apartment.label.form.apartmentArea')"
+                v-decorator="['receiptDate', {rules: [{required: true, message: $t('contract.label.form.receiptDate.required')}], initialValue: 0}]"/>
             </a-form-item>
           </a-col>
           <a-col :lg="6" :md="12" :sm="24">
