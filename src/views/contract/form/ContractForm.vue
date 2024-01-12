@@ -25,7 +25,7 @@
             v-decorator="['renterId']"/>
         </a-form-item>
         <a-row class="form-row" :gutter="16">
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.contractNumber')">
               <a-input
                 size="large"
@@ -36,7 +36,7 @@
               ></a-input>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.contractName')">
               <a-input
                 size="large"
@@ -46,7 +46,19 @@
               ></a-input>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
+            <a-form-item :label="$t('contract.label.form.contractStatus')">
+              <a-select
+                placeholder="请选择"
+                size="large"
+                :options="contractStatusOption"
+                v-decorator="['contractStatus', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}], initialValue: 0}]"
+              />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row>
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.apartmentName')">
               <a-input
                 size="large"
@@ -59,7 +71,7 @@
               <a-button type="primary" @click="openModal">选择</a-button>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.roomNumber')">
               <a-input
                 size="large"
@@ -72,7 +84,7 @@
               <a-button type="primary" @click="openRoomSelectModal">选择</a-button>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.renterName')">
               <a-input
                 size="large"
@@ -85,45 +97,33 @@
               <a-button type="primary" @click="openRenterSelectModal">选择</a-button>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.rentStartDate')">
               <a-date-picker
                 size="large"
-                style="width: 100%"
                 :placeholder="$t('contract.label.form.rentStartDate.required')"
                 v-decorator="['rentStartDate', {rules: [{required: true, message: $t('contract.label.form.rentStartDate.required')}]}]"
               ></a-date-picker>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.rentEndDate')">
               <a-date-picker
                 size="large"
-                style="width: 100%"
                 :placeholder="$t('contract.label.form.rentEndDate')"
                 v-decorator="['rentEndDate', {rules: [{required: true, message: $t('contract.label.form.rentEndDate.required')}]}]"
               ></a-date-picker>
             </a-form-item>
           </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
+          <a-col :span="24 / colCount">
             <a-form-item :label="$t('contract.label.form.receiptDate')">
               <a-input-number
                 size="large"
-                style="width: 100%"
                 :min="1"
                 :max="28"
                 :precision="0"
                 :placeholder="$t('maindata.apartment.label.form.apartmentArea')"
                 v-decorator="['receiptDate', {rules: [{required: true, message: $t('contract.label.form.receiptDate.required')}], initialValue: 0}]"/>
-            </a-form-item>
-          </a-col>
-          <a-col :lg="6" :md="12" :sm="24">
-            <a-form-item :label="$t('contract.label.form.contractStatus')">
-              <a-select
-                placeholder="请选择"
-                :options="contractStatusOption"
-                v-decorator="['contractStatus', {rules: [{required: true, message: $t('contract.label.form.contractStatus.required')}], initialValue: 0}]"
-              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -173,6 +173,10 @@ export default {
     showSubmit: {
       type: Boolean,
       default: false
+    },
+    colCount: {
+      type: Number,
+      default: 3
     }
   },
   data () {
