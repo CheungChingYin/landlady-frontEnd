@@ -7,7 +7,7 @@
       <a-card class="card" title="" :bordered="false">
         <a-tabs default-active-key="1">
           <a-tab-pane key="1" tab="合同收费项目">
-            <room-assets-record-table-form ref="roomAssetsRecordTableForm" :head-id="id"></room-assets-record-table-form>
+            <FeeItemTableForm ref="feeItemTableForm" :head-id="id"></FeeItemTableForm>
           </a-tab-pane>
           <a-tab-pane key="2" tab="附件" force-render>
             <attachment-tab-form ref="attachmentTabForm" :head-id="id"></attachment-tab-form>
@@ -31,10 +31,12 @@ import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/RoomAssetsRecordTableForm.vue'
 import ContractForm from '@/views/contract/form/ContractForm.vue'
+import FeeItemTableForm from '@/views/maindata/feeItem/form/FeeItemTableForm.vue'
 
 export default {
   name: 'ContractAdvancedForm',
   components: {
+    FeeItemTableForm,
     ContractForm,
     RoomAssetsRecordTableForm,
     AttachmentTabForm,
@@ -55,7 +57,7 @@ export default {
       headForm.validateFields((err, values) => {
         if (!err) {
           const saveData = Object.assign({}, values)
-          saveData.roomAssetsRecordList = this.$refs.roomAssetsRecordTableForm.data
+          saveData.roomAssetsRecordList = this.$refs.feeItemTableForm.data
           saveData.attachmentList = this.$refs.attachmentTabForm.data
           this.loading = true
           saveOrUpdateComplexData(saveData).then(res => {
@@ -66,7 +68,7 @@ export default {
               // 保存成功后，更新表单数据
               this.id = res.result.id
               this.$refs.contractForm.form.setFieldsValue(pick(res.result, this.$refs.contractForm.fields))
-              this.$refs.roomAssetsRecordTableForm.loadData(res.result.id)
+              this.$refs.feeItemTableForm.loadData(res.result.id)
               this.$refs.attachmentTabForm.loadData(res.result.id)
             }
           }).finally(() => {
@@ -91,7 +93,7 @@ export default {
           this.$message.error(res.message)
         } else {
           this.$refs.contractForm.form.setFieldsValue(pick(record, this.$refs.contractForm.fields))
-          this.$refs.roomAssetsRecordTableForm.loadData(record.id)
+          this.$refs.feeItemTableForm.loadData(record.id)
           this.$refs.attachmentTabForm.loadData(record.id)
         }
       })
