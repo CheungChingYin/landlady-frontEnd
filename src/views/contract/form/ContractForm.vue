@@ -149,7 +149,7 @@
     <RenterMainDataSelectSearchModal
       ref="renterMainDataSelectSearchModal"
       @ok="renterSelectModalOk"
-      :get-list="getRenterList"/> >
+      :get-list="getRenterList"/>
   </page-header-wrapper>
 </template>
 
