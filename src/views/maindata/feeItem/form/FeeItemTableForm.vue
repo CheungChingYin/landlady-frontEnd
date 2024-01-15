@@ -260,6 +260,10 @@ export default {
       const newData = [...this.data]
       const target = newData.find(item => key === item.key)
       if (target) {
+        // 如果费用编码不是其他，则费用名称为字典项
+        if (column === 'feeCode' && value !== 999) {
+          target.feeName = this.feeCodeOption.find(item => item.value === value).label
+        }
         target[column] = value
         this.data = newData
       }
