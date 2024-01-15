@@ -35,7 +35,7 @@
           @change="e => handleChange(e, record.key, 'feeCode')"
           :options="feeCodeOption">
         </a-select>
-        <template v-else>{{ feeCodeOption.find(item => item.value === record.roomStatus).label }}</template>
+        <template v-else>{{ feeCodeOption.find(item => item.value === record.feeCode).label }}</template>
       </template>
       <template :slot="'feeCycle'" slot-scope="text, record">
         <a-select
@@ -47,7 +47,7 @@
           @change="e => handleChange(e, record.key, 'feeCycle')"
           :options="feeCycleOption">
         </a-select>
-        <template v-else>{{ feeCycleOption.find(item => item.value === record.roomStatus).label }}</template>
+        <template v-else>{{ feeCycleOption.find(item => item.value === record.feeCycle).label }}</template>
       </template>
       <template :slot="'amount'" slot-scope="text, record">
         <a-input-number
@@ -98,18 +98,13 @@
     <a-button style="width: 100%; margin-top: 16px; margin-bottom: 8px" type="dashed" icon="plus" @click="newMember">
       新增
     </a-button>
-    <assets-select-search-modal
-      ref="assetsSelectSearchModal"
-      :get-list="getAssetsList"
-      @ok="assetsSelectModalOk"/>
   </div>
 </template>
 
 <script>
 
 import { Ellipsis, STable } from '@/components'
-import { deleteData, getUnionList } from '@/api/maindata/RoomAssetsRecordApi'
-import { getList as getAssetsList } from '@/api/maindata/AssetsMainDataApi'
+import { deleteData, getList } from '@/api/contract/ContractFeeItemApi'
 import AssetsSelectSearchModal from '@/views/maindata/assets/modal/AssetsSearchModal.vue'
 import { getDictOption } from '@/api/system/dictItemApi'
 
@@ -181,7 +176,6 @@ export default {
         }
       ],
       data: [],
-      getAssetsList: getAssetsList,
       feeCycleOption: [],
       feeCodeOption: []
     }
@@ -222,20 +216,11 @@ export default {
       this.data = newData
     },
     saveRow (record) {
-      const data = Object.assign({}, record)
-      // 校验
-      if (this.checkAssetsIsExist(data.key, data.assetsId)) {
-        this.$message.error('资产已存在')
-        return
-      }
       this.memberLoading = true
       const target = this.data.find(item => item.key === record.key)
       target.isNew = false
       target.editable = false
       this.memberLoading = false
-    },
-    checkAssetsIsExist (key, assetsId) {
-      return this.data.find(item => item.assetsId === assetsId && item.key !== key) !== undefined
     },
     toggle (key) {
       const target = this.data.find(item => item.key === key)
@@ -244,7 +229,7 @@ export default {
     },
     async loadData (id) {
       this.memberLoading = true
-      await getUnionList(1, 99999, { roomId: id }).then(res => {
+      await getList(1, 99999, { contractId: id }).then(res => {
         if (res.code !== 200) {
           this.$message.error(res.message)
           return
@@ -278,32 +263,6 @@ export default {
         target[column] = value
         this.data = newData
       }
-    },
-    assetsSelectModalOk () {
-      const selectedRows = this.$refs.assetsSelectSearchModal.selectedRows
-      if (selectedRows.length === 0) {
-        this.$message.error('请选择一条数据')
-        return
-      }
-      console.log(selectedRows)
-      selectedRows.forEach(row => {
-        const dataLength = this.data.length
-        this.data.push({
-          key: dataLength === 0 ? '1' : (parseInt(this.data[dataLength - 1].key) + 1).toString(),
-          id: '',
-          roomId: this.headId,
-          assetsId: row.id,
-          assetsNumber: row.assetsNumber,
-          assetsName: row.assetsName,
-          unit: row.unit,
-          quantity: 0,
-          price: 0,
-          remark: '',
-          editable: true,
-          isNew: true
-        })
-      })
-      this.$refs.assetsSelectSearchModal.close()
     }
   },
   mounted () {
