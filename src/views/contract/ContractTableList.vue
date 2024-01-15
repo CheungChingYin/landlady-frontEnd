@@ -230,7 +230,7 @@ export default {
       this.$router.push({ name: 'contractAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'roomAdvancedForm', params: record })
+      this.$router.push({ name: 'contractAdvancedForm', params: record })
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'roomDetail', params: record })
