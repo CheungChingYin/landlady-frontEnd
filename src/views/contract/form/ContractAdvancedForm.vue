@@ -26,12 +26,13 @@
 
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
-import { getList, saveOrUpdateComplexData } from '@/api/maindata/RoomMainDataApi'
+import { getList, saveOrUpdateComplexData } from '@/api/contract/ContractHeadApi'
 import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/RoomAssetsRecordTableForm.vue'
 import ContractForm from '@/views/contract/form/ContractForm.vue'
 import FeeItemTableForm from '@/views/maindata/feeItem/form/FeeItemTableForm.vue'
+import moment from 'moment/moment'
 
 export default {
   name: 'ContractAdvancedForm',
@@ -57,8 +58,14 @@ export default {
       headForm.validateFields((err, values) => {
         if (!err) {
           const saveData = Object.assign({}, values)
-          saveData.roomAssetsRecordList = this.$refs.feeItemTableForm.data
+          saveData.contractFeeItemList = this.$refs.feeItemTableForm.data
           saveData.attachmentList = this.$refs.attachmentTabForm.data
+          if (values.rentStartDate !== undefined && values.rentStartDate != null && values.rentStartDate instanceof moment) {
+            saveData.rentStartDate = values.rentStartDate.format('YYYY-MM-DD')
+          }
+          if (values.rentEndDate !== undefined && values.rentEndDate != null && values.rentEndDate instanceof moment) {
+            saveData.rentEndDate = values.rentEndDate.format('YYYY-MM-DD')
+          }
           this.loading = true
           saveOrUpdateComplexData(saveData).then(res => {
             if (res.code !== 200) {
