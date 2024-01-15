@@ -32,7 +32,7 @@
                 type="text"
                 disabled=""
                 :placeholder="$t('contract.label.form.contractNumber')"
-                v-decorator="['apartmentName', {}]"
+                v-decorator="['contractNumber', {}]"
               ></a-input>
             </a-form-item>
           </a-col>
@@ -226,7 +226,7 @@ export default {
         this.$message.error('请先选择公寓')
         return
       }
-      this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId })
+      this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId, roomStatus: 0 })
     },
     openRenterSelectModal () {
       this.$refs.renterMainDataSelectSearchModal.open({})
