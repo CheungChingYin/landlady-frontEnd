@@ -9,6 +9,11 @@
       :data="loadAttachmentData"
       :alert="false"
       showPagination="auto">
+      <template :slot="'attachmentSize'" slot-scope="text">
+        <span>
+          {{ (parseFloat(text) / 1024).toFixed(2) }} KB
+        </span>
+      </template>
       <template :slot="'attachmentDesc'" slot-scope="text">
         <ellipsis :length="20" tooltip>
           {{ text }}
@@ -63,7 +68,7 @@ export default {
         {
           title: '附件大小',
           dataIndex: 'attachmentSize',
-          key: 'attachmentSize'
+          scopedSlots: { customRender: 'attachmentSize' }
         },
         {
           title: '附件描述',

@@ -56,6 +56,11 @@
               </ellipsis>
             </template>
           </template>
+          <template :slot="'attachmentSize'" slot-scope="text">
+            <span>
+              {{ (parseFloat(text) / 1024).toFixed(2) }} KB
+            </span>
+          </template>
           <template slot="operation" slot-scope="text, record">
             <template v-if="record.editable">
               <span v-if="record.isNew">
