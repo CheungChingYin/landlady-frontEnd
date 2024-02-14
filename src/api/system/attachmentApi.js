@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+import { Base64 } from 'js-base64'
 const api = {
   List: '/sys/file/list',
   Add: '/sys/file/add',
@@ -78,6 +78,12 @@ export function deleteData (id) {
     method: 'delete',
     params: { 'id': id }
   })
+}
+
+export function getPreviewFileUrl (attachment) {
+  const downloadUrl = process.env.VUE_APP_BACKEND_API_BASE_URL + api.download + '/' + attachment.id + '?fullfilename=' + attachment.attachmentName
+  const encodeUrl = encodeURIComponent(Base64.encode(downloadUrl))
+  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl
 }
 
 export function download (id) {

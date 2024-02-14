@@ -73,8 +73,12 @@
             </template>
             <span v-else>
               <a @click="toggle(record.key)">编辑</a>
-              <a-divider type="vertical"/>
-              <a v-if="record.id !== ''" @click="downloadFile(record)">下载</a>
+              <span v-if="record.id !== null && record.id !== ''">
+                <a-divider type="vertical"/>
+                <a @click="previewFile(record)">预览</a>
+                <a-divider type="vertical"/>
+                <a @click="downloadFile(record)">下载</a>
+              </span>
               <a-divider type="vertical"/>
               <a-popconfirm title="是否要删除此行？" @confirm="remove(record)">
                 <a>删除</a>
@@ -90,7 +94,7 @@
 <script>
 
 import { Ellipsis, STable } from '@/components'
-import { deleteData, download, getList } from '@/api/system/attachmentApi'
+import { deleteData, download, getList, getPreviewFileUrl } from '@/api/system/attachmentApi'
 import storage from 'store'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -250,6 +254,10 @@ export default {
         }
         this.newMember(info.file.response.result)
       }
+    },
+    previewFile (record) {
+      const previewUrl = getPreviewFileUrl(record)
+      window.open(previewUrl)
     },
     downloadFile (record) {
       download(record.id)
