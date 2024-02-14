@@ -15,24 +15,7 @@
       </a-descriptions>
       <a-divider style="margin-bottom: 32px"/>
       <div class="title">附件信息</div>
-      <s-table
-        style="margin-bottom: 24px"
-        ref="attachmentTable"
-        size="default"
-        rowKey="id"
-        :columns="attachmentColumns"
-        :data="loadAttachmentData"
-        :alert="false"
-        showPagination="auto">
-        <template :slot="'attachmentDesc'" slot-scope="text">
-          <ellipsis :length="20" tooltip>
-            {{ text }}
-          </ellipsis>
-        </template>
-        <template slot="operation" slot-scope="text, record">
-          <a v-if="record.id !== ''" @click="downloadFile(record)">下载</a>
-        </template>
-      </s-table>
+      <AttachmentTabDetail :head-id="this.$route.params.id"></AttachmentTabDetail>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -41,48 +24,18 @@
 import { Ellipsis, STable } from '@/components'
 import { notification } from 'ant-design-vue'
 import { getList } from '@/api/maindata/AssetsMainDataApi'
-import { download, getList as getAttachmentList } from '@/api/system/attachmentApi'
+import AttachmentTabDetail from '@/views/system/attachment/AttachmentTabDetail.vue'
 
 export default {
   components: {
+    AttachmentTabDetail,
     Ellipsis,
     STable
   },
   data () {
     return {
       id: '',
-      apartmentData: {},
-      attachmentColumns: [{
-        title: '附件名称',
-        dataIndex: 'attachmentName'
-      },
-        {
-          title: '附件大小',
-          dataIndex: 'attachmentSize',
-          key: 'attachmentSize'
-        },
-        {
-          title: '附件描述',
-          dataIndex: 'attachmentDesc',
-          scopedSlots: { customRender: 'attachmentDesc' }
-        },
-        {
-          title: '操作',
-          key: 'action',
-          scopedSlots: { customRender: 'operation' }
-        }],
-      loadAttachmentData: parameter => {
-        return getAttachmentList(parameter.pageNo, parameter.pageSize, { sourceId: this.$route.params.id }).then(res => {
-          if (res.code !== 200) {
-            notification.error({
-              message: '请求列表数据失败',
-              description: '请求列表数据失败,请稍后重试'
-            })
-            return []
-          }
-          return res.result
-        })
-      }
+      apartmentData: {}
     }
   },
   methods: {
@@ -97,9 +50,6 @@ export default {
         }
         this.apartmentData = res.result.records[0]
       })
-    },
-    downloadFile (record) {
-      download(record.id)
     },
     routeBackHandler () {
       this.$router.back()
