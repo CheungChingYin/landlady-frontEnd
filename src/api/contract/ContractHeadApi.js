@@ -6,7 +6,8 @@ const api = {
   Edit: '/contract/contractHead/edit',
   QueryById: '/contract/contractHead/queryById',
   Delete: '/contract/contractHead/delete',
-  SaveOrUpdateComplex: '/contract/contractHead/saveOrUpdateComplexData'
+  SaveOrUpdateComplex: '/contract/contractHead/saveOrUpdateComplexData',
+  GenerateContractPdf: '/contract/contractHead/generateContractPdf'
 }
 
 /**
@@ -90,5 +91,13 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+export function generateContractPdf (data) {
+  return request({
+    url: api.GenerateContractPdf,
+    method: 'post',
+    data: data
   })
 }

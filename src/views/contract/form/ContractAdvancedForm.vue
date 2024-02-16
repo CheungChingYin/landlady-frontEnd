@@ -14,10 +14,14 @@
           </a-tab-pane>
         </a-tabs>
       </a-card>
+      <ContractSignModal
+        ref="contractSignModal"
+        :head-id="id" />
 
       <!-- fixed footer toolbar -->
       <footer-tool-bar :is-mobile="isMobile">
         <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
+        <a-button style="margin-left: 8px" type="primary" @click="contractSign">合同签订</a-button>
         <a-button style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
       </footer-tool-bar>
     </page-header-wrapper>
@@ -33,10 +37,12 @@ import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/Ro
 import ContractForm from '@/views/contract/form/ContractForm.vue'
 import FeeItemTableForm from '@/views/maindata/feeItem/form/FeeItemTableForm.vue'
 import moment from 'moment/moment'
+import ContractSignModal from '@/views/contract/form/ContractSignModal.vue'
 
 export default {
   name: 'ContractAdvancedForm',
   components: {
+    ContractSignModal,
     FeeItemTableForm,
     ContractForm,
     RoomAssetsRecordTableForm,
@@ -107,6 +113,9 @@ export default {
     },
     routeBackHandler () {
       this.$router.back()
+    },
+    contractSign () {
+      this.$refs.contractSignModal.open()
     }
   },
   mounted () {

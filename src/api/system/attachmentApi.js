@@ -6,7 +6,8 @@ const api = {
   Edit: '/sys/file/edit',
   QueryById: '/sys/file/queryById',
   Delete: '/sys/file/delete',
-  download: '/sys/file/download'
+  download: '/sys/file/download',
+  downloadByUrl: '/sys/file/downloadByUrl'
 }
 
 /**
@@ -80,8 +81,25 @@ export function deleteData (id) {
   })
 }
 
+/**
+ * 通过id获取预览文件地址
+ * @param attachment 附件对象
+ * @returns {string}
+ */
 export function getPreviewFileUrl (attachment) {
   const downloadUrl = process.env.VUE_APP_BACKEND_API_BASE_URL + api.download + '/' + attachment.id + '?fullfilename=' + attachment.attachmentName
+  const encodeUrl = encodeURIComponent(Base64.encode(downloadUrl))
+  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl
+}
+
+/**
+ * 通过url获取预览文件地址
+ * @param attachment 附件对象
+ * @returns {string}
+ */
+export function getPreviewFileUrlByUrl (attachment) {
+  // 需要对url进行base64编码
+  const downloadUrl = process.env.VUE_APP_BACKEND_API_BASE_URL + api.downloadByUrl + '/' + Base64.encode(attachment.attachmentUrl) + '?fullfilename=' + attachment.attachmentName
   const encodeUrl = encodeURIComponent(Base64.encode(downloadUrl))
   return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl
 }
