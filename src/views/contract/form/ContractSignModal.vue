@@ -19,6 +19,32 @@
           frameborder="0"
           scrolling="auto"></iframe>
       </div>
+      <div class="table-page-search-wrapper">
+        <a-row type="flex" justify="space-around" align="middle">
+          <a-col :span="11">
+            甲方签名:
+          </a-col>
+          <a-col :span="11">
+            乙方签名:
+          </a-col>
+        </a-row>
+        <a-row style="margin-top: 10px"  type="flex" justify="space-around" align="middle">
+          <a-col :span="11" style="border: 1px solid black">
+            <vue-esign ref="firstSignRef" :isCrop="true" />
+          </a-col>
+          <a-col :span="11" style="border: 1px solid black">
+            <vue-esign ref="secondSignRef" :isCrop="true" />
+          </a-col>
+        </a-row>
+        <a-row style="margin-top: 10px" type="flex" justify="space-around" align="middle">
+          <a-col :span="11">
+            <a-button type="danger" @click="() => { this.$refs.firstSignRef.reset() }">清空甲方签名</a-button>
+          </a-col>
+          <a-col :span="11">
+            <a-button type="danger" @click="() => { this.$refs.secondSignRef.reset() }">清空乙方签名</a-button>
+          </a-col>
+        </a-row>
+      </div>
     </a-spin>
   </a-modal>
 </template>
@@ -26,10 +52,11 @@
 <script>
   import { generateContractPdf } from '@/api/contract/ContractHeadApi'
   import { getPreviewFileUrlByUrl } from '@/api/system/attachmentApi'
+  import vueEsign from 'vue-esign'
 
   export default {
     name: 'ContractSignModal',
-    components: { },
+    components: { vueEsign },
     props: {
       headId: {
         type: String,
@@ -69,6 +96,9 @@
         this.$emit('close')
         this.visible = false
         this.queryParam = {}
+        this.iframeSrc = ''
+        this.$refs.firstSignRef.reset()
+        this.$refs.secondSignRef.reset()
       },
       open (params) {
         if (this.headId === null) {
