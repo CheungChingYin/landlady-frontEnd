@@ -16,6 +16,7 @@
       </a-card>
       <ContractSignModal
         ref="contractSignModal"
+        :parent-load-data="loadData"
         :head-id="id" />
 
       <!-- fixed footer toolbar -->
