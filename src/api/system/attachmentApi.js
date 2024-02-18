@@ -89,7 +89,7 @@ export function deleteData (id) {
 export function getPreviewFileUrl (attachment) {
   const downloadUrl = process.env.VUE_APP_BACKEND_API_BASE_URL + api.download + '/' + attachment.id + '?fullfilename=' + attachment.attachmentName
   const encodeUrl = encodeURIComponent(Base64.encode(downloadUrl))
-  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl
+  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl + '&officePreviewType=pdf'
 }
 
 /**
@@ -101,7 +101,7 @@ export function getPreviewFileUrlByUrl (attachment) {
   // 需要对url进行base64编码
   const downloadUrl = process.env.VUE_APP_BACKEND_API_BASE_URL + api.downloadByUrl + '/' + Base64.encode(attachment.attachmentUrl) + '?fullfilename=' + attachment.attachmentName
   const encodeUrl = encodeURIComponent(Base64.encode(downloadUrl))
-  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl
+  return process.env.VUE_APP_KKFILEVIEW_URL + '/onlinePreview?url=' + encodeUrl + '&officePreviewType=pdf'
 }
 
 export function download (id) {

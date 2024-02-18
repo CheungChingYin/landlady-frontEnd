@@ -28,7 +28,7 @@
             乙方签名:
           </a-col>
         </a-row>
-        <a-row style="margin-top: 10px"  type="flex" justify="space-around" align="middle">
+        <a-row style="margin-top: 10px" type="flex" justify="space-around" align="middle">
           <a-col :span="11" style="border: 1px solid black">
             <vue-esign ref="firstSignRef" :isCrop="true" />
           </a-col>
@@ -46,7 +46,17 @@
         </a-row>
       </div>
     </a-spin>
-  </a-modal>
+    <template slot="footer">
+      <a-button key="back" @click="handleCancel">
+        取消
+      </a-button>
+      <a-button key="submit" type="primary" @click="previewSignContract" :loading="confirmLoading">
+        预览签名后合同
+      </a-button>
+      <a-button key="submit" type="primary" @click="handleOk" :loading="confirmLoading">
+        合同签约
+      </a-button>
+    </template></a-modal>
 </template>
 
 <script>
@@ -78,6 +88,8 @@
         selectedRows: [],
         loading: false,
         confirmLoading: false,
+        firstSignData: null,
+        secondSignData: null,
         draftContractAttachment: {},
         signContractAttachment: {},
         iframeSrc: ''
@@ -120,6 +132,46 @@
           } else {
             this.draftContractAttachment = res.result
             this.iframeSrc = getPreviewFileUrlByUrl(this.draftContractAttachment)
+          }
+        }).finally(() => {
+          this.loading = false
+        })
+      },
+      async previewSignContract () {
+        await this.$refs.firstSignRef.generate().then(res => {
+          this.firstSignData = res
+        }).catch(() => {
+          this.$message.error('甲方未签名')
+        })
+        await this.$refs.secondSignRef.generate().then(res => {
+          this.secondSignData = res
+        }).catch(() => {
+          this.$message.error('乙方未签名')
+        })
+        this.loading = true
+        const params = {
+          id: this.headId,
+          attachmentList: [
+            {
+            attachmentType: 'firstPartySign',
+            attachmentUrl: '',
+            pictureBase64: this.firstSignData
+            },
+            {
+              attachmentType: 'secondPartySign',
+              attachmentUrl: '',
+              pictureBase64: this.secondSignData
+            }
+          ]
+        }
+        generateContractPdf(params).then(res => {
+          if (res.code !== 200) {
+            this.$message.error(res.message)
+          } else {
+            this.signContractAttachment = res.result
+            this.$nextTick(() => {
+              this.iframeSrc = getPreviewFileUrlByUrl(this.signContractAttachment)
+            })
           }
         }).finally(() => {
           this.loading = false
