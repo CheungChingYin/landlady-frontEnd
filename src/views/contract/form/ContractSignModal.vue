@@ -53,14 +53,16 @@
       <a-button key="submit" type="primary" @click="previewSignContract" :loading="confirmLoading">
         预览签名后合同
       </a-button>
-      <a-button key="submit" type="primary" @click="handleOk" :loading="confirmLoading">
-        合同签约
-      </a-button>
+      <a-popconfirm title="确认是否签约？确认后将对当前预览的合同生成合同文件" ok-text="是" cancel-text="否" @confirm="contractSign">
+        <a-button key="submit" type="primary" :loading="confirmLoading">
+          合同签约
+        </a-button>
+      </a-popconfirm>
     </template></a-modal>
 </template>
 
 <script>
-  import { generateContractPdf } from '@/api/contract/ContractHeadApi'
+import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadApi'
   import { getPreviewFileUrlByUrl } from '@/api/system/attachmentApi'
   import vueEsign from 'vue-esign'
 
@@ -72,6 +74,10 @@
         type: String,
         default: null,
         required: true
+      },
+      parentLoadData: {
+        type: Function,
+        default: () => {}
       }
     },
     data () {
@@ -175,6 +181,30 @@
           }
         }).finally(() => {
           this.loading = false
+        })
+      },
+      contractSign () {
+        this.confirmLoading = true
+        if (this.signContractAttachment == null) {
+          this.$message.error('请先预览签名后合同')
+          this.confirmLoading = false
+          return
+        }
+        const params = {
+          id: this.headId,
+          attachmentList: []
+        }
+        params.attachmentList.push(this.signContractAttachment)
+        contractSign(params).then(res => {
+          if (res.code !== 200) {
+            this.$message.error(res.message)
+          } else {
+            this.$message.success('合同签约成功')
+            this.close()
+            this.parentLoadData()
+          }
+        }).finally(() => {
+          this.confirmLoading = false
         })
       },
       cascadeOnChange (value) {},
