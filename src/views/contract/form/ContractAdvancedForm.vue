@@ -22,7 +22,7 @@
       <!-- fixed footer toolbar -->
       <footer-tool-bar :is-mobile="isMobile">
         <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
-        <a-button style="margin-left: 8px" type="primary" @click="contractSign">合同签订</a-button>
+        <a-button style="margin-left: 8px" type="primary" v-if="contractSignVisible" @click="contractSign">合同签订</a-button>
         <a-button style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
       </footer-tool-bar>
     </page-header-wrapper>
@@ -55,7 +55,8 @@ export default {
       loading: false,
       memberLoading: false,
       isMobile: false,
-      id: ''
+      id: '',
+      contractSignVisible: false
     }
   },
   methods: {
@@ -109,6 +110,11 @@ export default {
           this.$refs.contractForm.form.setFieldsValue(pick(record, this.$refs.contractForm.fields))
           this.$refs.feeItemTableForm.loadData(record.id)
           this.$refs.attachmentTabForm.loadData(record.id)
+          if (record.contractStatus === 0) {
+            this.contractSignVisible = true
+          } else {
+            this.contractSignVisible = false
+          }
         }
       })
     },
