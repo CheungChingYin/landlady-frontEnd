@@ -124,6 +124,10 @@ const columns = [
     dataIndex: 'contractName'
   },
   {
+    title: '公寓名称',
+    dataIndex: 'apartmentName'
+  },
+  {
     title: '房间名称',
     dataIndex: 'roomNumber'
   },
@@ -158,11 +162,11 @@ const columns = [
     dataIndex: 'createTime',
     sorter: true
   },
-  {
-    title: '更新时间',
-    dataIndex: 'updateTime',
-    sorter: true
-  },
+  // {
+  //   title: '更新时间',
+  //   dataIndex: 'updateTime',
+  //   sorter: true
+  // },
   {
     title: '操作',
     dataIndex: 'action',
@@ -188,7 +192,6 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
-        apartmentNumber: ''
       },
       // 合同状态选项
       contractStatusOption: [],
