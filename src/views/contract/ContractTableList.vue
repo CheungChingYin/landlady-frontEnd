@@ -233,7 +233,7 @@ export default {
       this.$router.push({ name: 'contractAdvancedForm', params: record })
     },
     handleShowDetail (record) {
-      this.$router.push({ name: 'roomDetail', params: record })
+      this.$router.push({ name: 'contractDetail', params: record })
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {

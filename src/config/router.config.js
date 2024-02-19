@@ -180,14 +180,14 @@ export const asyncRouterMap = [
             component: () => import('@/views/contract/form/ContractAdvancedForm.vue'),
             hidden: true,
             meta: { title: 'menu.contract.contractList', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/contract/ContractDetail',
+            name: 'contractDetail',
+            component: () => import('@/views/contract/ContractDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['system'] }
           }
-          // {
-          //   path: '/maindata/RoomDetail',
-          //   name: 'roomDetail',
-          //   component: () => import('@/views/maindata/room/RoomDetail'),
-          //   hidden: true,
-          //   meta: { title: 'menu.maindata.roomDetail', keepAlive: true, permission: ['system'] }
-          // }
         ]
       },
       // 系统管理
