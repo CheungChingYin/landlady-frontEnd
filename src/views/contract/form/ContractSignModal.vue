@@ -13,9 +13,9 @@
     <a-spin tip="合同生成中..." :spinning="loading">
       <div class="table-page-search-wrapper">
         <iframe
-          :src="iframeSrc"
           width="100%"
           height="800px"
+          ref="previewContractIframe"
           frameborder="0"
           scrolling="auto"></iframe>
       </div>
@@ -97,14 +97,16 @@ import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadAp
         firstSignData: null,
         secondSignData: null,
         draftContractAttachment: {},
-        signContractAttachment: {},
-        iframeSrc: ''
+        signContractAttachment: {}
       }
     },
     created () {
     },
     methods: {
       async initDict () {
+      },
+      setIframeSrc (url) {
+        this.$refs.previewContractIframe.contentWindow.location.replace(url)
       },
       // 关闭
       handleCancel () {
@@ -137,7 +139,7 @@ import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadAp
             this.$message.error(res.message)
           } else {
             this.draftContractAttachment = res.result
-            this.iframeSrc = getPreviewFileUrlByUrl(this.draftContractAttachment)
+            this.setIframeSrc(getPreviewFileUrlByUrl(this.draftContractAttachment))
           }
         }).finally(() => {
           this.loading = false
@@ -176,7 +178,7 @@ import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadAp
           } else {
             this.signContractAttachment = res.result
             this.$nextTick(() => {
-              this.iframeSrc = getPreviewFileUrlByUrl(this.signContractAttachment)
+              this.setIframeSrc(getPreviewFileUrlByUrl(this.signContractAttachment))
             })
           }
         }).finally(() => {
