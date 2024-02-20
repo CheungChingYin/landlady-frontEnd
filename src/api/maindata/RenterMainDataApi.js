@@ -68,10 +68,13 @@ export function queryById (id) {
   })
 }
 
-export function getUserListNotInRenterMainData () {
+export function getUserListNotInRenterMainData (pageNo, pageSize, param) {
+  param.pageNo = pageNo
+  param.pageSize = pageSize
   return request({
     url: api.getUserListNotInRenterMainData,
-    method: 'get'
+    method: 'get',
+    params: param
   })
 }
 
