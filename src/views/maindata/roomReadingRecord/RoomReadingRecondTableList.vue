@@ -6,13 +6,16 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="公寓编号">
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentId"/>
-                <a-button type="primary" @click="apartmentSelectModalOk">选择</a-button>
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentId" v-show="false"/>
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" />
+                <a-button type="primary" @click="openApartSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="房间编号">
-                <a-input v-model="queryParam.roomId" placeholder=""/>
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomId" placeholder="" v-show="false"/>
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomNumber" placeholder=""/>
+                <a-button type="primary" @click="openRoomSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
             <template v-if="advanced">
@@ -84,10 +87,14 @@
         </span>
       </s-table>
       <ApartmentSelectSearchModal
-        ref="userSelectSearchModal"
+        ref="apartmentSelectModalRef"
         @ok="apartmentSelectModalOk"
         :get-list="getApartList"
       ></ApartmentSelectSearchModal>
+      <RoomSelectSearchModal
+        ref="roomSelectSearchModal"
+        @ok="roomSelectModalOk"
+        :get-list="getRoomList"/>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -101,6 +108,8 @@ import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import { notification } from 'ant-design-vue'
 import { getDictOption } from '@/api/system/dictItemApi'
 import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal'
+import RoomSelectSearchModal from '@/views/maindata/apartment/modal/RoomSearchModal.vue'
+import { getList as getRoomList } from '@/api/maindata/RoomMainDataApi'
 
 const columns = [
   {
@@ -159,6 +168,7 @@ const columns = [
 export default {
   name: 'RoomReadingRecordTableList',
   components: {
+    RoomSelectSearchModal,
     ApartmentSelectSearchModal,
     STable,
     Ellipsis
@@ -172,6 +182,8 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
+        apartmentNumber: '',
+        roomNumber: ''
       },
       // 读数类型选项
       readingTypeOption: [],
@@ -191,7 +203,8 @@ export default {
       selectedRowKeys: [],
       selectedRows: [],
       areaOptions: [],
-      getApartList: getApartmentList
+      getApartList: getApartmentList,
+      getRoomList: getRoomList
     }
   },
   filters: {},
@@ -233,9 +246,6 @@ export default {
         this.$refs.table.loadData()
       })
     },
-    apartmentNumberEvent (record) {
-      this.$router.push({ name: 'apartmentFormDetail', params: { id: record.apartmentId } })
-    },
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
@@ -250,8 +260,11 @@ export default {
     },
     cascadeOnChange (value) {
     },
+    openApartSelectModel () {
+      this.$refs.apartmentSelectModalRef.open()
+    },
     apartmentSelectModalOk () {
-      const selectedRows = this.$refs.userSelectSearchModal.selectedRows
+      const selectedRows = this.$refs.apartmentSelectModalRef.selectedRows
       if (selectedRows.length !== 1) {
         this.$message.error('请选择一条数据')
         return
@@ -259,10 +272,20 @@ export default {
       this.queryParam.apartmentId = selectedRows[0].id
       this.queryParam.apartmentNumber = selectedRows[0].apartmentNumber
       console.log(this.queryParam)
-      this.$refs.userSelectSearchModal.close()
+      this.$refs.apartmentSelectModalRef.close()
     },
-    openRenterModal () {
-      this.$refs.userSelectSearchModal.open({})
+    openRoomSelectModel () {
+      this.$refs.roomSelectSearchModal.open({ apartmentId: this.queryParam.apartmentId })
+    },
+    roomSelectModalOk () {
+      const selectedRows = this.$refs.roomSelectSearchModal.selectedRows
+      if (selectedRows.length !== 1) {
+        this.$message.error('请选择一条数据')
+        return
+      }
+      this.queryParam.roomId = selectedRows[0].id
+      this.queryParam.roomNumber = selectedRows[0].roomNumber
+      this.$refs.roomSelectSearchModal.close()
     }
   },
   mounted () {
