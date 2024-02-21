@@ -125,6 +125,13 @@ export const asyncRouterMap = [
             meta: { title: 'menu.maindata.roomReadingRecordList', icon: 'snippets', keepAlive: true, permission: ['system'] }
           },
           {
+            path: '/maindata/RoomReadingRecordAdvancedForm',
+            name: 'roomReadingRecordAdvancedForm',
+            component: () => import('@/views/maindata/roomReadingRecord/form/RoomReadingRecordAdvancedForm'),
+            hidden: true,
+            meta: { title: 'menu.maindata.roomReadingRecordAdvancedForm', keepAlive: true, permission: ['system'] }
+          },
+          {
             path: '/maindata/AssetList',
             name: 'assetList',
             component: () => import('@/views/maindata/assets/AssetsTableList.vue'),

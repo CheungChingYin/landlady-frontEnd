@@ -223,13 +223,13 @@ export default {
       this.readingTypeOption = await getDictOption('reading_type')
     },
     handleAdd () {
-      this.$router.push({ name: 'contractAdvancedForm' })
+      this.$router.push({ name: 'roomReadingRecordAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'contractAdvancedForm', params: record })
+      this.$router.push({ name: 'roomReadingRecordAdvancedForm', params: record })
     },
     handleShowDetail (record) {
-      this.$router.push({ name: 'contractDetail', params: record })
+      this.$router.push({ name: 'roomReadingRecordDetail', params: record })
     },
     handleDelete (record) {
       deleteData(record.id).then(res => {

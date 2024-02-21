@@ -51,5 +51,20 @@ export default {
   'maindata.renter.label.form.address.require': '请输入地址',
   'maindata.renter.label.form.idNumber.require': '请输入身份证号',
   'maindata.renter.label.form.effectiveDate.require': '请选择身份证生效日期',
-  'maindata.renter.label.form.expireDate.require': '请选择身份证失效日期'
+  'maindata.renter.label.form.expireDate.require': '请选择身份证失效日期',
+  'maindata.reading.label.form.apartmentId_dictText': '公寓编号',
+  'maindata.reading.label.form.roomId_dictText': '房间编号',
+  'maindata.reading.label.form.readingYear': '读数年份',
+  'maindata.reading.label.form.readingMonth': '读数月份',
+  'maindata.reading.label.form.readingType': '读数类型',
+  'maindata.reading.label.form.reading': '读数',
+  'maindata.reading.label.form.createBy_dictText': '记录人',
+  'maindata.reading.label.form.remark': '备注',
+  'maindata.reading.label.form.apartmentId_dictText.require': '请选择公寓编号',
+  'maindata.reading.label.form.roomId_dictText.require': '请选择房间编号',
+  'maindata.reading.label.form.readingYear.require': '请填写读数年份',
+  'maindata.reading.label.form.readingMonth.require': '请填写读数月份',
+  'maindata.reading.label.form.readingType.require': '请选择读数类型',
+  'maindata.reading.label.form.reading.require': '请填写读数'
+
 }

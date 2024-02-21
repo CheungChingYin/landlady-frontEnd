@@ -6,7 +6,8 @@ const api = {
   Add: '/maindata/roomReadingRecord/add',
   Edit: '/maindata/roomReadingRecord/edit',
   QueryById: '/maindata/roomReadingRecord/queryById',
-  Delete: '/maindata/roomReadingRecord/delete'
+  Delete: '/maindata/roomReadingRecord/delete',
+  SaveOrUpdateComplex: '/maindata/roomReadingRecord/saveOrUpdateComplexData'
 }
 
 /**
@@ -95,5 +96,18 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+/**
+ * 新增或更新复合数据
+ * @param data 新增数据
+ * @returns {*}
+ */
+export function saveOrUpdateComplexData (data) {
+  return request({
+    url: api.SaveOrUpdateComplex,
+    method: 'post',
+    data: data
   })
 }
