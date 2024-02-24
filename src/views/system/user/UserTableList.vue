@@ -128,7 +128,6 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList } from '@/api/manage'
 
 import StepByStepModal from '@/views/list/modules/StepByStepModal'
 import CreateForm from '@/views/list/modules/CreateForm'
@@ -257,7 +256,6 @@ export default {
     }
   },
   created () {
-    getRoleList({ t: new Date() })
   },
   computed: {
     rowSelection () {
