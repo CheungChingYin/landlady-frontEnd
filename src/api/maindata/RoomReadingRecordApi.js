@@ -7,7 +7,9 @@ const api = {
   Edit: '/maindata/roomReadingRecord/edit',
   QueryById: '/maindata/roomReadingRecord/queryById',
   Delete: '/maindata/roomReadingRecord/delete',
-  SaveOrUpdateComplex: '/maindata/roomReadingRecord/saveOrUpdateComplexData'
+  SaveOrUpdateComplex: '/maindata/roomReadingRecord/saveOrUpdateComplexData',
+  downloadRoomReadingRecordExcelTemplate: '/maindata/roomReadingRecord/downloadRoomReadingRecordExcelTemplate',
+  importRoomReadingRecordExcel: '/maindata/roomReadingRecord/importRoomReadingRecordExcel'
 }
 
 /**
@@ -109,5 +111,13 @@ export function saveOrUpdateComplexData (data) {
     url: api.SaveOrUpdateComplex,
     method: 'post',
     data: data
+  })
+}
+
+export function downloadRoomReadingRecordExcelTemplate () {
+  return request({
+    url: api.downloadRoomReadingRecordExcelTemplate,
+    method: 'get',
+    responseType: 'blob'
   })
 }

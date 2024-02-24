@@ -58,6 +58,17 @@
 
       <div class="table-operator">
         <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+        <a-button icon="download" @click="downloadExcelTemplate">下载导入Excel模板</a-button>
+        <a-upload
+          name="file"
+          :multiple="true"
+          action="/api/maindata/roomReadingRecord/importRoomReadingRecordExcel"
+          :showUploadList="false"
+          :headers="headers"
+          accept=".xlsx"
+          @change="handleUploadChange">
+          <a-button icon="upload">导入房间读数Excel数据</a-button>
+        </a-upload>
       </div>
 
       <s-table
@@ -103,13 +114,15 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 
-import { getList, deleteData } from '@/api/maindata/RoomReadingRecordApi'
+import { getList, deleteData, downloadRoomReadingRecordExcelTemplate } from '@/api/maindata/RoomReadingRecordApi'
 import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import { notification } from 'ant-design-vue'
 import { getDictOption } from '@/api/system/dictItemApi'
 import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal'
 import RoomSelectSearchModal from '@/views/maindata/apartment/modal/RoomSearchModal.vue'
 import { getList as getRoomList } from '@/api/maindata/RoomMainDataApi'
+import storage from 'store'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 const columns = [
   {
@@ -204,7 +217,10 @@ export default {
       selectedRows: [],
       areaOptions: [],
       getApartList: getApartmentList,
-      getRoomList: getRoomList
+      getRoomList: getRoomList,
+      headers: {
+        'Authorization': storage.get(ACCESS_TOKEN)
+      }
     }
   },
   filters: {},
@@ -286,6 +302,19 @@ export default {
       this.queryParam.roomId = selectedRows[0].id
       this.queryParam.roomNumber = selectedRows[0].roomNumber
       this.$refs.roomSelectSearchModal.close()
+    },
+    downloadExcelTemplate () {
+        downloadRoomReadingRecordExcelTemplate()
+    },
+    handleUploadChange (info) {
+      if (info.file.response) {
+        if (info.file.response.code !== 200) {
+          this.$message.error(info.file.response.message)
+        } else {
+          this.$message.success('导入成功')
+          this.$refs.table.loadData()
+        }
+      }
     }
   },
   mounted () {
