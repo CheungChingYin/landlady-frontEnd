@@ -142,35 +142,25 @@
         </a-row>
       </a-form>
     </a-card>
-    <ApartmentSelectSearchModal
-      ref="apaetmentSelectSearchModal"
-      @ok="apartmentSelectModalOk"
-      :get-list="getApartList"/>
-
-    <RoomSelectSearchModal
-      ref="roomSelectSearchModal"
-      @ok="roomSelectModalOk"
-      :get-list="getRoomList"/>
-
-    <RenterMainDataSelectSearchModal
-      ref="renterMainDataSelectSearchModal"
-      @ok="renterSelectModalOk"
-      :get-list="getRenterList"/>
+    <ContractSelectSearchModal
+      ref="contractSelectSearchModal"
+      @ok="contractSelectModalOk"
+      :get-list="getContractList" />
   </page-header-wrapper>
 </template>
 
 <script>
 import { getDictOption } from '@/api/system/dictItemApi'
 import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal.vue'
-import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import RoomSelectSearchModal from '@/views/maindata/apartment/modal/RoomSearchModal.vue'
-import { getList as getRoomList } from '@/api/maindata/RoomMainDataApi'
-import { getList as getRenterList } from '@/api/maindata/RenterMainDataApi'
 import RenterMainDataSelectSearchModal from '@/views/maindata/renter/modal/RenterMainDataSearchModal.vue'
+import ContractSelectSearchModal from '@/views/contract/modal/ContractSearchModal.vue'
+import { getList as getContractList } from '@/api/contract/ContractHeadApi'
 
 export default {
   name: 'OrderForm',
   components: {
+    ContractSelectSearchModal,
     RenterMainDataSelectSearchModal,
     RoomSelectSearchModal,
     ApartmentSelectSearchModal
@@ -190,26 +180,25 @@ export default {
       form: this.$form.createForm(this),
       fields: [
         'id',
+        'contractId',
         'apartmentId',
         'roomId',
         'userId',
         'renterId',
+        'orderNumber',
         'contractNumber',
-        'contractName',
         'apartmentName',
         'roomNumber',
         'renterName',
-        'rentStartDate',
-        'rentEndDate',
-        'receiptDate',
         'orderStatus',
+        'orderType',
+        'orderYear',
+        'orderMonth',
         'remark'
       ],
       orderStatusOption: [],
       orderTypeOption: [],
-      getApartList: getApartmentList,
-      getRoomList: getRoomList,
-      getRenterList: getRenterList,
+      getContractList: getContractList,
       currentYear: new Date().getFullYear(),
       currentMonth: new Date().getMonth() + 1
     }
@@ -225,63 +214,25 @@ export default {
       this.orderTypeOption = await getDictOption('order_type')
     },
     openContractSelectModal () {
+      this.$refs.contractSelectSearchModal.open({ 'contractStatus': 1 })
     },
-    openModal () {
-      this.$refs.apaetmentSelectSearchModal.open({})
-    },
-    /**
-     * 房间选择模态框打开
-     */
-    openRoomSelectModal () {
-      const apartmentId = this.form.getFieldValue('apartmentId')
-      if (apartmentId == null || apartmentId === '') {
-        this.$message.error('请先选择公寓')
-        return
-      }
-      this.$refs.roomSelectSearchModal.open({ apartmentId: apartmentId, roomStatus: 0 })
-    },
-    openRenterSelectModal () {
-      this.$refs.renterMainDataSelectSearchModal.open({})
-    },
-    apartmentSelectModalOk () {
-      const selectedRows = this.$refs.apaetmentSelectSearchModal.selectedRows
+    contractSelectModalOk () {
+      const selectedRows = this.$refs.contractSelectSearchModal.selectedRows
       if (selectedRows.length !== 1) {
         this.$message.error('请选择一条数据')
         return
       }
       const params = {}
-      params.apartmentId = selectedRows[0].id
-      params.apartmentName = selectedRows[0].apartmentNumber
-      this.form.setFieldsValue(params)
-      this.$refs.apaetmentSelectSearchModal.close()
-    },
-    /**
-     * 房间选择模态框确认
-     */
-    roomSelectModalOk () {
-      const selectedRows = this.$refs.roomSelectSearchModal.selectedRows
-      if (selectedRows.length !== 1) {
-        this.$message.error('请选择一条数据')
-        return
-      }
-      const params = {}
-      params.roomId = selectedRows[0].id
+      params.contractId = selectedRows[0].id
+      params.contractNumber = selectedRows[0].contractNumber
+      params.apartmentId = selectedRows[0].apartmentId
+      params.apartmentName = selectedRows[0].apartmentName
+      params.roomId = selectedRows[0].roomId
       params.roomNumber = selectedRows[0].roomNumber
+      params.renterId = selectedRows[0].renterId
+      params.renterName = selectedRows[0].renterName
       this.form.setFieldsValue(params)
-      this.$refs.roomSelectSearchModal.close()
-    },
-    renterSelectModalOk () {
-      const selectedRows = this.$refs.renterMainDataSelectSearchModal.selectedRows
-      if (selectedRows.length !== 1) {
-        this.$message.error('请选择一条数据')
-        return
-      }
-      const params = {}
-      params.renterId = selectedRows[0].id
-      params.userId = selectedRows[0].userId
-      params.renterName = selectedRows[0].name
-      this.form.setFieldsValue(params)
-      this.$refs.renterMainDataSelectSearchModal.close()
+      this.$refs.contractSelectSearchModal.close()
     }
   },
   mounted () {
