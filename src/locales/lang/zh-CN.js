@@ -11,6 +11,7 @@ import result from './zh-CN/result'
 import account from './zh-CN/account'
 import mainData from './zh-CN/mainData'
 import contract from './zh-CN/contract'
+import order from './zh-CN/order'
 
 const components = {
   antLocale: antd,
@@ -34,5 +35,6 @@ export default {
   ...result,
   ...account,
   ...mainData,
-  ...contract
+  ...contract,
+  ...order
 }

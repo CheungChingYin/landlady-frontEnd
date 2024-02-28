@@ -253,10 +253,10 @@ export default {
       this.orderTypeOption = await getDictOption('order_type')
     },
     handleAdd () {
-      this.$router.push({ name: 'contractAdvancedForm' })
+      this.$router.push({ name: 'orderAdvancedForm' })
     },
     handleEdit (record) {
-      this.$router.push({ name: 'contractAdvancedForm', params: record })
+      this.$router.push({ name: 'orderAdvancedForm', params: record })
     },
     handleShowDetail (record) {
       this.$router.push({ name: 'contractDetail', params: record })

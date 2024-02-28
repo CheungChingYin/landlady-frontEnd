@@ -222,14 +222,14 @@ export const asyncRouterMap = [
             name: 'orderList',
             component: () => import('@/views/order/OrderTableList'),
             meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/order/orderAdvancedForm',
+            name: 'orderAdvancedForm',
+            component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
+            hidden: true,
+            meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'] }
           }
-          // {
-          //   path: '/order/orderAdvancedForm',
-          //   name: 'orderAdvancedForm',
-          //   component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
-          //   hidden: true,
-          //   meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'] }
-          // },
           // {
           //   path: '/order/OrderDetail',
           //   name: 'orderDetail',
