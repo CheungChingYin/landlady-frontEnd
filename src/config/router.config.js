@@ -210,6 +210,35 @@ export const asyncRouterMap = [
           }
         ]
       },
+      {
+        path: '/order',
+        name: 'order',
+        component: RouteView,
+        redirect: '/order/orderList',
+        meta: { title: 'menu.order', icon: 'file-search', permission: ['system'] },
+        children: [
+          {
+            path: '/order/orderList',
+            name: 'orderList',
+            component: () => import('@/views/order/OrderTableList'),
+            meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['system'] }
+          }
+          // {
+          //   path: '/order/orderAdvancedForm',
+          //   name: 'orderAdvancedForm',
+          //   component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
+          //   hidden: true,
+          //   meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'] }
+          // },
+          // {
+          //   path: '/order/OrderDetail',
+          //   name: 'orderDetail',
+          //   component: () => import('@/views/order/OrderDetail.vue'),
+          //   hidden: true,
+          //   meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['system'] }
+          // }
+        ]
+      },
       // 系统管理
       {
         path: '/system',
