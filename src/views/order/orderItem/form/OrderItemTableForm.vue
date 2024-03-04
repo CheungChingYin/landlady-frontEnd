@@ -302,9 +302,23 @@ export default {
       if (target) {
         target[column] = value
         this.data = newData
+        // 当变更订单费用项的金额时，更新订单金额
+        if (column === 'amount') {
+          this.calculateOrderAmount()
+        }
       }
     },
-    handleContractFeeItemOk () {
+    /**
+     * 计算订单金额
+     */
+    calculateOrderAmount () {
+      let orderAmount = 0
+      this.data.forEach(item => {
+        orderAmount += item.amount
+      })
+      this.$emit('setOrderAmount', orderAmount)
+    },
+    async handleContractFeeItemOk () {
       const selectedRows = this.$refs.contractFeeItemSelectSearchModal.selectedRows
       if (selectedRows.length === 0) {
         this.$message.error('请选择费用项')
@@ -316,7 +330,7 @@ export default {
         item.orderYear = this.headFormParams.orderYear
         item.orderMonth = this.headFormParams.orderMonth
       })
-      calculateFeeAmount(selectedRows).then(res => {
+      await calculateFeeAmount(selectedRows).then(res => {
         if (res.code !== 200) {
           this.$message.error(res.message)
           return
@@ -326,6 +340,7 @@ export default {
           this.newMember(item)
         })
       })
+      this.calculateOrderAmount()
       this.$refs.contractFeeItemSelectSearchModal.close()
     }
   },

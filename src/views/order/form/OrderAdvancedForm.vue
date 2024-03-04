@@ -7,7 +7,7 @@
       <a-card class="card" title="" :bordered="false">
         <a-tabs default-active-key="1">
           <a-tab-pane key="1" tab="订单费用项">
-            <OrderItemTableForm ref="orderItemTableForm" :head-id="id" :headFormParams="headFormParams"></OrderItemTableForm>
+            <OrderItemTableForm ref="orderItemTableForm" :head-id="id" :headFormParams="headFormParams" @setOrderAmount="setOrderAmount"></OrderItemTableForm>
           </a-tab-pane>
           <a-tab-pane key="2" tab="附件" force-render>
             <attachment-tab-form ref="attachmentTabForm" :head-id="id"></attachment-tab-form>
@@ -133,6 +133,9 @@ export default {
       this.headFormParams = this.$refs.orderForm.form.getFieldsValue()
       // 变更了所选的合同后，清空订单费用项
       this.$refs.orderItemTableForm.data = []
+    },
+    setOrderAmount (amount) {
+      this.$refs.orderForm.form.setFieldsValue({ orderAmount: amount })
     }
   },
   mounted () {
