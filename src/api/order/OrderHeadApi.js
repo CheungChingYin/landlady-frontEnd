@@ -6,7 +6,9 @@ const api = {
   Edit: '/order/orderHead/edit',
   QueryById: '/order/orderHead/queryById',
   Delete: '/order/orderHead/delete',
-  SaveOrUpdateComplex: '/order/orderHead/saveOrUpdateComplexData'
+  SaveOrUpdateComplex: '/order/orderHead/saveOrUpdateComplexData',
+  SendOrderToRenter: '/order/orderHead/sendOrderToRenter',
+  RenterConfirmOrder: '/order/orderHead/renterConfirmOrder'
 }
 
 /**
@@ -90,5 +92,31 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+/**
+ * 发送订单给租户
+ * @param id 主键ID
+ * @returns {*}
+ */
+export function sendOrderToRenter (data) {
+  return request({
+    url: api.SendOrderToRenter,
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 租户确认订单
+ * @param id 主键ID
+ * @returns {*}
+ */
+export function renterConfirmOrder (data) {
+  return request({
+    url: api.RenterConfirmOrder,
+    method: 'post',
+    data: data
   })
 }

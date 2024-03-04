@@ -18,7 +18,9 @@
       <!-- fixed footer toolbar -->
       <footer-tool-bar :is-mobile="isMobile">
         <a-button type="primary" @click="validate" :loading="loading">保存</a-button>
-        <a-button style="margin-left: 8px" type="primary" v-if="contractSignVisible" @click="contractSign">合同签订</a-button>
+        <a-popconfirm title="确认是否发送订单给租户？" ok-text="是" cancel-text="否" @confirm="sendOrderToRenter()">
+          <a-button style="margin-left: 8px" type="primary" v-if="sendOrderToRenterVisible">发送订单给租户</a-button>
+        </a-popconfirm>
         <a-button style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
       </footer-tool-bar>
     </page-header-wrapper>
@@ -27,7 +29,7 @@
 
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
-import { getList, saveOrUpdateComplexData } from '@/api/order/OrderHeadApi'
+import { getList, saveOrUpdateComplexData, sendOrderToRenter } from '@/api/order/OrderHeadApi'
 import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/RoomAssetsRecordTableForm.vue'
@@ -52,7 +54,7 @@ export default {
       memberLoading: false,
       isMobile: false,
       id: '',
-      contractSignVisible: false,
+      sendOrderToRenterVisible: false,
       headFormParams: {}
     }
   },
@@ -107,10 +109,10 @@ export default {
           this.$refs.orderForm.form.setFieldsValue(pick(record, this.$refs.orderForm.fields))
           this.$refs.orderItemTableForm.loadData(record.id)
           this.$refs.attachmentTabForm.loadData(record.id)
-          if (record.contractStatus === 0) {
-            this.contractSignVisible = true
+          if (record.orderStatus === 0) {
+            this.sendOrderToRenterVisible = true
           } else {
-            this.contractSignVisible = false
+            this.sendOrderToRenterVisible = false
           }
         }
       })
@@ -118,8 +120,15 @@ export default {
     routeBackHandler () {
       this.$router.back()
     },
-    contractSign () {
-      this.$refs.contractSignModal.open()
+    sendOrderToRenter () {
+      sendOrderToRenter({ 'id': this.id }).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+        } else {
+          this.$message.success('发送成功')
+          this.loadData()
+        }
+      })
     },
     selectChange (value, label) {
       // 由于直接获得表单值的时候，会取到修改前的值，故需要手动获取
