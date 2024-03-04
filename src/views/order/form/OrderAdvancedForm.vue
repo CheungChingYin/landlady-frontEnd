@@ -27,7 +27,7 @@
 
 <script>
 import FooterToolBar from '@/components/FooterToolbar'
-import { getList, saveOrUpdateComplexData } from '@/api/contract/ContractHeadApi'
+import { getList, saveOrUpdateComplexData } from '@/api/order/OrderHeadApi'
 import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RoomAssetsRecordTableForm from '@/views/maindata/roomAssetsRecord/form/RoomAssetsRecordTableForm.vue'
@@ -63,7 +63,7 @@ export default {
       headForm.validateFields((err, values) => {
         if (!err) {
           const saveData = Object.assign({}, values)
-          saveData.contractFeeItemList = this.$refs.orderItemTableForm.data
+          saveData.orderItemList = this.$refs.orderItemTableForm.data
           saveData.attachmentList = this.$refs.attachmentTabForm.data
           if (values.rentStartDate !== undefined && values.rentStartDate != null && values.rentStartDate instanceof moment) {
             saveData.rentStartDate = values.rentStartDate.format('YYYY-MM-DD')
