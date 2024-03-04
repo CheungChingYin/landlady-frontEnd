@@ -135,6 +135,19 @@
                 v-decorator="['orderMonth', {rules: [{required: true, message: $t('order.label.form.orderMonth.required')}], initialValue: currentMonth}]"/>
             </a-form-item>
           </a-col>
+          <a-col :span="24 / colCount">
+            <a-form-item :label="$t('order.label.form.orderAmount')">
+              <a-input-number
+                size="large"
+                :min="0"
+                :precision="2"
+                style="width: 100%"
+                :placeholder="$t('order.label.form.orderAmount')"
+                disabled=""
+                v-decorator="['orderAmount', {rules: [{required: true, message: $t('order.label.form.orderMonth.required')}], initialValue: 0}]"/>
+            </a-form-item>
+          </a-col>
+
         </a-row>
         <a-row class="form-row" :gutter="16">
           <a-form-item :label="$t('maindata.room.label.form.remark')">
@@ -197,6 +210,7 @@ export default {
         'orderType',
         'orderYear',
         'orderMonth',
+        'orderAmount',
         'remark'
       ],
       orderStatusOption: [],
