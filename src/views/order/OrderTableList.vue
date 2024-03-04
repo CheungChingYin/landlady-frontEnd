@@ -119,8 +119,8 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical"/>
+            <a @click="handleEdit(record)" v-if="record.orderStatus === '1'">编辑</a>
+            <a-divider type="vertical" v-if="record.orderStatus === '1'"/>
             <a @click="handleShowDetail(record)">查看</a>
             <a-divider type="vertical"/>
             <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
