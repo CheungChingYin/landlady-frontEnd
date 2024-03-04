@@ -16,15 +16,6 @@
           @change="e => handleChange(e.target.value, record.key, 'feeName')"/>
         <template v-else>{{ text }}</template>
       </template>
-      <template :slot="'unit'" slot-scope="text, record">
-        <a-input
-          :key="unit"
-          v-if="record.editable"
-          :value="text"
-          :placeholder="单位"
-          @change="e => handleChange(e.target.value, record.key, 'unit')"/>
-        <template v-else>{{ text }}</template>
-      </template>
       <template :slot="'feeCode'" slot-scope="text, record">
         <a-select
           v-if="record.editable"
@@ -37,18 +28,6 @@
         </a-select>
         <template v-else>{{ feeCodeOption.find(item => item.value === record.feeCode).label }}</template>
       </template>
-      <template :slot="'feeCycle'" slot-scope="text, record">
-        <a-select
-          v-if="record.editable"
-          placeholder="请选择"
-          style="width: 80%"
-          default-value="0"
-          :value="record.feeCycle"
-          @change="e => handleChange(e, record.key, 'feeCycle')"
-          :options="feeCycleOption">
-        </a-select>
-        <template v-else>{{ feeCycleOption.find(item => item.value === record.feeCycle).label }}</template>
-      </template>
       <template :slot="'amount'" slot-scope="text, record">
         <a-input-number
           v-if="record.editable"
@@ -58,6 +37,28 @@
           :value="text"
           :precision="2"
           @change="e => handleChange(e, record.key, 'amount')"/>
+        <template v-else>{{ text }}</template>
+      </template>
+      <template :slot="'beforeReading'" slot-scope="text, record">
+        <a-input-number
+          v-if="record.editable"
+          size="large"
+          style="width: 100%"
+          :min="0"
+          :value="text"
+          :precision="2"
+          @change="e => handleChange(e, record.key, 'beforeReading')"/>
+        <template v-else>{{ text }}</template>
+      </template>
+      <template :slot="'currentReading'" slot-scope="text, record">
+        <a-input-number
+          v-if="record.editable"
+          size="large"
+          style="width: 100%"
+          :min="0"
+          :value="text"
+          :precision="2"
+          @change="e => handleChange(e, record.key, 'currentReading')"/>
         <template v-else>{{ text }}</template>
       </template>
       <template :slot="'remark'" slot-scope="text, record">
@@ -95,22 +96,31 @@
         </span>
       </template>
     </a-table>
-    <a-button style="width: 100%; margin-top: 16px; margin-bottom: 8px" type="dashed" icon="plus" @click="newMember">
+    <a-button style="width: 100%; margin-top: 16px; margin-bottom: 8px" type="dashed" icon="plus" @click="addItem">
       新增
     </a-button>
+
+    <ContractFeeItemSelectSearchModal
+      ref="contractFeeItemSelectSearchModal"
+      @ok="handleContractFeeItemOk"
+      :contract-id="headId"
+      :getList="getContractFeeItemList"/>
   </div>
 </template>
 
 <script>
 
 import { Ellipsis, STable } from '@/components'
-import { deleteData, getList } from '@/api/contract/ContractFeeItemApi'
+import { getList as getContractFeeItemList } from '@/api/contract/ContractFeeItemApi'
+import { calculateFeeAmount, getList, deleteData } from '@/api/order/OrderItemApi'
 import AssetsSelectSearchModal from '@/views/maindata/assets/modal/AssetsSearchModal.vue'
 import { getDictOption } from '@/api/system/dictItemApi'
+import ContractFeeItemSelectSearchModal from '@/views/maindata/feeItem/modal/ContractFeeItemSearchModal.vue'
 
 export default {
-  name: 'FeeItemTableForm',
+  name: 'ContractItemTableForm',
   components: {
+    ContractFeeItemSelectSearchModal,
     AssetsSelectSearchModal,
     STable,
     Ellipsis
@@ -119,6 +129,11 @@ export default {
     headId: {
       type: String,
       default: '',
+      required: true
+    },
+    headFormParams: {
+      type: Object,
+      default: null,
       required: true
     }
   },
@@ -139,28 +154,29 @@ export default {
           title: '费用名称',
           dataIndex: 'feeName',
           key: 'feeName',
-          width: '10%',
+          width: '',
           scopedSlots: { customRender: 'feeName' }
-        },
-        {
-          title: '费用周期',
-          dataIndex: 'feeCycle',
-          key: 'feeCycle',
-          scopedSlots: { customRender: 'feeCycle' }
-        },
-        {
-          title: '单位',
-          dataIndex: 'unit',
-          key: 'unit',
-          width: '10%',
-          scopedSlots: { customRender: 'unit' }
         },
         {
           title: '金额',
           dataIndex: 'amount',
           key: 'amount',
-          width: '20%',
+          width: '10%',
           scopedSlots: { customRender: 'amount' }
+        },
+        {
+          title: '上期读数',
+          dataIndex: 'beforeReading',
+          key: 'beforeReading',
+          width: '10%',
+          scopedSlots: { customRender: 'beforeReading' }
+        },
+        {
+          title: '当期读数',
+          dataIndex: 'currentReading',
+          key: 'currentReading',
+          width: '10%',
+          scopedSlots: { customRender: 'currentReading' }
         },
         {
           title: '备注',
@@ -177,7 +193,8 @@ export default {
       ],
       data: [],
       feeCycleOption: [],
-      feeCodeOption: []
+      feeCodeOption: [],
+      getContractFeeItemList: getContractFeeItemList
     }
   },
   computed: {},
@@ -186,21 +203,44 @@ export default {
       this.feeCycleOption = await getDictOption('fee_cycle')
       this.feeCodeOption = await getDictOption('fee_code')
     },
-    newMember () {
+    addItem () {
+      if (this.headFormParams.contractId === undefined || this.headFormParams.contractId === '') {
+        this.$message.error('请先选择合同')
+        return
+      }
+      if (this.headFormParams.orderType === undefined || this.headFormParams.orderType === '') {
+        this.$message.error('请先选择订单类型')
+        return
+      }
+      if (this.headFormParams.orderType === 999) {
+        this.newMember({})
+      } else {
+        const params = { 'contractId': this.headFormParams.contractId }
+        this.$refs.contractFeeItemSelectSearchModal.open(params)
+      }
+    },
+    newMember (record) {
       const dataLength = this.data.length
-      this.data.push({
+      let rowData = {
         key: dataLength === 0 ? '1' : (parseInt(this.data[dataLength - 1].key) + 1).toString(),
         id: '',
-        contractId: this.headId,
+        orderId: this.headId,
+        contractFeeItemId: '',
+        beforeReadingId: '',
+        currentReadingId: '',
         feeCode: '',
         feeName: '',
-        feeCycle: '',
         amount: '',
-        unit: '',
+        beforeReading: '',
+        currentReading: '',
         remark: '',
         editable: true,
         isNew: true
-      })
+      }
+      if (record) {
+        rowData = Object.assign(rowData, record)
+      }
+      this.data.push(rowData)
     },
     remove (record) {
       const newData = this.data.filter(item => item.key !== record.key)
@@ -229,7 +269,7 @@ export default {
     },
     async loadData (id) {
       this.memberLoading = true
-      await getList(1, 99999, { contractId: id }).then(res => {
+      await getList(1, 99999, { orderId: id }).then(res => {
         if (res.code !== 200) {
           this.$message.error(res.message)
           return
@@ -260,13 +300,33 @@ export default {
       const newData = [...this.data]
       const target = newData.find(item => key === item.key)
       if (target) {
-        // 如果费用编码不是其他，则费用名称为字典项
-        if (column === 'feeCode' && value !== 999) {
-          target.feeName = this.feeCodeOption.find(item => item.value === value).label
-        }
         target[column] = value
         this.data = newData
       }
+    },
+    handleContractFeeItemOk () {
+      const selectedRows = this.$refs.contractFeeItemSelectSearchModal.selectedRows
+      if (selectedRows.length === 0) {
+        this.$message.error('请选择费用项')
+        return
+      }
+      selectedRows.forEach(item => {
+        item.roomId = this.headFormParams.roomId
+        item.contractFeeItemId = item.id
+        item.orderYear = this.headFormParams.orderYear
+        item.orderMonth = this.headFormParams.orderMonth
+      })
+      calculateFeeAmount(selectedRows).then(res => {
+        if (res.code !== 200) {
+          this.$message.error(res.message)
+          return
+        }
+        res.result.forEach(item => {
+          item.editable = false
+          this.newMember(item)
+        })
+      })
+      this.$refs.contractFeeItemSelectSearchModal.close()
     }
   },
   mounted () {

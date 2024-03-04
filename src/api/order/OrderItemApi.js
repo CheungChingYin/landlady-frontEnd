@@ -5,7 +5,8 @@ const api = {
   Add: '/order/orderItem/add',
   Edit: '/order/orderItem/edit',
   QueryById: '/order/orderItem/queryById',
-  Delete: '/order/orderItem/delete'
+  Delete: '/order/orderItem/delete',
+  CalculateFeeAmount: '/order/orderItem/calculateFeeAmount'
 }
 
 /**
@@ -89,5 +90,18 @@ export function deleteData (id) {
     url: api.Delete,
     method: 'delete',
     params: { 'id': id }
+  })
+}
+
+/**
+ * 计算费用金额
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function calculateFeeAmount (data) {
+  return request({
+    url: api.CalculateFeeAmount,
+    method: 'post',
+    data: data
   })
 }

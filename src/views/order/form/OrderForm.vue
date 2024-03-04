@@ -104,7 +104,8 @@
                 placeholder="请选择"
                 size="large"
                 :options="orderTypeOption"
-                v-decorator="['orderStatus', {rules: [{required: true, message: $t('order.label.form.orderType.required')}], initialValue: 0}]"
+                @change="orderTypeChangeEvent"
+                v-decorator="['orderType', {rules: [{required: true, message: $t('order.label.form.orderType.required')}]}]"
               />
             </a-form-item>
           </a-col>
@@ -116,6 +117,7 @@
                 :max="2100"
                 style="width: 100%"
                 :precision="0"
+                @change="currentYearChange"
                 :placeholder="$t('order.label.form.orderYear')"
                 v-decorator="['orderYear', {rules: [{required: true, message: $t('order.label.form.orderYear.required')}], initialValue: currentYear}]"/>
             </a-form-item>
@@ -128,6 +130,7 @@
                 :max="12"
                 :precision="0"
                 style="width: 100%"
+                @change="currentMonthChange"
                 :placeholder="$t('order.label.form.orderMonth')"
                 v-decorator="['orderMonth', {rules: [{required: true, message: $t('order.label.form.orderMonth.required')}], initialValue: currentMonth}]"/>
             </a-form-item>
@@ -232,7 +235,17 @@ export default {
       params.renterId = selectedRows[0].renterId
       params.renterName = selectedRows[0].renterName
       this.form.setFieldsValue(params)
+      this.$emit('contractChange', params)
       this.$refs.contractSelectSearchModal.close()
+    },
+    orderTypeChangeEvent (value) {
+      this.$emit('selectChange', value, 'orderType')
+    },
+    currentYearChange (value) {
+      this.$emit('selectChange', value, 'orderYear')
+    },
+    currentMonthChange (value) {
+      this.$emit('selectChange', value, 'orderMonth')
     }
   },
   mounted () {

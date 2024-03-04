@@ -2,22 +2,18 @@
   <a-spin :spinning="loading">
     <page-header-wrapper content="">
       <a-card class="card" title="订单信息" :bordered="false">
-        <OrderForm ref="orderForm" :showSubmit="false" />
+        <OrderForm ref="orderForm" :showSubmit="false" @selectChange="selectChange" @contractChange="contractChange" />
       </a-card>
       <a-card class="card" title="" :bordered="false">
         <a-tabs default-active-key="1">
           <a-tab-pane key="1" tab="订单费用项">
-            <OrderItemTableForm ref="orderItemTableForm" :head-id="id"></OrderItemTableForm>
+            <OrderItemTableForm ref="orderItemTableForm" :head-id="id" :headFormParams="headFormParams"></OrderItemTableForm>
           </a-tab-pane>
           <a-tab-pane key="2" tab="附件" force-render>
             <attachment-tab-form ref="attachmentTabForm" :head-id="id"></attachment-tab-form>
           </a-tab-pane>
         </a-tabs>
       </a-card>
-      <ContractSignModal
-        ref="contractSignModal"
-        :parent-load-data="loadData"
-        :head-id="id" />
 
       <!-- fixed footer toolbar -->
       <footer-tool-bar :is-mobile="isMobile">
@@ -56,7 +52,8 @@ export default {
       memberLoading: false,
       isMobile: false,
       id: '',
-      contractSignVisible: false
+      contractSignVisible: false,
+      headFormParams: {}
     }
   },
   methods: {
@@ -123,6 +120,19 @@ export default {
     },
     contractSign () {
       this.$refs.contractSignModal.open()
+    },
+    selectChange (value, label) {
+      // 由于直接获得表单值的时候，会取到修改前的值，故需要手动获取
+      const headForm = this.$refs.orderForm.form.getFieldsValue()
+      headForm[label] = value
+      this.headFormParams = headForm
+      // 变更了订单类型后清空订单费用项
+      this.$refs.orderItemTableForm.data = []
+    },
+    contractChange (params) {
+      this.headFormParams = this.$refs.orderForm.form.getFieldsValue()
+      // 变更了所选的合同后，清空订单费用项
+      this.$refs.orderItemTableForm.data = []
     }
   },
   mounted () {
