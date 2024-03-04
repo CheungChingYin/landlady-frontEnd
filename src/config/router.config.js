@@ -229,14 +229,14 @@ export const asyncRouterMap = [
             component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
             hidden: true,
             meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'] }
+          },
+          {
+            path: '/order/OrderDetail',
+            name: 'orderDetail',
+            component: () => import('@/views/order/OrderDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['system'] }
           }
-          // {
-          //   path: '/order/OrderDetail',
-          //   name: 'orderDetail',
-          //   component: () => import('@/views/order/OrderDetail.vue'),
-          //   hidden: true,
-          //   meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['system'] }
-          // }
         ]
       },
       // 系统管理
