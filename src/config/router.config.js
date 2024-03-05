@@ -40,7 +40,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'] }
+            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'], requiresAuth: true }
           }
         ]
       },
@@ -50,107 +50,107 @@ export const asyncRouterMap = [
         name: 'maindata',
         component: RouteView,
         redirect: '/maindata/apartmentList',
-        meta: { title: 'menu.maindata', icon: 'container', permission: ['system'] },
+        meta: { title: 'menu.maindata', icon: 'container', permission: ['system'], requiresAuth: true },
         children: [
           {
             path: '/maindata/apartmentList',
             name: 'apartmentList',
             component: () => import('@/views/maindata/apartment/ApartmentTableList'),
-            meta: { title: 'menu.maindata.apartmentList', icon: 'home', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.apartmentList', icon: 'home', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/ApartmentAdvancedForm',
             name: 'apartmentAdvancedForm',
             component: () => import('@/views/maindata/apartment/form/ApartmentAdvancedForm'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/ApartmentFormDetail',
             name: 'apartmentFormDetail',
             component: () => import('@/views/maindata/apartment/ApartmentFormDetail'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/roomList',
             name: 'roomList',
             component: () => import('@/views/maindata/room/RoomTableList'),
-            meta: { title: 'menu.maindata.roomList', icon: 'container', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomList', icon: 'container', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RoomAdvancedForm',
             name: 'roomAdvancedForm',
             component: () => import('@/views/maindata/room/form/RoomAdvancedForm'),
             hidden: true,
-            meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomList', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RoomDetail',
             name: 'roomDetail',
             component: () => import('@/views/maindata/room/RoomDetail'),
             hidden: true,
-            meta: { title: 'menu.maindata.roomDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/roomReadingRecordList',
             name: 'roomReadingRecordList',
             component: () => import('@/views/maindata/roomReadingRecord/RoomReadingRecondTableList.vue'),
-            meta: { title: 'menu.maindata.roomReadingRecordList', icon: 'snippets', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomReadingRecordList', icon: 'snippets', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RoomReadingRecordAdvancedForm',
             name: 'roomReadingRecordAdvancedForm',
             component: () => import('@/views/maindata/roomReadingRecord/form/RoomReadingRecordAdvancedForm'),
             hidden: true,
-            meta: { title: 'menu.maindata.roomReadingRecordAdvancedForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomReadingRecordAdvancedForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RoomReadingRecordDetail',
             name: 'roomReadingRecordDetail',
             component: () => import('@/views/maindata/roomReadingRecord/RoomReadingRecordDetail.vue'),
             hidden: true,
-            meta: { title: 'menu.maindata.roomReadingRecordDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.roomReadingRecordDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/AssetList',
             name: 'assetList',
             component: () => import('@/views/maindata/assets/AssetsTableList.vue'),
-            meta: { title: 'menu.maindata.assetList', icon: 'home', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.assetList', icon: 'home', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/AssetAdvancedForm',
             name: 'assetAdvancedForm',
             component: () => import('@/views/maindata/assets/form/AssetsAdvancedForm.vue'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/AssetsMainDataDetail',
             name: 'assetsMainDataDetail',
             component: () => import('@/views/maindata/assets/AssetsMainDataDetail'),
             hidden: true,
-            meta: { title: 'menu.maindata.assetsDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.assetsDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RenterList',
             name: 'renterList',
             component: () => import('@/views/maindata/renter/RenterTableList.vue'),
-            meta: { title: 'menu.maindata.renterList', icon: 'idcard', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.renterList', icon: 'idcard', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RenterAdvancedForm',
             name: 'renterAdvancedForm',
             component: () => import('@/views/maindata/renter/form/RenterAdvancedForm.vue'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/maindata/RenterDataDetail',
             name: 'renterDataDetail',
             component: () => import('@/views/maindata/renter/RenterDataDetail.vue'),
             hidden: true,
-            meta: { title: 'menu.maindata.renterDetail', icon: 'idcard', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.maindata.renterDetail', icon: 'idcard', keepAlive: true, permission: ['system'], requiresAuth: true }
           }
         ]
       },
@@ -160,27 +160,27 @@ export const asyncRouterMap = [
         name: 'contract',
         component: RouteView,
         redirect: '/contract/contractList',
-        meta: { title: 'menu.contract', icon: 'file-text', permission: ['system'] },
+        meta: { title: 'menu.contract', icon: 'file-text', permission: ['system'], requiresAuth: true },
         children: [
           {
             path: '/contract/contractList',
             name: 'contractList',
             component: () => import('@/views/contract/ContractTableList'),
-            meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/contract/contractAdvancedForm',
             name: 'contractAdvancedForm',
             component: () => import('@/views/contract/form/ContractAdvancedForm.vue'),
             hidden: true,
-            meta: { title: 'menu.contract.contractList', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.contract.contractList', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/contract/ContractDetail',
             name: 'contractDetail',
             component: () => import('@/views/contract/ContractDetail.vue'),
             hidden: true,
-            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           }
         ]
       },
@@ -189,27 +189,27 @@ export const asyncRouterMap = [
         name: 'order',
         component: RouteView,
         redirect: '/order/orderList',
-        meta: { title: 'menu.order', icon: 'file-search', permission: ['system'] },
+        meta: { title: 'menu.order', icon: 'file-search', permission: ['system'], requiresAuth: true },
         children: [
           {
             path: '/order/orderList',
             name: 'orderList',
             component: () => import('@/views/order/OrderTableList'),
-            meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/order/orderAdvancedForm',
             name: 'orderAdvancedForm',
             component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
             hidden: true,
-            meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/order/OrderDetail',
             name: 'orderDetail',
             component: () => import('@/views/order/OrderDetail.vue'),
             hidden: true,
-            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           }
         ]
       },
@@ -219,52 +219,52 @@ export const asyncRouterMap = [
         name: 'system',
         component: RouteView,
         redirect: '/system/userList',
-        meta: { title: 'menu.system', icon: 'setting', permission: ['system'] },
+        meta: { title: 'menu.system', icon: 'setting', permission: ['system'], requiresAuth: true },
         children: [
           {
             path: '/system/userList',
             name: 'userList',
             component: () => import('@/views/system/user/UserTableList'),
-            meta: { title: 'menu.system.userList', icon: 'user', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userList', icon: 'user', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/userForm',
             name: 'userForm',
             component: () => import('@/views/system/user/UserForm'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/userFormDetail',
             name: 'userFormDetail',
             component: () => import('@/views/system/user/UserFormDetail'),
             hidden: true,
-            meta: { title: 'menu.system.userFormDetail', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.userFormDetail', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/dictList',
             name: 'dictList',
             component: () => import('@/views/system/dict/DictTableList'),
-            meta: { title: 'menu.system.dictList', icon: 'unordered-list', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.dictList', icon: 'unordered-list', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/categoryList',
             name: 'categoryList',
             component: () => import('@/views/system/category/CategoryList'),
-            meta: { title: 'menu.system.categoryList', icon: 'branches', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.categoryList', icon: 'branches', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/roleList',
             name: 'roleList',
             component: () => import('@/views/system/role/RoleTableList'),
-            meta: { title: 'menu.system.roleList', icon: 'cluster', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.roleList', icon: 'cluster', keepAlive: true, permission: ['system'], requiresAuth: true }
           },
           {
             path: '/system/attachmentTab',
             name: 'attachmentTabForm',
             component: () => import('@/views/system/attachment/AttachmentTabForm'),
             hidden: true,
-            meta: { title: 'menu.system.attachmentTabForm', keepAlive: true, permission: ['system'] }
+            meta: { title: 'menu.system.attachmentTabForm', keepAlive: true, permission: ['system'], requiresAuth: true }
           }
         ]
       }
