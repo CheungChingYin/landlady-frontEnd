@@ -2,7 +2,7 @@ import axios from 'axios'
 import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
-import { ACCESS_TOKEN, USER_INFO } from '@/store/mutation-types'
+import { ACCESS_TOKEN, ROLE_CODE_STR, ROLE_LIST, USER_INFO } from '@/store/mutation-types'
 import router from '@/router'
 import { Modal } from 'ant-design-vue'
 
@@ -30,6 +30,12 @@ const errorHandler = (error) => {
         Modal.destroyAll()
         storage.remove(ACCESS_TOKEN)
         storage.remove(USER_INFO)
+        storage.remove(ROLE_LIST)
+        storage.remove(ROLE_CODE_STR)
+        notification.error({
+          message: '登录状态已过期',
+          description: data.message
+        })
         router.push({ name: 'login' })
       }
     }
