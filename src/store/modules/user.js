@@ -1,7 +1,7 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN, USER_INFO } from '@/store/mutation-types'
+import {ACCESS_TOKEN, ROLE_CODE_STR, ROLE_LIST, USER_INFO} from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 storage.addPlugin(expirePlugin)
@@ -44,6 +44,19 @@ const user = {
           storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
           // 设置用户信息
           storage.set(USER_INFO, result.userInfo)
+          const roleList = result.roleList
+          storage.set(ROLE_LIST, roleList)
+          if (roleList) {
+            let roleCodeStr = ''
+            roleList.forEach(role => {
+              roleCodeStr += role.roleCode + ','
+            })
+            // 去掉最后一个逗号
+            if (roleCodeStr.length > 0) {
+              roleCodeStr = roleCodeStr.substring(0, roleCodeStr.length - 1)
+            }
+            storage.set(ROLE_CODE_STR, roleCodeStr)
+          }
           resolve()
         }).catch(error => {
           reject(error)
@@ -97,6 +110,8 @@ const user = {
         logout(state.token).then(() => {
           storage.remove(ACCESS_TOKEN)
           storage.remove(USER_INFO)
+          storage.remove(ROLE_LIST)
+          storage.remove(ROLE_CODE_STR)
           resolve()
         })
       })

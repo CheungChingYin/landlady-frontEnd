@@ -1,6 +1,8 @@
 // token 请求头
 export const ACCESS_TOKEN = 'Authorization'
 export const USER_INFO = 'userInfo'
+export const ROLE_LIST = 'roleList'
+export const ROLE_CODE_STR = 'roleCodeStr'
 export const SIDEBAR_TYPE = 'sidebar_type'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
 export const TOGGLE_NAV_THEME = 'nav_theme'

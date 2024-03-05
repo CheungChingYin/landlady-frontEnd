@@ -35,11 +35,11 @@
       </a-tabs>
 
       <a-form-item>
-<!--        <router-link-->
-<!--          :to="{ name: 'recover', params: { user: 'aaa'} }"-->
-<!--          class="forge-password"-->
-<!--          style="float: right;"-->
-<!--        >{{ $t('user.login.forgot-password') }}</router-link>-->
+        <!--        <router-link-->
+        <!--          :to="{ name: 'recover', params: { user: 'aaa'} }"-->
+        <!--          class="forge-password"-->
+        <!--          style="float: right;"-->
+        <!--        >{{ $t('user.login.forgot-password') }}</router-link>-->
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
