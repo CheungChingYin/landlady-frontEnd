@@ -44,7 +44,7 @@ const user = {
           storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
           // 设置用户信息
           storage.set(USER_INFO, result.userInfo)
-          const roleList = result.roleList
+          const roleList = result.userInfo.roleList
           storage.set(ROLE_LIST, roleList)
           if (roleList) {
             let roleCodeStr = ''
