@@ -248,6 +248,7 @@ export default {
       params.roomNumber = selectedRows[0].roomNumber
       params.renterId = selectedRows[0].renterId
       params.renterName = selectedRows[0].renterName
+      params.userId = selectedRows[0].userId
       this.form.setFieldsValue(params)
       this.$emit('contractChange', params)
       this.$refs.contractSelectSearchModal.close()
