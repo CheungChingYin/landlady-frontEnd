@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   List: '/contract/contractHead/list',
+  ListForRenter: '/contract/contractHead/listForRenter',
   Add: '/contract/contractHead/add',
   Edit: '/contract/contractHead/edit',
   QueryById: '/contract/contractHead/queryById',
@@ -25,6 +26,25 @@ export function getList (pageNo, pageSize, param) {
   param.order = 'desc'
   return request({
     url: api.List,
+    method: 'get',
+    params: param
+  })
+}
+
+/**
+ * 获得列表信息(租户查询的时候使用)
+ * @param pageNo 当前页
+ * @param pageSize 显示条数
+ * @param param 搜索参数
+ * @returns {*}
+ */
+export function getListForRenter (pageNo, pageSize, param) {
+  param.pageNo = pageNo
+  param.pageSize = pageSize
+  param.column = 'createTime'
+  param.order = 'desc'
+  return request({
+    url: api.ListForRenter,
     method: 'get',
     params: param
   })

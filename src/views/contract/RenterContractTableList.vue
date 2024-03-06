@@ -101,13 +101,11 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 
-import { getList, deleteData } from '@/api/contract/ContractHeadApi'
+import { getListForRenter, deleteData } from '@/api/contract/ContractHeadApi'
 import { getList as getApartmentList } from '@/api/maindata/ApartmentApi'
 import { notification } from 'ant-design-vue'
 import { getDictOption } from '@/api/system/dictItemApi'
 import ApartmentSelectSearchModal from '@/views/maindata/apartment/modal/ApartmentSearchModal'
-import storage from 'store'
-import { USER_INFO } from '@/store/mutation-types'
 
 const columns = [
   {
@@ -192,8 +190,7 @@ export default {
       contractStatusOption: [],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        this.queryParam.userId = this.currentUser.id
-        return getList(parameter.pageNo, parameter.pageSize, this.queryParam).then(res => {
+        return getListForRenter(parameter.pageNo, parameter.pageSize, this.queryParam).then(res => {
           if (res.code !== 200) {
             notification.error({
               message: '请求列表数据失败',
@@ -212,9 +209,6 @@ export default {
   },
   filters: {},
   created () {
-    this.currentUser = storage.get(USER_INFO)
-    // 默认查询当前用户的合同
-    this.queryParam = { 'userId': this.currentUser.id }
   },
   computed: {
     rowSelection () {
