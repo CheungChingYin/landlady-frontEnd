@@ -43,6 +43,7 @@ export default {
   'menu.contract.contractDetail': '合同详情',
   'menu.order': '订单管理',
   'menu.order.orderHead': '订单数据',
+  'menu.order.orderHeadForRenter': '租户订单数据',
   'menu.order.orderList': '订单管理',
   'menu.order.orderDetail': '订单详情',
   'menu.list': '列表页',

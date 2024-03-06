@@ -74,27 +74,20 @@ export const renterRouterMap = [
         name: 'order',
         component: RouteView,
         redirect: '/order/orderList',
-        meta: { title: 'menu.order', icon: 'file-search', permission: ['admin'], requiresAuth: true },
+        meta: { title: 'menu.order', icon: 'file-search', permission: ['admin', 'renter'], requiresAuth: true },
         children: [
           {
-            path: '/order/orderList',
-            name: 'orderList',
-            component: () => import('@/views/order/OrderTableList'),
-            meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['admin'], requiresAuth: true }
+            path: '/order/orderListForRenter',
+            name: 'orderListForRenter',
+            component: () => import('@/views/order/RenterOrderTableList.vue'),
+            meta: { title: 'menu.order.orderHeadForRenter', icon: 'profile', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
           },
           {
-            path: '/order/orderAdvancedForm',
-            name: 'orderAdvancedForm',
-            component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
+            path: '/order/OrderDetailForRenter',
+            name: 'orderDetailForRenter',
+            component: () => import('@/views/order/RenterOrderDetail.vue'),
             hidden: true,
-            meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['admin'], requiresAuth: true }
-          },
-          {
-            path: '/order/OrderDetail',
-            name: 'orderDetail',
-            component: () => import('@/views/order/OrderDetail.vue'),
-            hidden: true,
-            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['admin'], requiresAuth: true }
+            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
           }
         ]
       }
