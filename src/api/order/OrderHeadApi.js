@@ -9,7 +9,8 @@ const api = {
   Delete: '/order/orderHead/delete',
   SaveOrUpdateComplex: '/order/orderHead/saveOrUpdateComplexData',
   SendOrderToRenter: '/order/orderHead/sendOrderToRenter',
-  RenterConfirmOrder: '/order/orderHead/renterConfirmOrder'
+  RenterConfirmOrder: '/order/orderHead/renterConfirmOrder',
+  RenterRefundOrder: '/order/orderHead/renterRefundOrder'
 }
 
 /**
@@ -136,6 +137,19 @@ export function sendOrderToRenter (data) {
 export function renterConfirmOrder (data) {
   return request({
     url: api.RenterConfirmOrder,
+    method: 'post',
+    data: data
+  })
+}
+
+/**
+ * 租户退回订单
+ * @param id 主键ID
+ * @returns {*}
+ */
+export function renterRefundOrder (data) {
+  return request({
+    url: api.RenterRefundOrder,
     method: 'post',
     data: data
   })

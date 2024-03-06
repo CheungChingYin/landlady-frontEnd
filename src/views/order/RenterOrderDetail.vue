@@ -2,6 +2,12 @@
   <page-header-wrapper>
     <template v-slot:extra>
       <a-button type="primary" style="margin-left: 8px" @click="routeBackHandler" >{{ $t('form.basic-form.form.return') }}</a-button>
+      <a-popconfirm title="确认订单是否无误？" ok-text="是" cancel-text="否" @confirm="orderConfirm()" v-if="confirmOrRefundOrderVisible" >
+        <a-button type="primary" style="margin-left: 8px" >订单确认</a-button>
+      </a-popconfirm>
+      <a-popconfirm title="确认订单是否退回？" ok-text="是" cancel-text="否" @confirm="orderRefund()" v-if="confirmOrRefundOrderVisible">
+        <a-button type="danger" style="margin-left: 8px">订单退回</a-button>
+      </a-popconfirm>
     </template>
     <a-card :bordered="false">
       <a-descriptions title="订单信息">
@@ -41,7 +47,7 @@
 <script>
 import { Ellipsis, STable } from '@/components'
 import { notification } from 'ant-design-vue'
-import { getList } from '@/api/order/OrderHeadApi'
+import { getList, renterConfirmOrder, renterRefundOrder } from '@/api/order/OrderHeadApi'
 import { getList as getOrderItemList } from '@/api/order/OrderItemApi'
 import AttachmentTabDetail from '@/views/system/attachment/AttachmentTabDetail.vue'
 
@@ -110,7 +116,8 @@ export default {
           }
           return res.result
         })
-      }
+      },
+      confirmOrRefundOrderVisible: false
     }
   },
   methods: {
@@ -124,6 +131,41 @@ export default {
           return
         }
         this.orderData = res.result.records[0]
+        if (this.orderData.orderStatus === 1) {
+          this.confirmOrRefundOrderVisible = true
+        } else {
+          this.confirmOrRefundOrderVisible = false
+        }
+      })
+    },
+    orderConfirm () {
+      renterConfirmOrder({ id: this.$route.params.id }).then(res => {
+        if (res.code !== 200) {
+          notification.error({
+            message: '订单确认失败',
+            description: res.message
+          })
+          return
+        }
+        notification.success({
+          message: '订单确认成功'
+        })
+        this.loadData(this.$route.params.id)
+      })
+    },
+    orderRefund () {
+      renterRefundOrder({ id: this.$route.params.id }).then(res => {
+        if (res.code !== 200) {
+          notification.error({
+            message: '订单退回失败',
+            description: res.message
+          })
+          return
+        }
+        notification.success({
+          message: '订单退回成功'
+        })
+        this.loadData(this.$route.params.id)
       })
     },
     routeBackHandler () {
@@ -149,6 +191,12 @@ export default {
     } else {
       this.id = this.$route.params.id
       this.loadData(this.$route.params.id)
+      // 根据订单状态为已发送，显示确认订单或退回订单按钮
+      if (this.$route.params.orderStatus === 1) {
+        this.confirmOrRefundOrderVisible = true
+      } else {
+        this.confirmOrRefundOrderVisible = false
+      }
     }
   }
 

@@ -109,7 +109,7 @@ export default {
           this.$refs.orderForm.form.setFieldsValue(pick(record, this.$refs.orderForm.fields))
           this.$refs.orderItemTableForm.loadData(record.id)
           this.$refs.attachmentTabForm.loadData(record.id)
-          if (record.orderStatus === 0) {
+          if (record.orderStatus === 0 || record.orderStatus === 3) {
             this.sendOrderToRenterVisible = true
           } else {
             this.sendOrderToRenterVisible = false

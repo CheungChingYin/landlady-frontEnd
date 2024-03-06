@@ -246,7 +246,7 @@ export default {
       this.orderTypeOption = await getDictOption('order_type')
     },
     handleShowDetail (record) {
-      this.$router.push({ name: 'orderDetail', params: record })
+      this.$router.push({ name: 'orderDetailForRenter', params: record })
     },
     apartmentNumberEvent (record) {
       this.$router.push({ name: 'apartmentFormDetail', params: { id: record.apartmentId } })
