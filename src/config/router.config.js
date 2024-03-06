@@ -6,7 +6,109 @@ const RouteView = {
   name: 'RouteView',
   render: h => h('router-view')
 }
-
+/**
+ * 租户路由
+ */
+export const renterRouterMap = [
+  {
+    path: '/',
+    name: 'index',
+    component: BasicLayout,
+    meta: { title: 'menu.home', requiresAuth: true },
+    redirect: '/dashboard/workplace',
+    children: [
+      // dashboard
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        redirect: '/dashboard/workplace',
+        component: RouteView,
+        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['admin', 'public'], requiresAuth: true },
+        children: [
+          {
+            path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
+            name: 'Analysis',
+            component: () => import('@/views/dashboard/Analysis'),
+            hidden: true,
+            meta: { title: 'menu.dashboard.analysis', keepAlive: false, permission: ['admin', 'public'], requiresAuth: true }
+          },
+          // 外部链接
+          // {
+          //   path: 'https://www.baidu.com/',
+          //   name: 'Monitor',
+          //   meta: { title: 'menu.dashboard.monitor', target: '_blank' }
+          // },
+          {
+            path: '/dashboard/workplace',
+            name: 'Workplace',
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['admin', 'public'], requiresAuth: true }
+          }
+        ]
+      },
+      // 合同
+      {
+        path: '/contract',
+        name: 'contract',
+        component: RouteView,
+        redirect: '/contract/contractList',
+        meta: { title: 'menu.contract', icon: 'file-text', permission: ['admin'], requiresAuth: true },
+        children: [
+          {
+            path: '/contract/renterContractTableList',
+            name: 'renterContractTableList',
+            component: () => import('@/views/contract/RenterContractTableList.vue'),
+            meta: { title: 'menu.contract.renterContractHead', icon: 'contacts', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
+          },
+          {
+            path: '/contract/RenterContractDetail',
+            name: 'renterContractDetail',
+            component: () => import('@/views/contract/RenterContractDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
+          }
+        ]
+      },
+      {
+        path: '/order',
+        name: 'order',
+        component: RouteView,
+        redirect: '/order/orderList',
+        meta: { title: 'menu.order', icon: 'file-search', permission: ['admin'], requiresAuth: true },
+        children: [
+          {
+            path: '/order/orderList',
+            name: 'orderList',
+            component: () => import('@/views/order/OrderTableList'),
+            meta: { title: 'menu.order.orderHead', icon: 'profile', keepAlive: true, permission: ['admin'], requiresAuth: true }
+          },
+          {
+            path: '/order/orderAdvancedForm',
+            name: 'orderAdvancedForm',
+            component: () => import('@/views/order/form/OrderAdvancedForm.vue'),
+            hidden: true,
+            meta: { title: 'menu.order.orderList', keepAlive: true, permission: ['admin'], requiresAuth: true }
+          },
+          {
+            path: '/order/OrderDetail',
+            name: 'orderDetail',
+            component: () => import('@/views/order/OrderDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.order.orderDetail', keepAlive: true, permission: ['admin'], requiresAuth: true }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
+]
+/**
+ * 管理员路由
+ */
 export const asyncRouterMap = [
   {
     path: '/',
@@ -169,12 +271,6 @@ export const asyncRouterMap = [
             meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['admin'], requiresAuth: true }
           },
           {
-            path: '/contract/renterContractTableList',
-            name: 'renterContractTableList',
-            component: () => import('@/views/contract/RenterContractTableList.vue'),
-            meta: { title: 'menu.contract.renterContractHead', icon: 'contacts', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
-          },
-          {
             path: '/contract/contractAdvancedForm',
             name: 'contractAdvancedForm',
             component: () => import('@/views/contract/form/ContractAdvancedForm.vue'),
@@ -187,13 +283,6 @@ export const asyncRouterMap = [
             component: () => import('@/views/contract/ContractDetail.vue'),
             hidden: true,
             meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['admin'], requiresAuth: true }
-          },
-          {
-            path: '/contract/RenterContractDetail',
-            name: 'renterContractDetail',
-            component: () => import('@/views/contract/RenterContractDetail.vue'),
-            hidden: true,
-            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
           }
         ]
       },

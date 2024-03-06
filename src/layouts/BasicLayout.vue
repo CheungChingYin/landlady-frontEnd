@@ -49,14 +49,15 @@
 <script>
 import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
 import { i18nRender } from '@/locales'
-import { asyncRouterMap } from '@/config/router.config'
+import { asyncRouterMap, renterRouterMap } from '@/config/router.config'
 import { mapState } from 'vuex'
-import { CONTENT_WIDTH_TYPE } from '@/store/mutation-types'
+import { CONTENT_WIDTH_TYPE, ROLE_CODE_STR } from '@/store/mutation-types'
 
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
+import storage from 'store'
 
 export default {
   name: 'BasicLayout',
@@ -108,7 +109,14 @@ export default {
     })
   },
   created () {
-    const routes = asyncRouterMap.find((item) => item.path === '/')
+    const roleCodeStr = storage.get(ROLE_CODE_STR)
+    let routes = null
+    // 根据角色判断路由
+    if (roleCodeStr === 'admin') {
+      routes = asyncRouterMap.find((item) => item.path === '/')
+    } else {
+      routes = renterRouterMap.find((item) => item.path === '/')
+    }
     // const routes = this.mainMenu.find((item) => item.path === '/')
     this.menus = (routes && routes.children) || []
   },

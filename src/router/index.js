@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { constantRouterMap, asyncRouterMap } from '@/config/router.config'
+import { constantRouterMap, asyncRouterMap, renterRouterMap } from '@/config/router.config'
 import storage from 'store'
 import { ACCESS_TOKEN, ROLE_CODE_STR } from '@/store/mutation-types'
 import notification from 'ant-design-vue/lib/notification'
@@ -8,7 +8,7 @@ import notification from 'ant-design-vue/lib/notification'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
-  routes: constantRouterMap.concat(asyncRouterMap)
+  routes: constantRouterMap.concat(asyncRouterMap).concat(renterRouterMap)
 })
 
 /**
