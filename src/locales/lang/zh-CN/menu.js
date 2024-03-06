@@ -38,6 +38,7 @@ export default {
   'menu.maindata.renterDetail': '租户详情',
   'menu.contract': '合同管理',
   'menu.contract.contractHead': '合同数据',
+  'menu.contract.renterContractHead': '租户合同数据',
   'menu.contract.contractList': '合同管理',
   'menu.contract.contractDetail': '合同详情',
   'menu.order': '订单管理',

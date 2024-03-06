@@ -169,6 +169,12 @@ export const asyncRouterMap = [
             meta: { title: 'menu.contract.contractHead', icon: 'contacts', keepAlive: true, permission: ['admin'], requiresAuth: true }
           },
           {
+            path: '/contract/renterContractTableList',
+            name: 'renterContractTableList',
+            component: () => import('@/views/contract/RenterContractTableList.vue'),
+            meta: { title: 'menu.contract.renterContractHead', icon: 'contacts', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
+          },
+          {
             path: '/contract/contractAdvancedForm',
             name: 'contractAdvancedForm',
             component: () => import('@/views/contract/form/ContractAdvancedForm.vue'),
@@ -181,6 +187,13 @@ export const asyncRouterMap = [
             component: () => import('@/views/contract/ContractDetail.vue'),
             hidden: true,
             meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['admin'], requiresAuth: true }
+          },
+          {
+            path: '/contract/RenterContractDetail',
+            name: 'renterContractDetail',
+            component: () => import('@/views/contract/RenterContractDetail.vue'),
+            hidden: true,
+            meta: { title: 'menu.contract.contractDetail', keepAlive: true, permission: ['admin', 'renter'], requiresAuth: true }
           }
         ]
       },
