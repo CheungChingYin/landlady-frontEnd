@@ -3,6 +3,7 @@ import expirePlugin from 'store/plugins/expire'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN, ROLE_CODE_STR, ROLE_LIST, USER_INFO } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import { notification } from 'ant-design-vue'
 
 storage.addPlugin(expirePlugin)
 const user = {
@@ -39,6 +40,12 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
+          if (response.code !== 200) {
+            notification.error({
+              message: '登陆失败',
+              description: response.message
+            })
+          }
           const result = response.result
           // 配置token
           storage.set(ACCESS_TOKEN, result.token, new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
