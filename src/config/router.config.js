@@ -158,14 +158,14 @@ export const asyncRouterMap = [
             name: 'apartmentAdvancedForm',
             component: () => import('@/views/maindata/apartment/form/ApartmentAdvancedForm'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['admin'], requiresAuth: true }
+            meta: { title: 'menu.maindata.apartmentAdvancedForm', keepAlive: true, permission: ['admin'], requiresAuth: true }
           },
           {
             path: '/maindata/ApartmentFormDetail',
             name: 'apartmentFormDetail',
             component: () => import('@/views/maindata/apartment/ApartmentFormDetail'),
             hidden: true,
-            meta: { title: 'menu.system.userForm', keepAlive: true, permission: ['admin'], requiresAuth: true }
+            meta: { title: 'menu.maindata.apartmentDetail', keepAlive: true, permission: ['admin'], requiresAuth: true }
           },
           {
             path: '/maindata/roomList',
