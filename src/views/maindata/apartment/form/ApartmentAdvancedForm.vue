@@ -71,6 +71,13 @@ export default {
           saveData.roomMainDataList = this.$refs.roomTableForm.data
           saveData.attachmentList = this.$refs.attachmentTabForm.data
           this.loading = true
+          // 房间编号已存在检查
+          const roomNumbers = saveData.roomMainDataList.map(item => item.roomNumber)
+          if (new Set(roomNumbers).size !== roomNumbers.length) {
+            this.$message.error('房间编号已存在')
+            this.loading = false
+            return
+          }
           saveOrUpdateComplexData(saveData).then(res => {
             if (res.code !== 200) {
               this.$message.error(res.message)
