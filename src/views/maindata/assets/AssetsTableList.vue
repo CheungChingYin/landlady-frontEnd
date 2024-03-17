@@ -103,10 +103,6 @@ const columns = [
     dataIndex: 'assetsName'
   },
   {
-    title: '省份',
-    dataIndex: 'provinceId_dictText'
-  },
-  {
     title: '资产描述',
     dataIndex: 'assetsDesc',
     scopedSlots: { customRender: 'description' }
