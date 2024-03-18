@@ -82,6 +82,7 @@ export default {
               // 保存成功后，更新表单数据
               this.id = res.result.id
               this.$refs.orderForm.form.setFieldsValue(pick(res.result, this.$refs.orderForm.fields))
+              this.sendOrderToRenterVisible = res.result.orderStatus === 0 || res.result.orderStatus === 3
               this.$refs.orderItemTableForm.loadData(res.result.id)
               this.$refs.attachmentTabForm.loadData(res.result.id)
             }
