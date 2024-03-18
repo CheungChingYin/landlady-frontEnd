@@ -82,6 +82,8 @@ export default {
               this.$message.success('保存成功')
               // 保存成功后，更新表单数据
               this.id = res.result.id
+              // 合同签订按钮是否展示
+              this.contractSignVisible = res.result.contractStatus === 0
               this.$refs.contractForm.form.setFieldsValue(pick(res.result, this.$refs.contractForm.fields))
               this.$refs.feeItemTableForm.loadData(res.result.id)
               this.$refs.attachmentTabForm.loadData(res.result.id)
