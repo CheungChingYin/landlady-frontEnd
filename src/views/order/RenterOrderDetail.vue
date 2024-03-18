@@ -106,7 +106,7 @@ export default {
         }
       ],
       loadContractFeeItemListData: parameter => {
-        return getOrderItemList(parameter.pageNo, parameter.pageSize, { contractId: this.$route.params.id }).then(res => {
+        return getOrderItemList(parameter.pageNo, parameter.pageSize, { orderId: this.$route.params.id }).then(res => {
           if (res.code !== 200) {
             notification.error({
               message: '请求列表数据失败',
