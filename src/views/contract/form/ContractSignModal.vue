@@ -97,7 +97,7 @@ import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadAp
         firstSignData: null,
         secondSignData: null,
         draftContractAttachment: {},
-        signContractAttachment: {}
+        signContractAttachment: null
       }
     },
     created () {
@@ -175,6 +175,7 @@ import { contractSign, generateContractPdf } from '@/api/contract/ContractHeadAp
         generateContractPdf(params).then(res => {
           if (res.code !== 200) {
             this.$message.error(res.message)
+            this.signContractAttachment = null
           } else {
             this.signContractAttachment = res.result
             this.$nextTick(() => {
