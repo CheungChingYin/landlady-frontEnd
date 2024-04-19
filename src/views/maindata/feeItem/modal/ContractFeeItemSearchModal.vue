@@ -124,7 +124,7 @@ const columns = [
         }
       }
       return {
-        title: '房间选择',
+        title: '费用项选择',
         visible: false,
         // 高级搜索 展开/关闭
         advanced: false,
