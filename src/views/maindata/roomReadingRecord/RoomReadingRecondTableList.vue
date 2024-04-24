@@ -7,14 +7,14 @@
             <a-col :md="8" :sm="24">
               <a-form-item label="公寓编号">
                 <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentId" v-show="false"/>
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" />
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" disabled="" />
                 <a-button type="primary" @click="openApartSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="房间编号">
                 <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomId" placeholder="" v-show="false"/>
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomNumber" placeholder=""/>
+                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomNumber" placeholder="" disabled=""/>
                 <a-button type="primary" @click="openRoomSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
