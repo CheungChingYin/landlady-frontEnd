@@ -73,8 +73,8 @@
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical"/>
             <a @click="handleShowDetail(record)">查看</a>
-            <a-divider type="vertical"/>
-            <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
+            <a-divider type="vertical" v-if="!(record.roomStatus === 1)"/>
+            <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)" v-if="!(record.roomStatus === 1)">
               <a>删除</a>
             </a-popconfirm>
           </template>
