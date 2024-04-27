@@ -27,6 +27,7 @@ import { saveOrUpdateComplexData, getList } from '@/api/maindata/RenterMainDataA
 import pick from 'lodash.pick'
 import AttachmentTabForm from '@/views/system/attachment/AttachmentTabForm.vue'
 import RenterForm from '@/views/maindata/renter/form/RenterForm.vue'
+import moment from 'moment'
 
 export default {
   name: 'RenterAdvancedForm',
@@ -50,6 +51,15 @@ export default {
       headForm.validateFields((err, values) => {
         if (!err) {
           const saveData = Object.assign({}, values)
+          if (values.birthday !== undefined && values.birthday != null && values.birthday instanceof moment) {
+            saveData.birthday = values.birthday.format('YYYY-MM-DD')
+          }
+          if (values.effectiveDate !== undefined && values.effectiveDate != null && values.effectiveDate instanceof moment) {
+            saveData.effectiveDate = values.effectiveDate.format('YYYY-MM-DD')
+          }
+          if (values.expireDate !== undefined && values.expireDate != null && values.expireDate instanceof moment) {
+            saveData.expireDate = values.expireDate.format('YYYY-MM-DD')
+          }
           saveData.attachmentList = this.$refs.attachmentTabForm.data
           this.loading = true
           saveOrUpdateComplexData(saveData).then(res => {
