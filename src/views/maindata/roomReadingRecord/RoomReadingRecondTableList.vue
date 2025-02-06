@@ -20,7 +20,7 @@
             </a-col>
             <template v-if="advanced">
               <a-col :md="8" :sm="24">
-                <a-form-item label="合同状态">
+                <a-form-item label="读数类型">
                   <a-select
                     v-model="queryParam.readingType"
                     placeholder="请选择"
