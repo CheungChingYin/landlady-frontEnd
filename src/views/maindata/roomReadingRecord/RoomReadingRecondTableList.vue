@@ -6,15 +6,25 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="公寓编号">
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentId" v-show="false"/>
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.apartmentNumber" disabled="" />
+                <a-input style="width: 65%; margin-right: 5%" v-model="queryParam.apartmentId" v-show="false" />
+                <a-input style="width: 65%; margin-right: 5%" v-model="queryParam.apartmentNumber" disabled="" />
                 <a-button type="primary" @click="openApartSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="房间编号">
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomId" placeholder="" v-show="false"/>
-                <a-input style="width: 65%;margin-right: 5%" v-model="queryParam.roomNumber" placeholder="" disabled=""/>
+                <a-input
+                  style="width: 65%; margin-right: 5%"
+                  v-model="queryParam.roomId"
+                  placeholder=""
+                  v-show="false"
+                />
+                <a-input
+                  style="width: 65%; margin-right: 5%"
+                  v-model="queryParam.roomNumber"
+                  placeholder=""
+                  disabled=""
+                />
                 <a-button type="primary" @click="openRoomSelectModel">选择</a-button>
               </a-form-item>
             </a-col>
@@ -25,30 +35,32 @@
                     v-model="queryParam.readingType"
                     placeholder="请选择"
                     default-value=""
-                    :options="readingTypeOption">
+                    :options="readingTypeOption"
+                  >
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
                 <a-form-item label="读数年份">
-                  <a-input v-model="queryParam.readingYear" placeholder=""/>
+                  <a-input v-model="queryParam.readingYear" placeholder="" />
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
                 <a-form-item label="读数月份">
-                  <a-input v-model="queryParam.readingMonth" placeholder=""/>
+                  <a-input v-model="queryParam.readingMonth" placeholder="" />
                 </a-form-item>
               </a-col>
             </template>
-            <a-col :md="!advanced && 8 || 24" :sm="24">
+            <a-col :md="(!advanced && 8) || 24" :sm="24">
               <span
                 class="table-page-search-submitButtons"
-                :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                :style="(advanced && { float: 'right', overflow: 'hidden' }) || {}"
+              >
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
-                <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
+                <a-button style="margin-left: 8px" @click="() => (this.queryParam = {})">重置</a-button>
                 <a @click="toggleAdvanced" style="margin-left: 8px">
                   {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
+                  <a-icon :type="advanced ? 'up' : 'down'" />
                 </a>
               </span>
             </a-col>
@@ -66,7 +78,8 @@
           :showUploadList="false"
           :headers="headers"
           accept=".xlsx"
-          @change="handleUploadChange">
+          @change="handleUploadChange"
+        >
           <a-button icon="upload">导入房间读数Excel数据</a-button>
         </a-upload>
       </div>
@@ -88,9 +101,9 @@
         <span slot="action" slot-scope="text, record">
           <template>
             <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical"/>
+            <a-divider type="vertical" />
             <a @click="handleShowDetail(record)">查看</a>
-            <a-divider type="vertical"/>
+            <a-divider type="vertical" />
             <a-popconfirm title="确认是否删除？" ok-text="是" cancel-text="否" @confirm="handleDelete(record)">
               <a>删除</a>
             </a-popconfirm>
@@ -102,10 +115,7 @@
         @ok="apartmentSelectModalOk"
         :get-list="getApartList"
       ></ApartmentSelectSearchModal>
-      <RoomSelectSearchModal
-        ref="roomSelectSearchModal"
-        @ok="roomSelectModalOk"
-        :get-list="getRoomList"/>
+      <RoomSelectSearchModal ref="roomSelectSearchModal" @ok="roomSelectModalOk" :get-list="getRoomList" />
     </a-card>
   </page-header-wrapper>
 </template>
@@ -201,8 +211,8 @@ export default {
       // 读数类型选项
       readingTypeOption: [],
       // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        return getList(parameter.pageNo, parameter.pageSize, this.queryParam).then(res => {
+      loadData: (parameter) => {
+        return getList(parameter.pageNo, parameter.pageSize, this.queryParam).then((res) => {
           if (res.code !== 200) {
             notification.error({
               message: '请求列表数据失败',
@@ -219,13 +229,12 @@ export default {
       getApartList: getApartmentList,
       getRoomList: getRoomList,
       headers: {
-        'Authorization': storage.get(ACCESS_TOKEN)
+        Authorization: storage.get(ACCESS_TOKEN)
       }
     }
   },
   filters: {},
-  created () {
-  },
+  created () {},
   computed: {
     rowSelection () {
       return {
@@ -248,7 +257,7 @@ export default {
       this.$router.push({ name: 'roomReadingRecordDetail', params: record })
     },
     handleDelete (record) {
-      deleteData(record.id).then(res => {
+      deleteData(record.id).then((res) => {
         if (res.code !== 200) {
           notification.error({
             message: '请求列表数据失败',
@@ -274,8 +283,7 @@ export default {
         date: moment(new Date())
       }
     },
-    cascadeOnChange (value) {
-    },
+    cascadeOnChange (value) {},
     openApartSelectModel () {
       this.$refs.apartmentSelectModalRef.open()
     },
@@ -304,7 +312,7 @@ export default {
       this.$refs.roomSelectSearchModal.close()
     },
     downloadExcelTemplate () {
-        downloadRoomReadingRecordExcelTemplate()
+      downloadRoomReadingRecordExcelTemplate()
     },
     handleUploadChange (info) {
       if (info.file.response) {
